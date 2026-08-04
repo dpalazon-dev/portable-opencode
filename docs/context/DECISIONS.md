@@ -1,13 +1,14 @@
 ---
 type: Decision Log
 title: Portable OpenCode Decisions
-description: Accepted, proposed and deferred architectural and product decisions.
+description: Accepted, proposed and deferred product and architecture decisions.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
 sources:
   - ../SPECIFICATION.es.md
   - PROJECT.md
+  - VISION.md
   - ARCHITECTURE.md
 verified:
   - by: repository-owner
@@ -15,8 +16,6 @@ verified:
 ---
 
 # Decisions
-
-This file records durable decisions. It does not replace detailed ADR files if individual decisions later require deeper treatment.
 
 ## Decision index
 
@@ -32,9 +31,9 @@ This file records durable decisions. It does not replace detailed ADR files if i
 | DEC-008 | accepted | Keep MCPs and broad integrations outside the initial core |
 | DEC-009 | proposed | Use TypeScript as the principal implementation language |
 | DEC-010 | proposed | Use Arize Phoenix as the MVP observability backend |
-| DEC-011 | proposed | Adopt a practical subset of OKF for context metadata |
+| DEC-011 | proposed | Adopt a practical subset of OKF-like metadata |
 | DEC-012 | deferred | Final packaging and distribution mechanism |
-| DEC-013 | proposed | Provide an optional first-party configuration TUI with Ratatui |
+| DEC-013 | deferred | Defer the configuration TUI until the CLI is effective |
 | DEC-014 | accepted | Design personal-first and allow reuse by others |
 
 ---
@@ -44,20 +43,13 @@ This file records durable decisions. It does not replace detailed ADR files if i
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Context
+OpenCode is the runtime and interaction surface. OpenRouter is the control plane for models, providers, routing, privacy, fallbacks and cost.
 
-The product was initially described too narrowly as an OpenCode distribution. Its distinctive behaviour depends equally on OpenRouter policy, routing, privacy, cost and provider selection.
+**Consequences**
 
-### Decision
-
-Define the product as a portable configuration system for **OpenCode + OpenRouter**, with OpenCode as runtime and OpenRouter as model control plane.
-
-### Consequences
-
-- product documentation must represent both components;
-- semantic model roles become a core abstraction;
-- OpenRouter validation and policy belong in the repository architecture;
-- the system is not complete when only OpenCode files are installed.
+- both systems are required for the canonical environment;
+- semantic model roles belong to the design;
+- configuration and verification must cover both systems.
 
 ---
 
@@ -66,19 +58,17 @@ Define the product as a portable configuration system for **OpenCode + OpenRoute
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Context
+Use native OpenCode, OpenRouter, Graphify, RTK and Phoenix surfaces before writing custom code.
 
-OpenCode already provides agents, commands, skills, plugins, tools, permissions, LSP, formatters, watcher and compaction.
+Custom code requires a concrete missing lifecycle or integration capability.
 
-### Decision
+**Consequences**
 
-Use native OpenCode and OpenRouter features first. Add custom code only for an identified gap or cross-component lifecycle need.
-
-### Consequences
-
-- less duplication and maintenance;
-- custom components require a documented purpose;
-- implementation must track upstream capability changes.
+- agents, commands, skills, permissions, LSP and formatters remain native OpenCode assets;
+- routing, fallbacks, privacy and presets remain OpenRouter policy;
+- Graphify owns graph extraction;
+- RTK owns output filtering;
+- the portable core remains small.
 
 ---
 
@@ -87,15 +77,9 @@ Use native OpenCode and OpenRouter features first. Add custom code only for an i
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+The first complete path targets empty or freshly initialized repositories.
 
-The MVP targets empty or freshly created repositories. Existing-repository adoption is a later workflow.
-
-### Consequences
-
-- initialization can make stronger assumptions;
-- migration and legacy compatibility are deferred;
-- acceptance tests should use disposable new projects.
+Existing-repository adoption is a separate later workflow.
 
 ---
 
@@ -104,15 +88,15 @@ The MVP targets empty or freshly created repositories. Existing-repository adopt
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+Graphify is installed from the beginning, but the first graph is generated after a useful source baseline exists.
 
-Install Graphify from the beginning, generate and refine `.graphifyignore`, maintain graph state and audit graph quality throughout the project lifecycle.
+`.graphifyignore`, graph freshness and graph quality are explicit project concerns.
 
-### Consequences
+**Consequences**
 
-- Graphify is not an optional post-install enhancement in the canonical profile;
-- ignore decisions and graph freshness require persisted state;
-- Graphify output itself must not create watcher loops or repository noise.
+- ignore generation is analyzed, not copied blindly;
+- explicit graph updates precede automatic hooks;
+- stale or noisy graphs remain visible in project state.
 
 ---
 
@@ -121,16 +105,16 @@ Install Graphify from the beginning, generate and refine `.graphifyignore`, main
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+The canonical path includes a local observability boundary between OpenCode and OpenRouter.
 
-Place a transparent local observability layer between OpenCode and OpenRouter. Store data locally, bind UI to loopback and capture metadata, usage, cost and errors by default. Full prompt and response content requires explicit opt-in.
+Metadata, usage, cost, latency and errors are captured by default. Prompt and response content is not.
 
-### Consequences
+**Consequences**
 
-- privacy is the default posture;
-- bypassing the proxy creates a visible degraded state;
-- secrets must be redacted before persistence;
-- the backend must remain replaceable.
+- local services bind loopback;
+- secrets are redacted before persistence;
+- bypassing observability produces an explicit degraded state;
+- Phoenix remains replaceable even if selected for the MVP.
 
 ---
 
@@ -139,19 +123,13 @@ Place a transparent local observability layer between OpenCode and OpenRouter. S
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+Maintain distinct ownership for:
 
-Maintain explicit boundaries between:
+1. canonical configuration versioned in this repository;
+2. configuration and context versioned in generated projects;
+3. credentials, traces, backups, caches and machine state kept private.
 
-1. configuration versioned in this repository;
-2. configuration generated into each project;
-3. credentials, traces, caches and private local state that never enter Git.
-
-### Consequences
-
-- generators and schemas must reflect ownership boundaries;
-- secrets cannot be copied from repository templates;
-- diagnostics must explain where each setting originates.
+The CLI must explain where an effective value comes from.
 
 ---
 
@@ -160,15 +138,9 @@ Maintain explicit boundaries between:
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+The repository uses the same context, decision, state and graph concepts it intends to generate.
 
-Use `AGENTS.md`, `docs/context/`, explicit decisions, machine state and `.graphifyignore` in the repository developing portable-opencode itself.
-
-### Consequences
-
-- the project becomes the first test case for its own concepts;
-- context consistency is part of task completion;
-- unimplemented pieces must remain honestly marked as inactive.
+Unimplemented capabilities remain marked as proposed, deferred or inactive.
 
 ---
 
@@ -177,15 +149,9 @@ Use `AGENTS.md`, `docs/context/`, explicit decisions, machine state and `.graphi
 **Status:** accepted  
 **Date:** 2026-08-04
 
-### Decision
+MCPs, GitHub automation, remote servers, community catalogues, local-model profiles and autonomous background agents are not required by the first complete personal path.
 
-Do not require MCPs, public session sharing, GitHub automation, remote servers, community plugin catalogues or autonomous background agents in the MVP.
-
-### Consequences
-
-- smaller core and clearer responsibility boundaries;
-- these capabilities may return as optional profiles;
-- the design must not prevent future extension.
+They may return only after a real need appears.
 
 ---
 
@@ -194,20 +160,16 @@ Do not require MCPs, public session sharing, GitHub automation, remote servers, 
 **Status:** proposed  
 **Date:** 2026-08-04
 
-### Proposal
+TypeScript is the leading option for the portable core, OpenCode extensions, schemas and generators because it aligns with OpenCode's ecosystem.
 
-Use TypeScript for the CLI domain layer, OpenCode plugins, custom tools, generators and schemas, with small platform wrappers where necessary.
+**Evidence required**
 
-### Rationale
+- simple installation on the primary environment;
+- packaging without excessive runtime friction;
+- reliable process and filesystem operations;
+- startup, update and migration strategy.
 
-It aligns with OpenCode extension mechanisms and supports typed configuration and distribution.
-
-### Evidence still required
-
-- packaging and single-command installation on Windows, macOS and Linux;
-- runtime choice and startup overhead;
-- interaction with Bun/Node requirements;
-- update strategy.
+The parked TUI does not influence this decision.
 
 ---
 
@@ -216,38 +178,35 @@ It aligns with OpenCode extension mechanisms and supports typed configuration an
 **Status:** proposed  
 **Date:** 2026-08-04
 
-### Proposal
+Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI.
 
-Use Phoenix locally behind a transparent proxy as the reference observability backend.
+**Evidence required**
 
-### Evidence still required
+- local installation and lifecycle;
+- resource use;
+- trace ingestion from the proxy;
+- retention and redaction;
+- primary-environment reliability.
 
-- local installation complexity;
-- OpenRouter request and streaming compatibility;
-- OpenInference/OTLP trace model fit;
-- resource usage;
-- retention and redaction controls;
-- Windows experience.
-
-A spike must precede acceptance.
+Phoenix is not the transparent proxy itself.
 
 ---
 
-## DEC-011 — Adopt a practical subset of OKF for context metadata
+## DEC-011 — Adopt a practical subset of OKF-like metadata
 
 **Status:** proposed  
 **Date:** 2026-08-04
 
-### Proposal
+Use only metadata that improves provenance, lifecycle and verification of curated context.
 
-Use OKF-compatible Markdown and frontmatter concepts for provenance, lifecycle, sources and verification without requiring full formal compliance in the MVP.
+Full formal compliance is not an MVP goal.
 
-### Evidence still required
+**Evidence required**
 
 - exact required fields;
-- validation tooling;
-- cost of maintaining compatibility;
-- benefit over a repository-owned schema.
+- repository-owned schema;
+- validation cost;
+- demonstrated value over plain Markdown.
 
 ---
 
@@ -256,108 +215,32 @@ Use OKF-compatible Markdown and frontmatter concepts for provenance, lifecycle, 
 **Status:** deferred  
 **Date:** 2026-08-04
 
-### Open options
+Packaging depends on the selected implementation language, primary platform and upgrade model.
 
-- npm package with executable;
-- Bun-distributed executable;
-- shell/PowerShell bootstrap downloading versioned artefacts;
-- platform packages;
-- hybrid installer.
+Candidate mechanisms include a packaged executable, package-manager command or small bootstrap wrapper.
 
-### Deferral reason
-
-The choice depends on the implementation language, platform matrix and update/migration model.
+The choice follows SPIKE-001 through SPIKE-004 and the CLI prototype.
 
 ---
 
-## DEC-013 — Provide an optional first-party configuration TUI with Ratatui
+## DEC-013 — Defer the configuration TUI until the CLI is effective
 
-**Status:** proposed  
-**Date:** 2026-08-04  
+**Status:** deferred  
+**Date:** 2026-08-05  
 **Feature:** [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md)
 
-### Context
+A Ratatui configurator may eventually improve plan and diagnostic review, but it is secondary to a simple complete CLI.
 
-The system will coordinate configuration across OpenCode, OpenRouter, local observability, Graphify, RTK, generated project context and machine-readable lifecycle state. Sequential prompts and raw command output can perform these operations, but they become difficult to understand when choices are interdependent or when the user must compare current and desired state.
+**Decision**
 
-A first-party TUI could make installation, configuration, plan review, diagnostics, repair and deterministic project scaffolding more observable and safer. It would become counterproductive if it duplicated the lifecycle engine, replaced OpenCode or made headless execution secondary.
+- park Ratatui and remove SPIKE-005 from the active roadmap;
+- do not let the TUI determine implementation language or core abstractions;
+- first deliver working `status`, `inspect`, `plan`, `apply`, `doctor`, `install` and `init-project` workflows;
+- reconsider the feature only after repeated CLI use reveals a concrete interaction problem.
 
-### Proposal
+**Preserved constraint**
 
-Provide an optional first-party terminal interface using **Ratatui** for configuration and lifecycle workflows.
-
-The TUI will be a presentation adapter over the same application engine used by the headless CLI. It will not own configuration rules, state transitions, filesystem mutations or process execution.
-
-The conventional and non-interactive CLI remains mandatory. The TUI is not required for CI, remote automation or non-TTY environments.
-
-### Product position
-
-Classify the TUI as a **strategic first-party frontend, optional at runtime and subsequent to the core lifecycle engine**.
-
-The initial useful scope is limited to:
-
-- overall environment status;
-- profile selection;
-- install-plan inspection;
-- operation progress and failure reporting;
-- doctor findings and safe remediation;
-- deterministic project-scaffold configuration.
-
-It must not replace:
-
-- the OpenCode TUI and agent conversation;
-- Phoenix or another observability explorer;
-- Graphify visualization;
-- the semantic `/init-project` interview inside OpenCode.
-
-### Architectural constraints
-
-- the shared application engine must exist before the TUI;
-- CLI and TUI must produce equivalent plans for equivalent inputs;
-- UI components may not directly mutate files or execute commands;
-- all operations require structured state, progress and outcomes;
-- non-TTY execution must never attempt to launch the TUI;
-- secrets must be redacted before reaching the view;
-- terminal state must recover after normal exit, failure and cancellation.
-
-### Relationship to implementation language
-
-Ratatui introduces material evidence in favour of Rust for the CLI and lifecycle engine, but this decision does not settle the language of the whole repository.
-
-`SPIKE-005` must compare:
-
-1. a shared Rust core, CLI and TUI;
-2. a separate Rust TUI over a non-Rust core.
-
-A split runtime must not be adopted without evidence that its flexibility outweighs its packaging and protocol complexity.
-
-### Evidence still required
-
-- Windows Terminal, Linux and macOS behaviour in the supported matrix;
-- terminal resize, keyboard input and clean restoration;
-- asynchronous progress and safe cancellation;
-- plan and diagnostic contracts shared with the CLI;
-- packaging implications of Ratatui and Rust;
-- accessibility limitations and fallback quality;
-- measured reduction in configuration error compared with guided CLI prompts;
-- a minimal screen set that adds value without creating a second OpenCode.
-
-### Acceptance condition
-
-This decision may move to `accepted` only after:
-
-- the application-engine boundary is specified;
-- the headless CLI remains independently usable;
-- `SPIKE-005` validates the Ratatui approach on the initial platform matrix;
-- the feature acceptance criteria in `FEAT-001` are reviewed and considered proportionate.
-
-### Consequences if accepted
-
-- Ratatui becomes a supported first-party frontend;
-- the core must expose presentation-independent plans, diagnostics, progress and outcomes;
-- packaging decisions must account for the Rust boundary;
-- UI testing and terminal compatibility enter the supported quality model;
-- richer dashboards and unrelated interfaces remain outside the feature scope.
+A future TUI must remain an optional thin adapter over the same operations as the CLI.
 
 ---
 
@@ -366,74 +249,25 @@ This decision may move to `accepted` only after:
 **Status:** accepted  
 **Date:** 2026-08-05
 
-### Context
+The repository owner is the only user required for MVP acceptance.
 
-The initial specification and configuration matrix began to assume multiple user personas, teams, broad platform parity, profile systems and future public adoption. Those concerns are plausible long-term directions, but they are not the problem the MVP must solve.
+The canonical configuration represents one real personal workflow. Public reuse is enabled through explicit, replaceable configuration, not through premature support for teams, profiles or universal platforms.
 
-The project exists first to make the repository owner's own OpenCode + OpenRouter environment explicit, reproducible, observable and reusable across personal projects and machines.
+**Consequences**
 
-### Decision
-
-Adopt **personal-first, reusable by others** as the product-scope rule.
-
-The repository owner is the only primary user required for MVP acceptance. The canonical configuration will represent the owner's real workflow and primary environment.
-
-Public GitHub availability, readable configuration and replaceable defaults should make reuse possible, but third-party onboarding, team governance, universal platform support and generic configuration frameworks will not drive the MVP.
-
-### Interpretation of portability
-
-For the MVP, portability means:
-
-- reproducibility across the owner's supported machines;
-- reuse across new projects;
-- separation of versioned configuration from credentials and local state;
-- the ability to change explicit defaults without reconstructing the system.
-
-It does not initially mean equal support for all operating systems, users, teams or workflows.
-
-### Consequences
-
-- begin with one canonical personal profile rather than a profile catalogue;
-- support the owner's primary environment before broader platform parity;
-- remove team, organization and multi-user requirements from MVP acceptance;
-- require an actual personal use case before adding configurability;
-- keep safe architecture boundaries, idempotence, dry-run, diagnostics and structured state because they directly improve personal maintainability;
-- reduce `DESIGN-001` against the canonical personal workflow;
-- treat public reuse as a beneficial consequence rather than a product requirement;
-- defer onboarding and support mechanisms intended only for unknown third parties.
-
-### Guardrail against over-personalization
-
-Personal-first does not mean hidden or hard-coded.
-
-The canonical configuration must still:
-
-- document why defaults exist;
-- separate configuration from secrets;
-- expose important overrides;
-- avoid assumptions that cannot be inspected;
-- remain understandable after time has passed;
-- permit replacement of models, providers and local preferences.
-
-### Review trigger
-
-Reconsider broader productization only when at least one of the following occurs:
-
-- the owner needs multiple genuinely different profiles;
-- a second real user adopts the tool and exposes a repeated limitation;
-- platform differences block the owner's own machines;
-- a team workflow becomes an actual requirement;
-- the public repository develops sustained external use that justifies support cost.
+- one canonical personal configuration;
+- support the owner's primary environment first;
+- no team, organization or marketplace architecture in the MVP;
+- add configurability only for demonstrated needs;
+- preserve safety, idempotence, diagnostics and explicit state because they improve personal maintainability.
 
 ## Open questions
 
-- Which exact capabilities remain after reducing the configuration matrix to the personal-first MVP?
-- What is the repository owner's primary supported platform and shell?
-- Which OpenCode versions and interfaces will be supported first?
-- How will semantic OpenRouter roles be represented and synchronized?
-- How is the OpenCode session identifier propagated to the proxy?
-- What Graphify update strategy is reliable on the primary platform?
-- Which files and behaviours are generated versus linked from the portable repository?
-- What is the smallest useful OKF-compatible metadata schema?
-- Does Ratatui justify a Rust application core, or only a separate presentation adapter?
-- Should invoking `portable-opencode` without arguments open the TUI or display CLI help?
+- What is the primary supported environment and shell?
+- Which implementation language and packaging approach survive the technical spikes?
+- Which OpenCode project config form becomes canonical?
+- Which agents and semantic roles are required initially?
+- Which Graphify outputs are versioned?
+- What is the minimal context metadata schema?
+- How are OpenRouter presets reconciled in the first CLI?
+- What Phoenix lifecycle and retention policy is acceptable?
