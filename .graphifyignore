@@ -1,0 +1,76 @@
+# portable-opencode dogfooding policy
+#
+# This repository currently contains documentation rather than an executable
+# implementation. The file is versioned now so Graphify scope is intentional
+# from the beginning. Revisit it when source directories are introduced.
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+
+# Builds and packages
+dist/
+build/
+out/
+target/
+coverage/
+*.tgz
+
+# Caches
+.cache/
+.pytest_cache/
+.mypy_cache/
+__pycache__/
+*.pyc
+
+# Local tooling
+.opencode/cache/
+.portable-opencode/private/
+.portable-opencode/logs/
+.portable-opencode/cache/
+graphify-out/
+
+# Observability local state
+.phoenix/
+phoenix-data/
+langfuse-data/
+observability-data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+auth.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Generated and minified assets
+*.min.js
+*.min.css
+*.map
+*.bundle.*
+*.generated.*
+
+# Archives and binaries
+*.zip
+*.tar
+*.gz
+*.7z
+*.exe
+*.dll
+*.so
+*.dylib
