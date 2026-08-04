@@ -25,8 +25,21 @@
   "scope_alignment": {
     "project": "aligned",
     "vision": "aligned",
-    "architecture": "pending_review",
+    "architecture": "aligned",
+    "conventions": "pending_review",
+    "operations": "pending_review",
+    "configuration_tui": "pending_personal_first_review",
+    "roadmap": "pending_personal_first_review",
     "configuration_matrix": "pending_personal_first_reduction"
+  },
+  "architecture": {
+    "model": "single-canonical-personal-workflow",
+    "control_interface": "headless-cli-required",
+    "tui": "optional-proposed-adapter",
+    "profile_strategy": "single-canonical-configuration",
+    "environment_lifecycle": "separate",
+    "project_lifecycle": "separate",
+    "implementation_shape": "small-core-with-narrow-adapters"
   },
   "design": {
     "configuration_matrix": {
@@ -42,7 +55,7 @@
   "features": {
     "configuration_tui": {
       "id": "FEAT-001",
-      "status": "proposed",
+      "status": "proposed_requires_personal_first_review",
       "decision": "DEC-013",
       "definition": "docs/features/CONFIGURATION_TUI.md",
       "technology": "ratatui",
@@ -76,8 +89,8 @@
   },
   "next": {
     "milestone": "personal-first-scope-alignment",
-    "step": "architecture-review",
-    "document": "docs/context/ARCHITECTURE.md"
+    "step": "conventions-review",
+    "document": "docs/context/CONVENTIONS.md"
   },
-  "updated_at": "2026-08-05T00:13:00+02:00"
+  "updated_at": "2026-08-05T00:22:00+02:00"
 }
