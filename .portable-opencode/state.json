@@ -1,0 +1,50 @@
+{
+  "$schema": "./state.schema.json",
+  "project": {
+    "name": "portable-opencode",
+    "repository": "dpalazon-dev/portable-opencode",
+    "phase": "definition",
+    "status": "configuring"
+  },
+  "initialization": {
+    "environment": "not_applicable",
+    "scaffold": "dogfooded_manually",
+    "interactive_context": "complete_pending_owner_verification",
+    "ready": false
+  },
+  "context": {
+    "path": "docs/context",
+    "status": "active",
+    "format": "okf-compatible-subset",
+    "owner_verification": "pending"
+  },
+  "graphify": {
+    "installed": false,
+    "status": "inactive_no_source_implementation",
+    "dirty": false,
+    "ignore_file": ".graphifyignore",
+    "last_update": null,
+    "pending_decisions": []
+  },
+  "observability": {
+    "status": "proposed",
+    "backend": "phoenix",
+    "validated": false,
+    "content_capture_default": false
+  },
+  "verification": {
+    "profile": "docs-only",
+    "last_run": null,
+    "result": "pending"
+  },
+  "decisions": {
+    "accepted": 8,
+    "proposed": 3,
+    "deferred": 1
+  },
+  "next": {
+    "milestone": "configuration-matrix",
+    "document": "docs/context/ROADMAP.md"
+  },
+  "updated_at": "2026-08-04T23:22:00+02:00"
+}
