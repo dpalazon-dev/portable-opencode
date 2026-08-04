@@ -22,6 +22,12 @@
     "format": "okf-compatible-subset",
     "owner_verification": "pending"
   },
+  "scope_alignment": {
+    "project": "aligned",
+    "vision": "aligned",
+    "architecture": "pending_review",
+    "configuration_matrix": "pending_personal_first_reduction"
+  },
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
@@ -70,8 +76,8 @@
   },
   "next": {
     "milestone": "personal-first-scope-alignment",
-    "step": "vision-review",
-    "document": "docs/context/VISION.md"
+    "step": "architecture-review",
+    "document": "docs/context/ARCHITECTURE.md"
   },
-  "updated_at": "2026-08-05T00:06:00+02:00"
+  "updated_at": "2026-08-05T00:13:00+02:00"
 }
