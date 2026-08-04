@@ -140,10 +140,32 @@ A capability belongs in the MVP only when it contributes directly to the canonic
 
 > Preserve only components and abstractions that directly improve the canonical personal workflow or its long-term maintainability.
 
+---
+
+## 2026-08-05 — Personal-first conventions and operations aligned
+
+**Outcome**
+
+- rewrote `CONVENTIONS.md` as a minimal set of rules that prevent recurring errors, preserve inspectability and protect safety;
+- removed assumptions about contributor governance, mandatory pull requests, profile catalogues, public SDKs, universal platform parity and release trains;
+- established one canonical personal configuration and evidence-based overrides;
+- made direct commits acceptable for low-risk verified documentation changes while retaining branches for spikes and executable work;
+- rewrote `OPERATIONS.md` around a lightweight sequence: orient, define outcome, inspect evidence, plan, change, verify, synchronize and close;
+- defined personal task classes for documentation, spikes, implementation and maintenance;
+- specified when work is sufficiently bounded to pass to Codex;
+- reduced verification to the active `docs-only` profile plus future repository and canonical-journey profiles when executable code exists;
+- made handoff a continuity mechanism across sessions rather than a team-reporting process.
+
+**Operating principle**
+
+> Use the lightest process that preserves safety, evidence and continuity.
+
 **Current status**
 
-`PROJECT.md`, `VISION.md` and `ARCHITECTURE.md` are aligned with `DEC-014`. `CONVENTIONS.md`, `OPERATIONS.md`, `FEAT-001`, `ROADMAP.md` and `DESIGN-001` still require personal-first review.
+`PROJECT.md`, `VISION.md`, `ARCHITECTURE.md`, `CONVENTIONS.md` and `OPERATIONS.md` are aligned with `DEC-014`.
+
+`FEAT-001`, `ROADMAP.md` and `DESIGN-001` remain pending personal-first review or reduction.
 
 **Recommended next action**
 
-Review `CONVENTIONS.md` and remove process, abstraction and compatibility rules that serve hypothetical contributors or product variants rather than the owner's real development workflow.
+Review `FEAT-001 — Interactive Configuration TUI` and determine its minimum personal value, scope and delivery position before simplifying the roadmap and configuration matrix.
