@@ -31,6 +31,7 @@ Deliverables:
 - [x] initial decision log;
 - [x] machine-readable project state;
 - [x] first `.graphifyignore` policy;
+- [x] first independently reviewable feature definition;
 - [ ] automated documentation validation;
 - [ ] repository issue backlog derived from open decisions.
 
@@ -54,13 +55,15 @@ Deliverables:
 - validation criteria;
 - user questions and decision points;
 - OpenRouter semantic role manifest;
-- initial state schema.
+- initial state schema;
+- presentation-independent operation and diagnostic concepts required by CLI and future TUI.
 
 Exit criteria:
 
 - every MVP capability has a source of truth;
 - duplicated responsibility is identified;
-- implementation tasks can be cut without inventing behaviour.
+- implementation tasks can be cut without inventing behaviour;
+- configuration and lifecycle concepts do not depend on a specific interface.
 
 ## Phase 2 — Technical spikes
 
@@ -110,10 +113,28 @@ Validate:
 - output format and quality metrics;
 - cross-platform reliability.
 
+### SPIKE-005 — Ratatui and application boundary
+
+Feature reference: [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md).
+
+Validate:
+
+- Ratatui behaviour on Windows Terminal and the initial Unix terminal matrix;
+- separation between model/update/view state and domain operations;
+- structured progress and safe cancellation;
+- terminal restoration after exit, failure and interruption;
+- non-TTY fallback;
+- shared plan and diagnostic contracts with the headless CLI;
+- packaging consequences of a Rust core versus a separate Rust frontend;
+- minimum useful views and measurable benefit over guided prompts.
+
+The prototype is limited to a doctor view, an install-plan review and a profile selector backed by fixture or serialized application data.
+
 Exit criteria:
 
 - each proposed foundational decision is accepted, revised or rejected with evidence;
-- architecture uncertainties are reduced to implementation risks.
+- architecture uncertainties are reduced to implementation risks;
+- DEC-013 and FEAT-001 are updated from spike evidence.
 
 ## Phase 3 — CLI and state foundation
 
@@ -121,6 +142,7 @@ Exit criteria:
 
 Deliverables:
 
+- presentation-independent application engine;
 - CLI skeleton;
 - configuration and state schemas;
 - profile loading;
@@ -129,13 +151,17 @@ Deliverables:
 - dry-run support;
 - idempotent install state;
 - structured diagnostics;
+- structured progress and operation outcomes;
+- machine-readable output;
+- safe cancellation boundaries;
 - unit and integration test foundation.
 
 Exit criteria:
 
 - CLI can inspect and explain intended changes;
 - state transitions are tested;
-- rerunning an operation does not corrupt state.
+- rerunning an operation does not corrupt state;
+- presentation layers can consume plans and diagnostics without duplicating mutation logic.
 
 ## Phase 4 — Global installation MVP
 
@@ -155,7 +181,33 @@ Exit criteria:
 
 - clean supported environment reaches `installed`;
 - failures produce actionable remediation;
-- secrets remain outside versioned files.
+- secrets remain outside versioned files;
+- the full workflow remains usable without a TUI.
+
+## Phase 4.5 — First-party configuration TUI
+
+**Goal:** add a guided Ratatui frontend over stable installation, planning and diagnostic operations.
+
+Deliverables:
+
+- home and environment status view;
+- profile selection;
+- install-plan review;
+- operation progress and failure reporting;
+- doctor findings and remediation actions;
+- safe exit, cancellation and terminal recovery;
+- headless CLI equivalence tests.
+
+Exit criteria:
+
+- the TUI performs no direct filesystem or process mutations;
+- equivalent inputs produce equivalent CLI and TUI plans;
+- non-TTY execution never launches the TUI;
+- secrets are redacted;
+- supported terminal smoke tests pass;
+- DEC-013 is accepted, revised or rejected based on evidence.
+
+This phase may move later if the application-engine contracts are not stable enough. It must not block the headless installation MVP.
 
 ## Phase 5 — New-project scaffold MVP
 
@@ -170,13 +222,15 @@ Deliverables:
 - `.opencode/` base assets;
 - provisional `.graphifyignore`;
 - project state;
-- initial verification profile.
+- initial verification profile;
+- optional TUI projection for deterministic scaffold choices after FEAT-001 foundation is validated.
 
 Exit criteria:
 
 - identical inputs produce an equivalent scaffold;
 - the operation is idempotent or safely refuses unsafe repetition;
-- the project clearly reports `scaffolded`, not `ready`.
+- the project clearly reports `scaffolded`, not `ready`;
+- TUI and CLI paths, when both exist, use the same scaffold plan.
 
 ## Phase 6 — Interactive `/init-project`
 
@@ -200,6 +254,8 @@ Exit criteria:
 - ambiguous graph decisions are persisted;
 - verification commands are canonical and executable.
 
+The semantic interview remains an OpenCode agent workflow rather than a rigid TUI form.
+
 ## Phase 7 — Session continuity and maintenance
 
 **Goal:** make the environment useful beyond initial bootstrap.
@@ -212,7 +268,8 @@ Deliverables:
 - compaction preservation;
 - handoff workflow;
 - session and project cost commands;
-- upgrade and migration path.
+- upgrade and migration path;
+- optional TUI views for pending decisions and repair operations.
 
 Exit criteria:
 
@@ -230,4 +287,7 @@ Exit criteria:
 - local model profiles;
 - template marketplace;
 - enterprise governance;
-- background agents.
+- background agents;
+- observability dashboards inside the portable TUI;
+- Graphify visualization inside the portable TUI;
+- OpenCode session management inside the portable TUI.
