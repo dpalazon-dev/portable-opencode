@@ -1,7 +1,7 @@
 ---
 type: Knowledge Log
 title: Portable OpenCode Context Log
-description: Concise chronological record of meaningful context, scope and architecture changes.
+description: Concise chronological record of meaningful project transitions.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
@@ -14,158 +14,86 @@ verified:
 
 # Context log
 
-This log records meaningful transitions, their outcome and the next action. It does not repeat the full rationale already maintained in project, vision, architecture, decision, feature or design documents.
+This log records outcomes, resulting state and the next action. Detailed rationale lives in the canonical context, decision, feature, research and design documents.
 
 ## 2026-08-04 — Repository foundation
 
 **Outcome**
 
-- created the public `dpalazon-dev/portable-opencode` repository;
-- published README, licence, contribution and security files;
-- published conceptual and functional specification v0.2;
-- defined the product as a coherent OpenCode + OpenRouter configuration system;
-- introduced Graphify, RTK, structured context and local observability as core concepts.
-
-**Resulting decisions**
-
-- OpenCode and OpenRouter are co-equal foundations;
-- Graphify belongs to the canonical setup;
-- observability is local and metadata-first by default;
-- MCPs and broad integrations remain outside the initial core.
-
----
+- created the public repository;
+- published the initial specification and repository policies;
+- defined OpenCode + OpenRouter as the coherent product foundation;
+- introduced Graphify, RTK, structured context and local observability.
 
 ## 2026-08-04 — Repository dogfooding established
 
 **Outcome**
 
-- added root `AGENTS.md`;
-- created canonical `docs/context/` documents;
-- separated project, vision, architecture, conventions, operations, decisions and roadmap;
-- added machine-readable state and `.graphifyignore`;
-- required the repository to expose its real state without relying on conversation history.
+- added root `AGENTS.md`, canonical context documents, decision log, state and `.graphifyignore`;
+- required the repository to expose its actual status without conversation history.
 
-**Resulting state**
-
-- project entered definition and architectural-design phase;
-- verification remained documentation-only;
-- unimplemented capabilities were explicitly marked inactive or proposed.
-
----
-
-## 2026-08-04 — Configuration TUI proposed
+## 2026-08-04 — Initial TUI and configuration matrix defined
 
 **Outcome**
 
-- created `FEAT-001 — Interactive Configuration TUI`;
-- added proposed `DEC-013`;
-- selected Ratatui as the technology to evaluate;
-- defined the TUI as an optional adapter over the same operations as the CLI;
-- added `SPIKE-005` to validate terminal behaviour, application boundaries and packaging consequences.
+- created `FEAT-001` for a possible Ratatui configurator;
+- drafted `DESIGN-001` with 177 capabilities;
+- exposed that the design was drifting toward a generalized product.
 
-**Boundary**
-
-The TUI may improve installation, plan review, diagnosis and repair. It must not replace OpenCode, own mutation logic or force a generalized product architecture.
-
-**Current status**
-
-`FEAT-001` and `DEC-013` remain proposed and require personal-first review.
-
----
-
-## 2026-08-04 — Configuration matrix drafted
-
-**Outcome**
-
-- created `DESIGN-001 — Configuration Matrix`;
-- mapped 177 possible capabilities across core lifecycle, OpenCode, OpenRouter, observability, Graphify, RTK, context, security, interfaces, installation and verification;
-- defined ownership, defaults, overrides, validation, failure semantics and spike dependencies.
-
-**Finding**
-
-The matrix was useful for exposing the design surface, but it also revealed drift toward a generalized multi-user product.
-
-**Current status**
-
-`DESIGN-001` requires reduction before owner approval.
-
----
-
-## 2026-08-05 — Personal-first scope adopted
+## 2026-08-05 — Personal-first scope aligned
 
 **Outcome**
 
 - accepted `DEC-014 — Design personal-first and allow reuse by others`;
-- rewrote `PROJECT.md` around the repository owner as the sole required MVP user;
-- redefined portability as reproducibility across the owner's supported machines and new projects;
-- removed third-party onboarding, teams, broad platform parity and generic profile systems from MVP requirements.
+- aligned `PROJECT.md`, `VISION.md`, `ARCHITECTURE.md`, `CONVENTIONS.md` and `OPERATIONS.md`;
+- reduced the architecture to one canonical personal configuration, a small CLI core and native external-tool surfaces.
 
-**Design rule**
+**Governing rule**
 
-> Personal-first, reusable by others.
+> A capability belongs in the MVP only when it improves the canonical personal workflow or protects its safety and maintainability.
 
-Public reuse remains possible through explicit and replaceable configuration. It does not drive MVP architecture or acceptance.
-
----
-
-## 2026-08-05 — Personal-first vision aligned
+## 2026-08-05 — TUI parked
 
 **Outcome**
 
-- rewrote `VISION.md` around one complete personal journey from fresh machine to repeated daily use;
-- defined one canonical default before additional profiles;
-- separated deterministic portable operations from semantic OpenCode workflows;
-- established evidence-based triggers for future profiles, platforms, teams or broader productization.
+- changed `DEC-013` and `FEAT-001` to deferred;
+- removed Ratatui and SPIKE-005 from the active implementation path;
+- established that the CLI must be useful and stable before any TUI re-evaluation.
 
-**Resulting gate**
-
-A capability belongs in the MVP only when it contributes directly to the canonical personal journey or protects its safety and maintainability.
-
----
-
-## 2026-08-05 — Personal-first architecture aligned
+## 2026-08-05 — Upstream configuration research completed
 
 **Outcome**
 
-- rewrote `ARCHITECTURE.md` using the canonical personal workflow as its selection criterion;
-- replaced the platform-like architecture with a small application core, mandatory CLI and narrow external adapters;
-- removed a profile framework from the MVP in favour of one canonical personal configuration;
-- separated environment lifecycle from project lifecycle;
-- defined the operation sequence as inspect, plan, review, apply, verify and record;
-- reduced application concepts to findings, plans, decisions, operations, outcomes and state;
-- explicitly deferred multi-user systems, universal platform parity, marketplaces, public SDKs, hosted control planes and speculative adapter layers;
-- preserved Graphify, RTK, structured context, observability, safety, idempotence and diagnostics because they directly improve the owner's workflow.
+- reviewed current primary documentation for OpenCode, OpenRouter, Graphify, RTK and Phoenix;
+- created `RESEARCH-001 — Configuration Surface Research`;
+- confirmed that most desired behaviour should use native configuration and installers rather than custom portable abstractions.
 
-**Architecture principle**
+**Key finding**
 
-> Preserve only components and abstractions that directly improve the canonical personal workflow or its long-term maintainability.
+```text
+OpenCode owns runtime configuration and agent assets
+OpenRouter owns model/provider policy
+Graphify owns graph extraction and ignore semantics
+RTK owns command rewriting and output reduction
+Phoenix owns OTLP trace collection
+portable-opencode owns inspect, plan, apply, verify, state and coordination
+```
 
----
-
-## 2026-08-05 — Personal-first conventions and operations aligned
+## 2026-08-05 — Roadmap and configuration matrix rebuilt
 
 **Outcome**
 
-- rewrote `CONVENTIONS.md` as a minimal set of rules that prevent recurring errors, preserve inspectability and protect safety;
-- removed assumptions about contributor governance, mandatory pull requests, profile catalogues, public SDKs, universal platform parity and release trains;
-- established one canonical personal configuration and evidence-based overrides;
-- made direct commits acceptable for low-risk verified documentation changes while retaining branches for spikes and executable work;
-- rewrote `OPERATIONS.md` around a lightweight sequence: orient, define outcome, inspect evidence, plan, change, verify, synchronize and close;
-- defined personal task classes for documentation, spikes, implementation and maintenance;
-- specified when work is sufficiently bounded to pass to Codex;
-- reduced verification to the active `docs-only` profile plus future repository and canonical-journey profiles when executable code exists;
-- made handoff a continuity mechanism across sessions rather than a team-reporting process.
-
-**Operating principle**
-
-> Use the lightest process that preserves safety, evidence and continuity.
+- rewrote the roadmap without reducing canonical scope;
+- made specifications, configuration design, schemas, templates and scripts explicit deliverables;
+- ordered delivery around technical validation, CLI foundation, machine installation, project bootstrap, continuity and hardening;
+- reduced `DESIGN-001` from 177 to 81 capabilities;
+- removed duplicated rows, team assumptions, profile catalogues and TUI-driven concepts;
+- linked remaining uncertainty to four active technical spikes.
 
 **Current status**
 
-`PROJECT.md`, `VISION.md`, `ARCHITECTURE.md`, `CONVENTIONS.md` and `OPERATIONS.md` are aligned with `DEC-014`.
-
-`FEAT-001`, `ROADMAP.md` and `DESIGN-001` remain pending personal-first review or reduction.
+The roadmap, research and reduced matrix await owner review.
 
 **Recommended next action**
 
-Review `FEAT-001 — Interactive Configuration TUI` and determine its minimum personal value, scope and delivery position before simplifying the roadmap and configuration matrix.
+Resolve the eight personal defaults listed in `DESIGN-001`, beginning with the primary supported environment and the canonical OpenCode project configuration form.
