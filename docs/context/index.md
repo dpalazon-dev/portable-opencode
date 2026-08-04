@@ -45,6 +45,15 @@ The broad product specification remains in [../SPECIFICATION.es.md](../SPECIFICA
 | `ROADMAP.md` | What is built next and in which order? |
 | `log.md` | What changed in the project context? |
 
+## Related design and feature documents
+
+These documents refine the context without replacing it:
+
+- [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) defines configuration ownership, defaults, overrides, validation, failure semantics and interface exposure for the MVP.
+- [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) defines the proposed Ratatui frontend and its boundary with the shared application engine.
+
+A design or feature document may remain `draft` or `proposed` while the context documents stay active. Accepted durable changes must still be reflected in `DECISIONS.md`, `ARCHITECTURE.md` and project state.
+
 ## Status model
 
 Context documents may use:
