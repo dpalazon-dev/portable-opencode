@@ -1,12 +1,15 @@
 ---
 type: Conventions
 title: Portable OpenCode Repository Conventions
-description: Current documentation, code, configuration and collaboration conventions.
+description: Minimal conventions that keep the personal-first repository explicit, safe and maintainable.
 status: active
 created: 2026-08-04
-modified: 2026-08-04
+modified: 2026-08-05
 sources:
+  - PROJECT.md
+  - VISION.md
   - ARCHITECTURE.md
+  - DECISIONS.md
   - ../../AGENTS.md
 verified:
   - by: repository-owner
@@ -15,129 +18,271 @@ verified:
 
 # Conventions
 
-## General principles
+## 1. Purpose
 
-- Prefer explicit structure over implicit agent memory.
-- Prefer native OpenCode and OpenRouter features over custom duplication.
-- Separate product intent, architecture, operations and implementation detail.
-- Make defaults strong, documented and replaceable.
-- Treat safety, observability and verification as architecture, not polish.
-- Do not claim implementation or support that has not been validated.
+These conventions exist to reduce mistakes, forgotten assumptions and maintenance cost in the repository owner's real workflow.
 
-## Repository language
+They are not a contributor handbook, public SDK contract or attempt to standardize every possible project.
 
-- Machine-facing identifiers, code, schemas and CLI names use English.
-- The current canonical product specification and context documents may remain in Spanish while the project is owner-led.
-- Public-facing English documentation may be added later without deleting the Spanish source until both are maintained deliberately.
-- Avoid mixing languages inside identifiers or a single technical concept.
+A convention belongs here only when it does at least one of the following:
 
-## Naming
+- prevents a recurring error;
+- makes behaviour inspectable after memory fades;
+- protects secrets or destructive boundaries;
+- keeps generated output reproducible;
+- clarifies ownership between portable-opencode, OpenCode, OpenRouter and external tools;
+- provides a stable rule that agents must follow repeatedly.
 
-- Product and CLI name: `portable-opencode` until explicitly renamed.
+If a rule serves only hypothetical collaborators, profile variants or unsupported platforms, defer it until the need exists.
+
+## 2. Governing rules
+
+- Personal-first, reusable by others.
+- One canonical personal configuration before additional profiles.
+- Explicit state before implicit memory.
+- Native capability before custom code.
+- Deterministic operation before conversational automation.
+- Inspect before changing; plan before applying; verify after applying.
+- Keep secrets and private operational data outside Git.
+- Do not claim support or implementation without evidence.
+- Prefer the smallest coherent abstraction that solves the current problem.
+
+## 3. Source-of-truth discipline
+
+Use the narrowest canonical document:
+
+| Concern | Source of truth |
+|---|---|
+| Current identity, scope and status | `PROJECT.md` |
+| Desired personal outcome | `VISION.md` |
+| Component boundaries and lifecycle | `ARCHITECTURE.md` |
+| Repeated repository rules | `CONVENTIONS.md` |
+| How work is performed | `OPERATIONS.md` |
+| Durable decisions and rationale | `DECISIONS.md` |
+| Delivery order | `ROADMAP.md` |
+| Feature-specific behaviour | `docs/features/` |
+| Implementable configuration contracts | `docs/design/` |
+| Machine-readable current state | `.portable-opencode/state.json` |
+| Concise chronological transitions | `log.md` |
+
+Do not duplicate large sections between documents. Link to the source and record only the implication relevant to the current document.
+
+When sources conflict, follow the hierarchy defined in `AGENTS.md` and resolve the inconsistency explicitly.
+
+## 4. Language and naming
+
+### Language
+
+- Code, schemas, identifiers, CLI commands and machine-readable values use English.
+- Canonical repository documentation may use English while the project remains owner-led.
+- Do not maintain duplicate translations unless both have a real maintenance purpose.
+- Avoid mixing languages inside one identifier or technical concept.
+
+### Naming
+
+- Product and CLI: `portable-opencode` until renamed by decision.
 - Context documents: uppercase semantic names under `docs/context/`.
-- Commands: lowercase kebab-case, for example `/graph-update`.
+- CLI commands: lowercase kebab-case.
+- OpenCode slash commands: lowercase kebab-case, for example `/graph-update`.
 - Custom tools: lowercase snake_case, for example `graph_status`.
-- Plugins: lowercase kebab-case prefixed with `portable-`.
-- Semantic model roles: lowercase stable nouns such as `main`, `build`, `explore`, `review`, `verify`.
-- Decision identifiers: `DEC-NNN`.
-- Spike identifiers: `SPIKE-NNN`.
+- Plugins: lowercase kebab-case prefixed with `portable-` only when a plugin actually exists.
+- Semantic model roles: short stable nouns such as `build`, `explore`, `review` and `verify`.
+- Decisions: `DEC-NNN`.
+- Features: `FEAT-NNN`.
+- Designs: `DESIGN-NNN`.
+- Spikes: `SPIKE-NNN`.
 
-## Documentation
+Do not create identifiers for speculative components merely to make the repository appear complete.
 
-- Use Markdown with YAML frontmatter for curated context.
-- Include `type`, `title`, `description`, `status`, `created` and `modified`.
-- Add `sources` when a document derives from other repository artefacts.
-- Mark verification honestly; never invent an approval.
-- Link to the canonical source instead of copying long sections.
-- Current state belongs in `PROJECT.md`; desired state in `VISION.md`.
-- Durable rationale belongs in `DECISIONS.md`.
-- Chronological progress belongs in `log.md`, not in architecture documents.
-- Large research notes should not become canonical context until distilled.
+## 5. Documentation conventions
 
-## Decision discipline
+Curated context documents use Markdown with YAML frontmatter.
 
-A decision is accepted only when it has:
+Required fields:
 
-- an identifier;
+- `type`;
+- `title`;
+- `description`;
+- `status`;
+- `created`;
+- `modified`.
+
+Use `sources` when another repository artefact materially supports the document. Verification metadata must describe real review or evidence; never invent approval.
+
+Documentation must distinguish:
+
+- current fact;
+- accepted decision;
+- proposal;
+- technical hypothesis;
+- future direction;
+- implemented and validated behaviour.
+
+`log.md` stays concise. It records meaningful outcomes, resulting state and the next action. It is not a transcript and does not repeat full rationale.
+
+Create a new document only when it has a stable responsibility that cannot be handled cleanly by an existing source of truth.
+
+## 6. Decision and evidence conventions
+
+A durable decision requires:
+
+- identifier;
 - status;
 - date;
 - context;
-- decision;
-- rationale;
-- consequences.
+- decision or proposal;
+- consequences;
+- evidence gate when acceptance depends on a spike.
 
-Use these statuses:
+Allowed decision states:
 
 - `accepted`;
 - `proposed`;
-- `superseded`;
+- `deferred`;
 - `rejected`;
-- `deferred`.
+- `superseded`.
 
-Unresolved questions are not accepted decisions.
+Do not convert an open question into an accepted decision for convenience.
 
-## Configuration
+Upstream documentation is evidence of documented capability, not proof that the capability works in the owner's environment. Behaviour that materially affects architecture requires a reproducible spike or implementation test.
 
-- Prefer JSONC, YAML or TOML only when the consumer supports them natively and comments or structure add value.
-- Define schemas for generated or user-edited configuration.
-- Separate versioned defaults from local overrides.
-- Never interpolate secrets into generated files that may be committed.
-- Every generated file should have a clear source template or generator.
-- Generated changes should be deterministic for identical inputs.
+## 7. Configuration and state conventions
 
-## Code defaults
+Maintain four explicit ownership boundaries:
 
-Until superseded by a decision:
+1. canonical versioned configuration in this repository;
+2. managed configuration materialized on the owner's machine;
+3. project-versioned configuration generated into target repositories;
+4. private local values and operational data that never enter Git.
 
-- TypeScript is preferred for OpenCode plugins, custom tools and orchestration that benefits from its ecosystem.
-- Shell scripts should be small wrappers, not the primary domain layer.
-- External systems should be accessed through adapters.
-- Pure configuration-generation logic should be separated from filesystem mutation.
-- Functions that change state should support dry-run or return an explicit change plan where practical.
-- Public APIs and state transitions require tests.
-- Errors must include cause, affected component and remediation.
+Rules:
 
-These defaults do not yet select the final CLI framework or package manager.
+- one canonical personal configuration is the default;
+- add an override only for a demonstrated need;
+- do not build a generic profile framework before a second real configuration exists;
+- generated output must have an identifiable source and be deterministic for equivalent inputs;
+- user-editable or generated structured files require validation when implementation begins;
+- installed state is not automatically the source of truth;
+- secrets must be referenced through private mechanisms, never interpolated into committable templates;
+- derived state must be reconstructible or clearly marked as local-only.
 
-## Security
+Prefer the format natively consumed by the target component. Do not introduce YAML, TOML, JSONC or another format solely for stylistic consistency.
 
-- Deny access to real secrets by default.
-- Prefer allowlists for executable commands when feasible.
-- Destructive operations must be narrow and approved.
-- Logging must default to metadata-only.
-- Redact sensitive values before persistence.
-- Bind local UIs to loopback by default.
-- Never store API keys in repository templates or examples.
+## 8. Implementation conventions
 
-## Testing
+Until superseded by evidence and an accepted decision:
 
-The intended test layers are:
+- keep a small presentation-independent application core;
+- keep the CLI as the required control interface;
+- treat the Ratatui TUI as an optional adapter, not an architectural driver;
+- use narrow adapters around OpenCode, OpenRouter, Graphify, RTK, Phoenix and filesystem/process boundaries;
+- keep pure planning and validation separate from mutation;
+- state-changing operations must expose an explicit plan or dry-run where practical;
+- make operations idempotent or fail safely when repetition is unsafe;
+- return structured findings, operations and outcomes;
+- include actionable remediation in errors;
+- implement the canonical personal path before generalized extension points;
+- do not create plugin systems, registries, public SDKs or cross-platform abstraction layers without a current use case.
 
-1. schema and fixture validation;
-2. unit tests for composition and policy logic;
-3. integration tests for filesystem and CLI state transitions;
-4. contract tests for OpenCode/OpenRouter adapters;
-5. smoke tests on supported platforms;
-6. end-to-end bootstrap tests in disposable environments.
+TypeScript remains a proposed default for OpenCode extensions and orchestration. Ratatui introduces a possible Rust boundary. Neither is accepted for the whole implementation until the relevant spikes provide evidence.
 
-A feature is not complete when only its happy path works locally.
+## 9. Dependency conventions
 
-## Commits and pull requests
+Add a dependency only when it provides a concrete capability needed by the canonical workflow and is cheaper to maintain than implementing the required subset directly.
+
+Before adding a foundational dependency, evaluate:
+
+- whether an existing component already owns the capability;
+- installation cost on the primary environment;
+- operational and update burden;
+- failure behaviour;
+- privacy implications;
+- whether it forces an unnecessary runtime or packaging model.
+
+Wrap unstable external boundaries narrowly. Do not build adapters for alternatives that are not being used.
+
+## 10. Safety conventions
+
+- Deny reading or persisting real secrets by default.
+- Prefer narrow command allowlists once executable automation exists.
+- Destructive operations require explicit approval and a visible target scope.
+- Back up an existing managed file before replacing it unless the operation is safely reconstructible.
+- Local observability captures metadata by default; content capture requires explicit opt-in.
+- Redact credentials and sensitive values before logs, traces or UI rendering.
+- Bind local service interfaces to loopback by default.
+- Never commit API keys, credentials, private traces, observability databases or unrelated source code.
+
+Safety rules are enforced in code, permissions and adapters when possible. Prompt instructions alone are insufficient.
+
+## 11. Verification conventions
+
+Verification grows with the implementation. Do not create ceremonial test layers before there is code to test.
+
+Current profile: `docs-only`.
+
+When executable code exists, prioritize tests for:
+
+1. configuration and state schemas;
+2. pure planning and composition logic;
+3. filesystem mutation and rollback boundaries;
+4. lifecycle state transitions;
+5. safety and secret-redaction behaviour;
+6. the canonical end-to-end personal journey;
+7. only the platform environments the owner actually supports.
+
+Test a second platform or profile when it becomes part of the real supported path, not because a generic product might need it eventually.
+
+A change is not verified merely because it worked once interactively. Record the command, fixture or procedure that produced the evidence.
+
+## 12. Git conventions
+
+This is a personal repository. Process should create useful review boundaries, not bureaucracy.
 
 - Keep commits conceptually coherent.
-- Explain architectural changes in the relevant decision record.
-- Do not mix generated noise with hand-authored changes when avoidable.
-- PR descriptions should state what changed, why, validation and remaining risk.
-- Prefer draft PRs for incomplete architectural work.
+- Commit messages describe the outcome, not the editing activity.
+- Direct commits to `main` are acceptable for low-risk documentation and repository-maintenance changes after verification.
+- Use a branch for technical spikes, executable implementation, risky migrations or changes that benefit from an isolated review boundary.
+- Pull requests are optional for personal work and useful when reviewing a substantial diff, preserving experiment discussion or asking an agent to implement against a bounded task.
+- Do not require issue, branch and PR ceremony for every small change.
+- Do not mix generated noise, experimental output and canonical changes when they can be separated.
 
-## Dependency policy
+## 13. Generated and local files
 
-- Add dependencies for clear capability, not convenience alone.
-- Prefer maintained, inspectable libraries with stable APIs.
-- Avoid hard dependencies on enterprise-only services.
-- Wrap rapidly changing external APIs behind repository-owned interfaces.
-- Record a decision for foundational dependencies.
+Ignore by default:
 
-## Generated and local files
+- credentials and real `.env` files;
+- observability databases and raw private traces;
+- caches and temporary logs;
+- build output and coverage;
+- generated Graphify output unless a specific artefact is deliberately versioned;
+- editor and terminal transient state;
+- disposable spike output that is not evidence.
 
-Generated artefacts, caches, Graphify output, trace databases and private local state must remain ignored unless a specific artefact is intentionally committed as a fixture.
+Fixtures and small evidence artefacts may be committed when they are intentionally sanitized, reproducible and necessary to validate a contract.
+
+## 14. Completion rule
+
+A repository change is complete when:
+
+- the requested outcome exists;
+- it follows the personal-first architecture;
+- affected sources of truth agree;
+- relevant verification was executed or explicitly deferred;
+- project state reflects the actual situation;
+- no unsupported capability claim was introduced;
+- the next action is discoverable without relying on conversation memory.
+
+## 15. Explicitly deferred process
+
+The MVP does not require:
+
+- contributor governance;
+- mandatory pull requests;
+- a public extension API;
+- a profile marketplace;
+- a universal style guide for generated projects;
+- cross-platform parity policies;
+- release trains or formal support windows;
+- compatibility guarantees for users who are not part of the canonical personal workflow.
+
+Introduce these only after a concrete need appears.
