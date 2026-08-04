@@ -182,3 +182,36 @@ The project remains in `definition/configuring`. Scope alignment is in progress 
 ### Recommended next action
 
 Review `VISION.md` and remove success conditions that depend on unknown third-party users, teams or universal adoption while preserving the long-term possibility of reuse.
+
+---
+
+## 2026-08-05 — Personal-first vision aligned
+
+### Objective
+
+Turn the scope correction into a precise product vision that can guide architecture and MVP reduction without drifting back toward a generalized platform.
+
+### Completed
+
+- rewrote `VISION.md` around the repository owner as the sole required MVP user;
+- defined the primary moment of value as recovering the same deliberate environment on a fresh supported machine or new project;
+- described end-to-end experiences for installation, project initialization, normal development and repair;
+- replaced generic adoption goals with explicit personal workflow outcomes;
+- defined personal-first product principles and a single canonical default before profile proliferation;
+- separated deterministic lifecycle operations from semantic OpenCode workflows;
+- clarified local-first privacy, honest state, reversibility and maintainability requirements;
+- defined MVP portability without implying universal operating-system parity;
+- established evidence-based triggers for later profiles, platforms, team workflows or broader productization;
+- preserved public readability and replaceable configuration without introducing third-party support obligations.
+
+### Design outcome
+
+The vision now optimizes for a complete and maintainable personal workflow rather than theoretical market breadth. Future reuse remains possible because assumptions are explicit, not because the MVP is generalized in advance.
+
+### Current status
+
+`PROJECT.md` and `VISION.md` are aligned with `DEC-014`. Architecture and the configuration matrix still contain assumptions that require personal-first review.
+
+### Recommended next action
+
+Review `ARCHITECTURE.md` and remove components or abstraction requirements justified only by hypothetical users, broad platform parity or future productization. Preserve boundaries that directly improve the owner's safety, maintainability and ability to evolve the tool.
