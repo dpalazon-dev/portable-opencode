@@ -26,8 +26,8 @@
     "project": "aligned",
     "vision": "aligned",
     "architecture": "aligned",
-    "conventions": "pending_review",
-    "operations": "pending_review",
+    "conventions": "aligned",
+    "operations": "aligned",
     "configuration_tui": "pending_personal_first_review",
     "roadmap": "pending_personal_first_review",
     "configuration_matrix": "pending_personal_first_reduction"
@@ -40,6 +40,22 @@
     "environment_lifecycle": "separate",
     "project_lifecycle": "separate",
     "implementation_shape": "small-core-with-narrow-adapters"
+  },
+  "operations": {
+    "model": "lightweight-personal-workflow",
+    "sequence": [
+      "orient",
+      "define-outcome",
+      "inspect-evidence",
+      "plan",
+      "change",
+      "verify",
+      "synchronize",
+      "close"
+    ],
+    "git_policy": "lightest-useful-review-boundary",
+    "codex_policy": "bounded-tasks-only",
+    "active_verification_profile": "docs-only"
   },
   "design": {
     "configuration_matrix": {
@@ -89,8 +105,8 @@
   },
   "next": {
     "milestone": "personal-first-scope-alignment",
-    "step": "conventions-review",
-    "document": "docs/context/CONVENTIONS.md"
+    "step": "configuration-tui-review",
+    "document": "docs/features/CONFIGURATION_TUI.md"
   },
-  "updated_at": "2026-08-05T00:22:00+02:00"
+  "updated_at": "2026-08-05T00:30:00+02:00"
 }
