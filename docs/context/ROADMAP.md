@@ -46,24 +46,34 @@ Exit criteria:
 
 **Goal:** translate the specification into implementable configuration ownership.
 
+**Status:** in progress. [DESIGN-001](../design/CONFIGURATION_MATRIX.md) exists as a draft and is awaiting owner review.
+
 Deliverables:
 
-- matrix of OpenCode features and settings;
-- global versus project versus private ownership;
-- default values and override mechanisms;
-- generated versus static configuration;
-- validation criteria;
-- user questions and decision points;
-- OpenRouter semantic role manifest;
-- initial state schema;
-- presentation-independent operation and diagnostic concepts required by CLI and future TUI.
+- [x] initial matrix of core, OpenCode, OpenRouter, observability, Graphify, RTK, context, security, interface, installation and verification capabilities;
+- [x] global, project, private, remote and generated ownership model;
+- [x] proposed defaults and override mechanisms;
+- [x] static, template, generated, linked, queried, derived and private materialization model;
+- [x] validation and failure semantics;
+- [x] CLI and future TUI interface exposure;
+- [x] presentation-independent operation and diagnostic concepts required by CLI and TUI;
+- [x] first-MVP capability groups;
+- [x] technical evidence gates for `SPIKE-001` through `SPIKE-005`;
+- [ ] repository-owner review of proposed defaults;
+- [ ] resolution or explicit deferral of the ten open product questions;
+- [ ] OpenRouter semantic-role manifest design;
+- [ ] initial state schema derived from the matrix;
+- [ ] automated matrix consistency validation;
+- [ ] issues for the accepted spike scope.
 
 Exit criteria:
 
 - every MVP capability has a source of truth;
 - duplicated responsibility is identified;
 - implementation tasks can be cut without inventing behaviour;
-- configuration and lifecycle concepts do not depend on a specific interface.
+- configuration and lifecycle concepts do not depend on a specific interface;
+- proposed defaults are owner-approved or explicitly delegated to a spike;
+- state advances from `configuration-matrix/owner-review` to `technical-spikes`.
 
 ## Phase 2 — Technical spikes
 
