@@ -1,0 +1,38 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Local state
+.portable-opencode/local/
+.portable-opencode/logs/
+.portable-opencode/cache/
+
+# Observability data
+phoenix-data/
+langfuse-data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Graphify generated output
+graphify-out/
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+out/
+coverage/
+.venv/
+venv/
+__pycache__/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
