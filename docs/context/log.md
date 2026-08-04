@@ -4,7 +4,7 @@ title: Portable OpenCode Context Log
 description: Chronological record of meaningful changes to project context and operational state.
 status: active
 created: 2026-08-04
-modified: 2026-08-04
+modified: 2026-08-05
 sources:
   - index.md
 verified:
@@ -152,3 +152,33 @@ The matrix distinguishes accepted product policies from proposed defaults and un
 ### Recommended next action
 
 Review the matrix domain by domain, beginning with the core lifecycle and initial platform/profile choices. Only after owner verification should the project advance to technical spikes.
+
+---
+
+## 2026-08-05 — Personal-first product scope adopted
+
+### Objective
+
+Correct the project scope before reviewing or implementing a configuration matrix that had begun to assume a generalized multi-user product.
+
+### Completed
+
+- adopted `DEC-014 — Design personal-first and allow reuse by others`;
+- rewrote `PROJECT.md` around one primary user and one canonical real workflow;
+- clarified that portability initially means reuse across the owner's machines and new projects;
+- removed third-party onboarding, teams, broad platform parity and generic profile systems from MVP requirements;
+- preserved inspectability, safety, idempotence, structured state and explicit overrides because they improve personal maintainability;
+- marked `DESIGN-001` as requiring reduction against the personal-first criterion;
+- updated machine-readable project scope and decision counts.
+
+### Design outcome
+
+Public GitHub availability remains valuable for versioning, transparency and possible reuse. It no longer implies that the MVP must behave as a broadly supported product.
+
+### Current status
+
+The project remains in `definition/configuring`. Scope alignment is in progress and the configuration matrix has not been approved.
+
+### Recommended next action
+
+Review `VISION.md` and remove success conditions that depend on unknown third-party users, teams or universal adoption while preserving the long-term possibility of reuse.
