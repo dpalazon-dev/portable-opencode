@@ -4,7 +4,7 @@ title: Portable OpenCode Decisions
 description: Accepted, proposed and deferred architectural and product decisions.
 status: active
 created: 2026-08-04
-modified: 2026-08-04
+modified: 2026-08-05
 sources:
   - ../SPECIFICATION.es.md
   - PROJECT.md
@@ -35,6 +35,7 @@ This file records durable decisions. It does not replace detailed ADR files if i
 | DEC-011 | proposed | Adopt a practical subset of OKF for context metadata |
 | DEC-012 | deferred | Final packaging and distribution mechanism |
 | DEC-013 | proposed | Provide an optional first-party configuration TUI with Ratatui |
+| DEC-014 | accepted | Design personal-first and allow reuse by others |
 
 ---
 
@@ -358,14 +359,80 @@ This decision may move to `accepted` only after:
 - UI testing and terminal compatibility enter the supported quality model;
 - richer dashboards and unrelated interfaces remain outside the feature scope.
 
+---
+
+## DEC-014 — Design personal-first and allow reuse by others
+
+**Status:** accepted  
+**Date:** 2026-08-05
+
+### Context
+
+The initial specification and configuration matrix began to assume multiple user personas, teams, broad platform parity, profile systems and future public adoption. Those concerns are plausible long-term directions, but they are not the problem the MVP must solve.
+
+The project exists first to make the repository owner's own OpenCode + OpenRouter environment explicit, reproducible, observable and reusable across personal projects and machines.
+
+### Decision
+
+Adopt **personal-first, reusable by others** as the product-scope rule.
+
+The repository owner is the only primary user required for MVP acceptance. The canonical configuration will represent the owner's real workflow and primary environment.
+
+Public GitHub availability, readable configuration and replaceable defaults should make reuse possible, but third-party onboarding, team governance, universal platform support and generic configuration frameworks will not drive the MVP.
+
+### Interpretation of portability
+
+For the MVP, portability means:
+
+- reproducibility across the owner's supported machines;
+- reuse across new projects;
+- separation of versioned configuration from credentials and local state;
+- the ability to change explicit defaults without reconstructing the system.
+
+It does not initially mean equal support for all operating systems, users, teams or workflows.
+
+### Consequences
+
+- begin with one canonical personal profile rather than a profile catalogue;
+- support the owner's primary environment before broader platform parity;
+- remove team, organization and multi-user requirements from MVP acceptance;
+- require an actual personal use case before adding configurability;
+- keep safe architecture boundaries, idempotence, dry-run, diagnostics and structured state because they directly improve personal maintainability;
+- reduce `DESIGN-001` against the canonical personal workflow;
+- treat public reuse as a beneficial consequence rather than a product requirement;
+- defer onboarding and support mechanisms intended only for unknown third parties.
+
+### Guardrail against over-personalization
+
+Personal-first does not mean hidden or hard-coded.
+
+The canonical configuration must still:
+
+- document why defaults exist;
+- separate configuration from secrets;
+- expose important overrides;
+- avoid assumptions that cannot be inspected;
+- remain understandable after time has passed;
+- permit replacement of models, providers and local preferences.
+
+### Review trigger
+
+Reconsider broader productization only when at least one of the following occurs:
+
+- the owner needs multiple genuinely different profiles;
+- a second real user adopts the tool and exposes a repeated limitation;
+- platform differences block the owner's own machines;
+- a team workflow becomes an actual requirement;
+- the public repository develops sustained external use that justifies support cost.
+
 ## Open questions
 
-- What exact configuration matrix defines the MVP?
+- Which exact capabilities remain after reducing the configuration matrix to the personal-first MVP?
+- What is the repository owner's primary supported platform and shell?
 - Which OpenCode versions and interfaces will be supported first?
 - How will semantic OpenRouter roles be represented and synchronized?
 - How is the OpenCode session identifier propagated to the proxy?
-- What Graphify update strategy is reliable across platforms?
-- Is Windows native the primary path, or should WSL be recommended initially?
+- What Graphify update strategy is reliable on the primary platform?
 - Which files and behaviours are generated versus linked from the portable repository?
 - What is the smallest useful OKF-compatible metadata schema?
 - Does Ratatui justify a Rust application core, or only a separate presentation adapter?
