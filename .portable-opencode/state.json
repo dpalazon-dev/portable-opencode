@@ -4,12 +4,16 @@
     "name": "portable-opencode",
     "repository": "dpalazon-dev/portable-opencode",
     "phase": "definition",
-    "status": "configuring"
+    "status": "configuring",
+    "scope": "personal-first",
+    "primary_user": "repository-owner",
+    "reuse_policy": "public-reuse-allowed-not-mvp-driver",
+    "scope_decision": "DEC-014"
   },
   "initialization": {
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
-    "interactive_context": "complete_pending_owner_verification",
+    "interactive_context": "scope_alignment_in_progress",
     "ready": false
   },
   "context": {
@@ -21,11 +25,12 @@
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
-      "status": "draft_pending_owner_review",
+      "status": "draft_requires_personal_first_reduction",
       "document": "docs/design/CONFIGURATION_MATRIX.md",
       "capability_count": 177,
-      "next_action": "review_open_product_questions_and_proposed_defaults",
-      "completion_gate": "owner_verified_and_spike_links_confirmed"
+      "reduction_required": true,
+      "next_action": "remove_or_defer_capabilities_not_required_by_canonical_personal_workflow",
+      "completion_gate": "personal_first_scope_applied_and_owner_verified"
     }
   },
   "features": {
@@ -59,14 +64,14 @@
     "result": "pending"
   },
   "decisions": {
-    "accepted": 8,
+    "accepted": 9,
     "proposed": 4,
     "deferred": 1
   },
   "next": {
-    "milestone": "configuration-matrix",
-    "step": "owner-review",
-    "document": "docs/design/CONFIGURATION_MATRIX.md"
+    "milestone": "personal-first-scope-alignment",
+    "step": "vision-review",
+    "document": "docs/context/VISION.md"
   },
-  "updated_at": "2026-08-04T23:58:00+02:00"
+  "updated_at": "2026-08-05T00:06:00+02:00"
 }
