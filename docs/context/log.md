@@ -74,3 +74,41 @@ Documentation-only validation is required after publication: file presence, link
 ### Recommended next action
 
 Build the configuration matrix and convert open architectural questions into tracked technical spikes.
+
+---
+
+## 2026-08-04 — Ratatui configuration TUI defined
+
+### Objective
+
+Record the configuration TUI as a reviewable future feature without allowing the interface to dictate or duplicate the product core.
+
+### Completed
+
+- added `FEAT-001` in `docs/features/CONFIGURATION_TUI.md`;
+- added proposed decision `DEC-013`;
+- classified the TUI as an optional strategic first-party frontend;
+- selected Ratatui as the proposed implementation technology;
+- defined the presentation-independent application-engine boundary;
+- required CLI and TUI plan equivalence;
+- added `SPIKE-005` and a later TUI delivery phase to the roadmap;
+- recorded the feature in machine-readable project state.
+
+### Scope boundary
+
+The proposed TUI covers installation, configuration, plan review, diagnostics, repair and deterministic project scaffolding. It does not replace OpenCode, Phoenix, Graphify visualization or the semantic `/init-project` agent workflow.
+
+### Decision status
+
+`DEC-013` remains `proposed`. Ratatui and the Rust boundary require evidence from `SPIKE-005` before implementation is accepted.
+
+### Validation required
+
+- verify document links and frontmatter;
+- validate JSON state syntax;
+- review feature acceptance criteria for proportionality;
+- decide whether the configuration matrix must define interface contracts explicitly.
+
+### Recommended next action
+
+Continue with the configuration matrix, including shared concepts for plans, diagnostics, progress, outcomes and pending decisions so future CLI and TUI interfaces cannot diverge.
