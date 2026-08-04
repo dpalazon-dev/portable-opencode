@@ -25,7 +25,10 @@ The system configures and coordinates existing components. Its value lies in the
 ```text
 ┌─────────────────────────────────────────────────────────────┐
 │ User and project workflow                                   │
-│ CLI + OpenCode commands + project context                   │
+│ Headless CLI · proposed Ratatui TUI · OpenCode · context    │
+├─────────────────────────────────────────────────────────────┤
+│ Shared application and lifecycle engine                     │
+│ plans · validation · diagnostics · state · operations       │
 ├─────────────────────────────────────────────────────────────┤
 │ OpenCode runtime                                            │
 │ sessions · agents · tools · permissions · plugins · LSP     │
@@ -38,9 +41,11 @@ The system configures and coordinates existing components. Its value lies in the
 └─────────────────────────────────────────────────────────────┘
 ```
 
+The Ratatui TUI remains proposed under DEC-013. Its presence in this diagram defines the intended boundary, not an implemented capability.
+
 ## Component responsibilities
 
-### Portable CLI and orchestration
+### Application engine, CLI and orchestration
 
 Owns:
 
@@ -49,11 +54,30 @@ Owns:
 - project scaffolding;
 - profile selection;
 - generated configuration;
+- deterministic change planning;
 - state transitions;
 - lifecycle commands;
-- migration between repository versions.
+- migration between repository versions;
+- structured progress, diagnostics and operation outcomes.
+
+The application engine must be presentation-independent. The headless CLI is a mandatory first-party adapter and must remain fully usable without a TUI.
 
 It must not implement a second agent runtime.
+
+### Proposed Ratatui configuration TUI
+
+If DEC-013 is accepted after SPIKE-005, the TUI owns only:
+
+- rendering current and desired state;
+- navigation and input collection;
+- plan and diff inspection;
+- progress and failure presentation;
+- selection of explicit remediation actions;
+- terminal lifecycle and interaction state.
+
+It must call the same application operations as the CLI. It may not mutate files, execute arbitrary commands, own configuration rules or create independent state transitions.
+
+Feature definition: [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md).
 
 ### OpenCode
 
@@ -121,6 +145,7 @@ Owns:
 - architecture and conventions;
 - operational procedures;
 - durable decisions and rationale;
+- feature definitions;
 - roadmap and meaningful history.
 
 Context documents describe the project; machine state records its current lifecycle.
@@ -184,6 +209,8 @@ ready
 
 Additional states may include `blocked`, `degraded` and `migration-required`. State transitions must be explicit and testable.
 
+CLI and TUI presentation state must not become lifecycle states of the configured environment.
+
 ## Request path
 
 The intended inference path is:
@@ -201,6 +228,22 @@ OpenCode session
 
 A bypass mode may send requests directly to OpenRouter, but it must mark observability as degraded.
 
+## Configuration operation path
+
+```text
+User input through CLI or proposed TUI
+  → desired configuration
+  → application engine
+  → deterministic plan
+  → review / approval
+  → system adapters
+  → operation result
+  → lifecycle state update
+  → structured output to the active interface
+```
+
+For equivalent inputs, CLI and TUI must produce equivalent plans and outcomes.
+
 ## Project intelligence path
 
 ```text
@@ -214,7 +257,7 @@ User intent
   → graph/context/state update
 ```
 
-## Extension model
+## Extension and interface model
 
 Use the following distinction consistently:
 
@@ -226,19 +269,23 @@ Use the following distinction consistently:
 | Skill | Reusable procedure loaded on demand |
 | Plugin | Event-driven automation |
 | Custom tool | Typed executable operation |
-| CLI command | Installation, lifecycle or environment operation |
+| Application engine | Presentation-independent plans, validation, state and operations |
+| CLI command | Headless installation, lifecycle or environment operation |
+| Ratatui TUI | Optional interactive projection of application operations |
 
 ## Initial technical shape
 
 The implementation is expected to contain:
 
-- a portable CLI;
+- a presentation-independent application and lifecycle engine;
+- a portable headless CLI;
 - versioned templates and manifests;
 - OpenCode configuration, agents and extensions;
 - OpenRouter policy definitions and validation;
 - an observability proxy adapter;
 - Graphify ignore composition and state management;
-- schemas and tests.
+- schemas and tests;
+- a Ratatui frontend only after DEC-013 and SPIKE-005 justify it.
 
 The exact runtime, package manager and distribution method remain open until the configuration matrix and initial spikes are complete.
 
@@ -253,7 +300,9 @@ The exact runtime, package manager and distribution method remain open until the
 - diagnosability;
 - cross-platform behaviour;
 - low operational overhead;
-- graceful degradation.
+- graceful degradation;
+- interface equivalence;
+- recoverable terminal behaviour.
 
 ## Known architectural uncertainties
 
@@ -263,6 +312,9 @@ The exact runtime, package manager and distribution method remain open until the
 - Graphify incremental update and hook behaviour across platforms;
 - Windows-native versus WSL installation strategy;
 - minimum subset of OKF worth enforcing;
-- packaging and update model for plugins and templates.
+- packaging and update model for plugins and templates;
+- whether Ratatui justifies a Rust application core or a separate Rust frontend;
+- progress, cancellation and recovery contracts shared by CLI and TUI;
+- terminal accessibility and supported platform boundaries.
 
 These require explicit spikes before being converted into fixed architecture.
