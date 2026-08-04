@@ -18,6 +18,16 @@
     "format": "okf-compatible-subset",
     "owner_verification": "pending"
   },
+  "design": {
+    "configuration_matrix": {
+      "id": "DESIGN-001",
+      "status": "draft_pending_owner_review",
+      "document": "docs/design/CONFIGURATION_MATRIX.md",
+      "capability_count": 177,
+      "next_action": "review_open_product_questions_and_proposed_defaults",
+      "completion_gate": "owner_verified_and_spike_links_confirmed"
+    }
+  },
   "features": {
     "configuration_tui": {
       "id": "FEAT-001",
@@ -55,7 +65,8 @@
   },
   "next": {
     "milestone": "configuration-matrix",
-    "document": "docs/context/ROADMAP.md"
+    "step": "owner-review",
+    "document": "docs/design/CONFIGURATION_MATRIX.md"
   },
-  "updated_at": "2026-08-04T23:42:00+02:00"
+  "updated_at": "2026-08-04T23:58:00+02:00"
 }
