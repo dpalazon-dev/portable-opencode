@@ -1,14 +1,20 @@
 ---
 type: Roadmap
 title: Portable OpenCode Roadmap
-description: Ordered delivery path from specification to a usable new-project MVP.
+description: Personal-first delivery path from validated design to a complete CLI-driven workflow.
 status: active
 created: 2026-08-04
-modified: 2026-08-04
+modified: 2026-08-05
 sources:
   - PROJECT.md
   - VISION.md
+  - ARCHITECTURE.md
+  - CONVENTIONS.md
+  - OPERATIONS.md
   - DECISIONS.md
+  - ../SPECIFICATION.es.md
+  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
+  - ../design/CONFIGURATION_MATRIX.md
 verified:
   - by: repository-owner
     status: pending
@@ -16,288 +22,334 @@ verified:
 
 # Roadmap
 
-The roadmap is ordered by uncertainty reduction and architectural dependency. Dates are intentionally omitted until the implementation shape is validated.
+## 1. Delivery principle
 
-## Phase 0 — Canonical project context
+The roadmap preserves the full canonical scope while ordering it around one usable personal path:
 
-**Goal:** make the repository understandable and operable without relying on conversation history.
+```text
+define
+→ verify upstream surfaces
+→ build a small CLI core
+→ configure the personal machine
+→ initialize a new project
+→ support daily continuity
+→ harden and release
+```
 
-Deliverables:
+A phase must produce an observable capability or remove a material uncertainty. Documentation, schemas, templates and scripts are deliverables when they directly enable that path.
 
-- [x] public repository;
-- [x] conceptual specification v0.2;
-- [x] root `AGENTS.md`;
-- [x] curated context documents;
-- [x] initial decision log;
-- [x] machine-readable project state;
-- [x] first `.graphifyignore` policy;
-- [x] first independently reviewable feature definition;
-- [ ] automated documentation validation;
-- [ ] repository issue backlog derived from open decisions.
+The Ratatui configuration TUI is parked until the CLI can install, inspect, plan, apply, diagnose and initialize effectively.
 
-Exit criteria:
+## 2. Phase 0 — Canonical specification and design
 
-- context documents have clear responsibilities;
-- current state and future vision are separated;
-- accepted and proposed decisions are explicit;
-- another agent can identify the next step from repository files.
+**Goal:** make implementation possible without asking an agent to invent product behaviour.
 
-## Phase 1 — Configuration matrix
+### Product and context
 
-**Goal:** translate the specification into implementable configuration ownership.
+- [x] public repository and root `AGENTS.md`;
+- [x] personal-first `PROJECT.md`, `VISION.md` and `ARCHITECTURE.md`;
+- [x] minimal `CONVENTIONS.md` and `OPERATIONS.md`;
+- [x] accepted decisions and machine-readable project state;
+- [x] canonical context index and concise log;
+- [ ] publish the complete canonical specification in GitHub;
+- [ ] revise the specification to a personal-first v0.3 after matrix approval.
 
-**Status:** in progress. [DESIGN-001](../design/CONFIGURATION_MATRIX.md) exists as a draft and is awaiting owner review.
+### Configuration design
 
-Deliverables:
+- [x] initial broad configuration matrix;
+- [x] research current official configuration surfaces;
+- [ ] approve the reduced personal-first configuration matrix;
+- [ ] define the canonical configuration file tree;
+- [ ] define generated, copied, linked and private file ownership;
+- [ ] define the local override mechanism;
+- [ ] define JSON Schemas for portable configuration and state;
+- [ ] define the OpenRouter semantic-role and preset manifest;
+- [ ] define the managed-resource inventory used for backup and upgrades.
 
-- [x] initial matrix of core, OpenCode, OpenRouter, observability, Graphify, RTK, context, security, interface, installation and verification capabilities;
-- [x] global, project, private, remote and generated ownership model;
-- [x] proposed defaults and override mechanisms;
-- [x] static, template, generated, linked, queried, derived and private materialization model;
-- [x] validation and failure semantics;
-- [x] CLI and future TUI interface exposure;
-- [x] presentation-independent operation and diagnostic concepts required by CLI and TUI;
-- [x] first-MVP capability groups;
-- [x] technical evidence gates for `SPIKE-001` through `SPIKE-005`;
-- [ ] repository-owner review of proposed defaults;
-- [ ] resolution or explicit deferral of the ten open product questions;
-- [ ] OpenRouter semantic-role manifest design;
-- [ ] initial state schema derived from the matrix;
-- [ ] automated matrix consistency validation;
-- [ ] issues for the accepted spike scope.
+### Command and script design
 
-Exit criteria:
+- [ ] define the CLI command contract;
+- [ ] define the exact responsibility of each command;
+- [ ] inventory installation and verification scripts;
+- [ ] define PowerShell and shell wrapper boundaries for the primary environment;
+- [ ] define exit codes, machine-readable output and diagnostic codes.
 
-- every MVP capability has a source of truth;
-- duplicated responsibility is identified;
-- implementation tasks can be cut without inventing behaviour;
-- configuration and lifecycle concepts do not depend on a specific interface;
-- proposed defaults are owner-approved or explicitly delegated to a spike;
-- state advances from `configuration-matrix/owner-review` to `technical-spikes`.
+### Exit criteria
 
-## Phase 2 — Technical spikes
+- every MVP capability has one owner and one configuration surface;
+- upstream-documented behaviour is separated from behaviour requiring a spike;
+- the CLI and scripts can be implemented from explicit contracts;
+- no TUI, team or generic-profile requirement blocks the path.
 
-**Goal:** resolve the highest-risk assumptions before committing architecture.
+## 3. Phase 1 — Technical validation
 
-### SPIKE-001 — OpenCode extension and configuration lifecycle
+**Goal:** validate only the upstream behaviours that materially affect architecture.
 
-Validate:
-
-- configuration precedence;
-- project/global agents and tools;
-- plugin events;
-- session identifiers and metadata;
-- command orchestration;
-- permissions and compaction hooks.
-
-### SPIKE-002 — OpenRouter policy and semantic roles
+### SPIKE-001 — OpenCode configuration lifecycle
 
 Validate:
 
-- presets or equivalent stable aliases;
-- provider routing and fallbacks;
-- session affinity;
-- usage and cost metadata;
-- privacy controls;
-- API capabilities needed for doctor checks.
+- global and project configuration precedence;
+- chosen project configuration location;
+- discovery of rules, agents, commands and skills;
+- permission merging and command-pattern behaviour;
+- provider options for OpenRouter;
+- plugin lifecycle and stability;
+- session and command metadata available for observability.
+
+### SPIKE-002 — OpenRouter policy
+
+Validate:
+
+- semantic roles implemented through presets;
+- preset create, update, version and verification workflow;
+- provider routing and fallback options passed through OpenCode;
+- model fallback behaviour;
+- tool and parameter compatibility;
+- privacy options and Zero Data Retention routing;
+- usage, cost, cache and resolved-model metadata.
 
 ### SPIKE-003 — Local observability
 
 Validate:
 
-- transparent proxying and streaming;
-- tool-call payloads;
-- Phoenix ingestion and UI;
-- trace correlation with OpenCode events;
-- redaction and metadata-only mode;
-- local resource use and Windows setup.
+- transparent OpenAI-compatible proxying from OpenCode to OpenRouter;
+- streaming, tool calls, structured output and errors;
+- metadata-only and redaction policy;
+- correlation of project, session, agent and command identifiers;
+- OTLP/OpenInference export to local Phoenix;
+- start, stop, health, retention and bypass behaviour;
+- resource use on the primary machine.
 
-### SPIKE-004 — Graphify lifecycle
-
-Validate:
-
-- install and update commands;
-- incremental graph behaviour;
-- hook integration;
-- `.graphifyignore` composition;
-- output format and quality metrics;
-- cross-platform reliability.
-
-### SPIKE-005 — Ratatui and application boundary
-
-Feature reference: [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md).
+### SPIKE-004 — Graphify and RTK lifecycle
 
 Validate:
 
-- Ratatui behaviour on Windows Terminal and the initial Unix terminal matrix;
-- separation between model/update/view state and domain operations;
-- structured progress and safe cancellation;
-- terminal restoration after exit, failure and interruption;
-- non-TTY fallback;
-- shared plan and diagnostic contracts with the headless CLI;
-- packaging consequences of a Rust core versus a separate Rust frontend;
-- minimum useful views and measurable benefit over guided prompts.
+- Graphify and RTK installation on the primary environment;
+- documented OpenCode integrations;
+- `.gitignore` and `.graphifyignore` semantics;
+- first graph generation and quality audit;
+- explicit graph update workflow;
+- optional hook behaviour after explicit updates are stable;
+- RTK rewrite exclusions, failure tee output and diagnostics.
 
-The prototype is limited to a doctor view, an install-plan review and a profile selector backed by fixture or serialized application data.
+### Exit criteria
 
-Exit criteria:
+- each spike is reproducible;
+- each uncertain matrix row is accepted, revised or deferred;
+- implementation language and packaging can be selected with evidence;
+- no production abstraction is created inside a spike.
 
-- each proposed foundational decision is accepted, revised or rejected with evidence;
-- architecture uncertainties are reduced to implementation risks;
-- DEC-013 and FEAT-001 are updated from spike evidence.
+## 4. Phase 2 — CLI, configuration and state foundation
 
-## Phase 3 — CLI and state foundation
+**Goal:** build the smallest reliable engine that can explain and apply desired state.
 
-**Goal:** create the minimal reliable lifecycle engine.
+### Repository implementation shape
 
-Deliverables:
+- select implementation language, runtime and package manager;
+- create the source, schema, template, script, fixture and test structure;
+- keep external tools behind narrow adapters;
+- keep OpenCode extensions in their native form.
 
-- presentation-independent application engine;
-- CLI skeleton;
-- configuration and state schemas;
-- profile loading;
-- deterministic template rendering;
-- filesystem change planning;
-- dry-run support;
-- idempotent install state;
-- structured diagnostics;
-- structured progress and operation outcomes;
-- machine-readable output;
-- safe cancellation boundaries;
-- unit and integration test foundation.
+### Core contracts
 
-Exit criteria:
+- canonical personal configuration model;
+- local override model;
+- environment and project state schemas;
+- findings, plans, operations, outcomes and diagnostic codes;
+- managed-resource inventory;
+- versioned schema and migration markers.
 
-- CLI can inspect and explain intended changes;
-- state transitions are tested;
-- rerunning an operation does not corrupt state;
-- presentation layers can consume plans and diagnostics without duplicating mutation logic.
+### CLI foundation
 
-## Phase 4 — Global installation MVP
+Implement:
 
-**Goal:** configure a machine for the canonical workflow.
+```text
+portable-opencode status
+portable-opencode inspect
+portable-opencode plan
+portable-opencode apply
+portable-opencode doctor
+```
 
-Deliverables:
+Required behaviour:
 
-- `portable-opencode install`;
-- `portable-opencode doctor`;
-- OpenCode global configuration;
-- OpenRouter key and policy checks;
-- RTK and Graphify checks;
-- observability lifecycle commands;
-- safe backup and upgrade behaviour.
+- deterministic plans;
+- dry-run and explain output;
+- backups before replacement;
+- idempotent re-execution;
+- structured JSON output;
+- actionable failures;
+- safe interruption boundaries;
+- no dependency on a TUI.
 
-Exit criteria:
+### Exit criteria
 
-- clean supported environment reaches `installed`;
-- failures produce actionable remediation;
-- secrets remain outside versioned files;
-- the full workflow remains usable without a TUI.
+- fixture environments produce deterministic plans;
+- applying a plan updates state and managed resources coherently;
+- a second run produces a no-op or an explained drift result;
+- schemas and core behaviour have automated tests.
 
-## Phase 4.5 — First-party configuration TUI
+## 5. Phase 3 — Personal machine installation
 
-**Goal:** add a guided Ratatui frontend over stable installation, planning and diagnostic operations.
+**Goal:** reproduce the canonical global environment on the owner's supported machine.
 
-Deliverables:
+### CLI and scripts
 
-- home and environment status view;
-- profile selection;
-- install-plan review;
-- operation progress and failure reporting;
-- doctor findings and remediation actions;
-- safe exit, cancellation and terminal recovery;
-- headless CLI equivalence tests.
+Implement:
 
-Exit criteria:
+```text
+portable-opencode install
+portable-opencode doctor
+portable-opencode status
+portable-opencode observability start|stop|status
+```
 
-- the TUI performs no direct filesystem or process mutations;
-- equivalent inputs produce equivalent CLI and TUI plans;
-- non-TTY execution never launches the TUI;
-- secrets are redacted;
-- supported terminal smoke tests pass;
-- DEC-013 is accepted, revised or rejected based on evidence.
+### Managed global configuration
 
-This phase may move later if the application-engine contracts are not stable enough. It must not block the headless installation MVP.
+- supported OpenCode installation and version check;
+- global `opencode.jsonc`;
+- global `AGENTS.md`;
+- canonical global agents, commands and skills;
+- permissions baseline;
+- OpenCode TUI preferences;
+- OpenRouter authentication check;
+- semantic preset reconciliation;
+- RTK installation and OpenCode integration;
+- Graphify installation and OpenCode integration;
+- local observability proxy and Phoenix lifecycle;
+- backups and drift reporting.
 
-## Phase 5 — New-project scaffold MVP
+### Exit criteria
 
-**Goal:** prepare an empty directory for interactive project definition.
+- a clean supported environment reaches `healthy`;
+- secrets remain in documented private stores;
+- `doctor` identifies missing or divergent components;
+- OpenCode can execute a test request through the selected OpenRouter policy;
+- RTK and Graphify integrations are verifiably active;
+- observability can be disabled only as an explicit degraded mode.
 
-Deliverables:
+## 6. Phase 4 — New-project bootstrap
 
-- `portable-opencode init-project <path>`;
-- Git initialization;
-- project context templates;
-- local OpenCode configuration;
-- `.opencode/` base assets;
-- provisional `.graphifyignore`;
+**Goal:** turn an empty directory into an understood, runnable and verifiable agentic project.
+
+### Deterministic scaffold
+
+Implement:
+
+```text
+portable-opencode init-project <path>
+portable-opencode project status
+portable-opencode project doctor
+```
+
+Generate or configure:
+
+- Git repository when absent;
+- project `AGENTS.md`;
+- `docs/context/`;
+- local OpenCode config and assets;
 - project state;
-- initial verification profile;
-- optional TUI projection for deterministic scaffold choices after FEAT-001 foundation is validated.
+- stack-detection result;
+- provisional `.gitignore` and `.graphifyignore`;
+- verification command manifest;
+- initial application baseline when selected.
 
-Exit criteria:
+### Semantic initialization in OpenCode
 
-- identical inputs produce an equivalent scaffold;
-- the operation is idempotent or safely refuses unsafe repetition;
-- the project clearly reports `scaffolded`, not `ready`;
-- TUI and CLI paths, when both exist, use the same scaffold plan.
+Provide `/init-project` to:
 
-## Phase 6 — Interactive `/init-project`
+- establish purpose and constraints;
+- select or confirm stack;
+- define architecture and conventions;
+- reconcile native `/init`;
+- install dependencies;
+- configure LSP and formatter;
+- refine ignore files;
+- build and audit the first Graphify graph;
+- run canonical verification;
+- persist unresolved decisions;
+- move the project to `ready` only when gates pass.
 
-**Goal:** transform a scaffold into a runnable, understood and verified project.
+### Exit criteria
 
-Deliverables:
+- identical inputs create an equivalent scaffold;
+- the project distinguishes `scaffolded`, `configuring`, `ready`, `dirty`, `degraded` and `blocked`;
+- the first graph and context are useful rather than merely present;
+- the generated project passes its verification manifest.
 
-- structured project interview;
-- context completion;
-- stack profile selection;
-- minimal application generation;
-- LSP, formatter and verification setup;
-- final `.gitignore` and `.graphifyignore`;
-- initial graph generation and audit;
-- native OpenCode `/init` integration;
-- ready-state validation.
+## 7. Phase 5 — Daily continuity and maintenance
 
-Exit criteria:
+**Goal:** make the environment useful after initialization.
 
-- a fixture project reaches `ready` only when all criteria pass;
-- ambiguous graph decisions are persisted;
-- verification commands are canonical and executable.
+Implement explicit workflows for:
 
-The semantic interview remains an OpenCode agent workflow rather than a rigid TUI form.
-
-## Phase 7 — Session continuity and maintenance
-
-**Goal:** make the environment useful beyond initial bootstrap.
-
-Deliverables:
-
-- graph dirty/update lifecycle;
-- project status command;
+- project and environment status;
+- graph freshness and explicit updates;
 - context consistency review;
-- compaction preservation;
-- handoff workflow;
-- session and project cost commands;
-- upgrade and migration path;
-- optional TUI views for pending decisions and repair operations.
+- handoff and compaction continuity;
+- verification after significant changes;
+- session, model, provider, token and cost inspection;
+- configuration drift;
+- component health;
+- safe upgrade and schema migration;
+- restoration from managed backups.
 
 Exit criteria:
 
-- another session can recover current work reliably;
-- stale graph or context is visible;
-- version upgrades preserve or migrate project state safely.
+- a new session can recover current intent, state and next action;
+- stale graph, invalid context or degraded observability is visible;
+- upgrades preserve explicit personal overrides and private boundaries;
+- no daily workflow depends on undocumented manual steps.
 
-## Deferred roadmap
+## 8. Phase 6 — Hardening and first release
 
-- adoption of existing repositories;
-- team workspaces and shared policies;
-- Langfuse or remote observability profiles;
-- GitHub automation;
+**Goal:** prove the complete personal path and make it maintainable.
+
+Deliverables:
+
+- documentation and schema validation;
+- unit and integration tests;
+- adapter contract tests;
+- disposable project fixtures;
+- end-to-end test from clean supported machine to ready project;
+- failure and recovery scenarios;
+- secret and trace-redaction checks;
+- supported-version manifest;
+- installation and recovery documentation;
+- versioning and release notes;
+- first tagged release.
+
+Exit criteria:
+
+- the canonical path is reproducible without conversation history;
+- reruns, failures and upgrades do not corrupt managed state;
+- upstream version assumptions are explicit;
+- the owner can install and use the system as the default personal workflow.
+
+## 9. Parked work
+
+### Configuration TUI
+
+`FEAT-001` and Ratatui are deferred until all of the following are true:
+
+- the CLI contracts are stable;
+- installation and `doctor` work end to end;
+- plans and diagnostics are already structured;
+- repeated CLI use reveals interaction problems that a TUI would materially solve.
+
+Only then should the feature be re-evaluated. It is not part of the implementation-language decision or first release gate.
+
+### Other deferred directions
+
+- existing-repository adoption;
+- additional personal profiles;
+- team and organization policy;
+- universal operating-system parity;
 - MCP profiles;
-- local model profiles;
-- template marketplace;
-- enterprise governance;
-- background agents;
-- observability dashboards inside the portable TUI;
-- Graphify visualization inside the portable TUI;
-- OpenCode session management inside the portable TUI.
+- local-model profiles;
+- alternate observability backends;
+- GitHub automation;
+- marketplaces;
+- autonomous background agents;
+- hosted control planes.
