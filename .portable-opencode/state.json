@@ -18,6 +18,17 @@
     "format": "okf-compatible-subset",
     "owner_verification": "pending"
   },
+  "features": {
+    "configuration_tui": {
+      "id": "FEAT-001",
+      "status": "proposed",
+      "decision": "DEC-013",
+      "definition": "docs/features/CONFIGURATION_TUI.md",
+      "technology": "ratatui",
+      "implementation": "not_started",
+      "validation_spike": "SPIKE-005"
+    }
+  },
   "graphify": {
     "installed": false,
     "status": "inactive_no_source_implementation",
@@ -39,12 +50,12 @@
   },
   "decisions": {
     "accepted": 8,
-    "proposed": 3,
+    "proposed": 4,
     "deferred": 1
   },
   "next": {
     "milestone": "configuration-matrix",
     "document": "docs/context/ROADMAP.md"
   },
-  "updated_at": "2026-08-04T23:22:00+02:00"
+  "updated_at": "2026-08-04T23:42:00+02:00"
 }
