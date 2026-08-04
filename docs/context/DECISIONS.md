@@ -34,6 +34,7 @@ This file records durable decisions. It does not replace detailed ADR files if i
 | DEC-010 | proposed | Use Arize Phoenix as the MVP observability backend |
 | DEC-011 | proposed | Adopt a practical subset of OKF for context metadata |
 | DEC-012 | deferred | Final packaging and distribution mechanism |
+| DEC-013 | proposed | Provide an optional first-party configuration TUI with Ratatui |
 
 ---
 
@@ -266,6 +267,97 @@ Use OKF-compatible Markdown and frontmatter concepts for provenance, lifecycle, 
 
 The choice depends on the implementation language, platform matrix and update/migration model.
 
+---
+
+## DEC-013 — Provide an optional first-party configuration TUI with Ratatui
+
+**Status:** proposed  
+**Date:** 2026-08-04  
+**Feature:** [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md)
+
+### Context
+
+The system will coordinate configuration across OpenCode, OpenRouter, local observability, Graphify, RTK, generated project context and machine-readable lifecycle state. Sequential prompts and raw command output can perform these operations, but they become difficult to understand when choices are interdependent or when the user must compare current and desired state.
+
+A first-party TUI could make installation, configuration, plan review, diagnostics, repair and deterministic project scaffolding more observable and safer. It would become counterproductive if it duplicated the lifecycle engine, replaced OpenCode or made headless execution secondary.
+
+### Proposal
+
+Provide an optional first-party terminal interface using **Ratatui** for configuration and lifecycle workflows.
+
+The TUI will be a presentation adapter over the same application engine used by the headless CLI. It will not own configuration rules, state transitions, filesystem mutations or process execution.
+
+The conventional and non-interactive CLI remains mandatory. The TUI is not required for CI, remote automation or non-TTY environments.
+
+### Product position
+
+Classify the TUI as a **strategic first-party frontend, optional at runtime and subsequent to the core lifecycle engine**.
+
+The initial useful scope is limited to:
+
+- overall environment status;
+- profile selection;
+- install-plan inspection;
+- operation progress and failure reporting;
+- doctor findings and safe remediation;
+- deterministic project-scaffold configuration.
+
+It must not replace:
+
+- the OpenCode TUI and agent conversation;
+- Phoenix or another observability explorer;
+- Graphify visualization;
+- the semantic `/init-project` interview inside OpenCode.
+
+### Architectural constraints
+
+- the shared application engine must exist before the TUI;
+- CLI and TUI must produce equivalent plans for equivalent inputs;
+- UI components may not directly mutate files or execute commands;
+- all operations require structured state, progress and outcomes;
+- non-TTY execution must never attempt to launch the TUI;
+- secrets must be redacted before reaching the view;
+- terminal state must recover after normal exit, failure and cancellation.
+
+### Relationship to implementation language
+
+Ratatui introduces material evidence in favour of Rust for the CLI and lifecycle engine, but this decision does not settle the language of the whole repository.
+
+`SPIKE-005` must compare:
+
+1. a shared Rust core, CLI and TUI;
+2. a separate Rust TUI over a non-Rust core.
+
+A split runtime must not be adopted without evidence that its flexibility outweighs its packaging and protocol complexity.
+
+### Evidence still required
+
+- Windows Terminal, Linux and macOS behaviour in the supported matrix;
+- terminal resize, keyboard input and clean restoration;
+- asynchronous progress and safe cancellation;
+- plan and diagnostic contracts shared with the CLI;
+- packaging implications of Ratatui and Rust;
+- accessibility limitations and fallback quality;
+- measured reduction in configuration error compared with guided CLI prompts;
+- a minimal screen set that adds value without creating a second OpenCode.
+
+### Acceptance condition
+
+This decision may move to `accepted` only after:
+
+- the application-engine boundary is specified;
+- the headless CLI remains independently usable;
+- `SPIKE-005` validates the Ratatui approach on the initial platform matrix;
+- the feature acceptance criteria in `FEAT-001` are reviewed and considered proportionate.
+
+### Consequences if accepted
+
+- Ratatui becomes a supported first-party frontend;
+- the core must expose presentation-independent plans, diagnostics, progress and outcomes;
+- packaging decisions must account for the Rust boundary;
+- UI testing and terminal compatibility enter the supported quality model;
+- richer dashboards and unrelated interfaces remain outside the feature scope.
+
 ## Open questions
 
 - What exact configuration matrix defines the MVP?
@@ -276,3 +368,5 @@ The choice depends on the implementation language, platform matrix and update/mi
 - Is Windows native the primary path, or should WSL be recommended initially?
 - Which files and behaviours are generated versus linked from the portable repository?
 - What is the smallest useful OKF-compatible metadata schema?
+- Does Ratatui justify a Rust application core, or only a separate presentation adapter?
+- Should invoking `portable-opencode` without arguments open the TUI or display CLI help?
