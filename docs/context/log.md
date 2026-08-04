@@ -1,7 +1,7 @@
 ---
 type: Knowledge Log
 title: Portable OpenCode Context Log
-description: Chronological record of meaningful changes to project context and operational state.
+description: Concise chronological record of meaningful context, scope and architecture changes.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
@@ -14,204 +14,136 @@ verified:
 
 # Context log
 
+This log records meaningful transitions, their outcome and the next action. It does not repeat the full rationale already maintained in project, vision, architecture, decision, feature or design documents.
+
 ## 2026-08-04 — Repository foundation
 
-### Objective
+**Outcome**
 
-Create a public repository and turn the conceptual discussion into a durable project specification.
-
-### Completed
-
-- created `dpalazon-dev/portable-opencode`;
-- published the initial README, licence, contribution and security files;
+- created the public `dpalazon-dev/portable-opencode` repository;
+- published README, licence, contribution and security files;
 - published conceptual and functional specification v0.2;
-- reframed the project as a coherent OpenCode + OpenRouter configuration system;
-- introduced local observability as a core plane;
-- evaluated a selective, non-replacing role for OKF.
+- defined the product as a coherent OpenCode + OpenRouter configuration system;
+- introduced Graphify, RTK, structured context and local observability as core concepts.
 
-### Decisions
+**Resulting decisions**
 
-- OpenCode and OpenRouter are co-equal foundations of the product;
-- Graphify is mandatory in the canonical profile;
+- OpenCode and OpenRouter are co-equal foundations;
+- Graphify belongs to the canonical setup;
 - observability is local and metadata-first by default;
-- MCPs remain outside the initial core.
-
-### Validation
-
-Repository and specification files were fetched from GitHub after publication.
-
-### Next action
-
-Create and adopt the repository's own agent rules, context documents, decision log and machine-readable state.
+- MCPs and broad integrations remain outside the initial core.
 
 ---
 
-## 2026-08-04 — Dogfooding context established
+## 2026-08-04 — Repository dogfooding established
 
-### Objective
-
-Make the repository follow the same context and continuity model it intends to generate for future projects.
-
-### Completed
+**Outcome**
 
 - added root `AGENTS.md`;
-- added canonical `docs/context/` documents;
-- separated current project, vision, architecture, conventions and operations;
-- recorded accepted, proposed and deferred decisions;
-- defined an uncertainty-driven roadmap;
-- added project state and `.graphifyignore`.
+- created canonical `docs/context/` documents;
+- separated project, vision, architecture, conventions, operations, decisions and roadmap;
+- added machine-readable state and `.graphifyignore`;
+- required the repository to expose its real state without relying on conversation history.
 
-### Validation
+**Resulting state**
 
-Documentation-only validation is required after publication: file presence, links, frontmatter and JSON syntax.
-
-### Open risks
-
-- context still requires explicit owner verification;
-- no automated documentation validator exists;
-- proposed implementation and observability choices remain unvalidated.
-
-### Recommended next action
-
-Build the configuration matrix and convert open architectural questions into tracked technical spikes.
+- project entered definition and architectural-design phase;
+- verification remained documentation-only;
+- unimplemented capabilities were explicitly marked inactive or proposed.
 
 ---
 
-## 2026-08-04 — Ratatui configuration TUI defined
+## 2026-08-04 — Configuration TUI proposed
 
-### Objective
+**Outcome**
 
-Record the configuration TUI as a reviewable future feature without allowing the interface to dictate or duplicate the product core.
+- created `FEAT-001 — Interactive Configuration TUI`;
+- added proposed `DEC-013`;
+- selected Ratatui as the technology to evaluate;
+- defined the TUI as an optional adapter over the same operations as the CLI;
+- added `SPIKE-005` to validate terminal behaviour, application boundaries and packaging consequences.
 
-### Completed
+**Boundary**
 
-- added `FEAT-001` in `docs/features/CONFIGURATION_TUI.md`;
-- added proposed decision `DEC-013`;
-- classified the TUI as an optional strategic first-party frontend;
-- selected Ratatui as the proposed implementation technology;
-- defined the presentation-independent application-engine boundary;
-- required CLI and TUI plan equivalence;
-- added `SPIKE-005` and a later TUI delivery phase to the roadmap;
-- recorded the feature in machine-readable project state.
+The TUI may improve installation, plan review, diagnosis and repair. It must not replace OpenCode, own mutation logic or force a generalized product architecture.
 
-### Scope boundary
+**Current status**
 
-The proposed TUI covers installation, configuration, plan review, diagnostics, repair and deterministic project scaffolding. It does not replace OpenCode, Phoenix, Graphify visualization or the semantic `/init-project` agent workflow.
-
-### Decision status
-
-`DEC-013` remains `proposed`. Ratatui and the Rust boundary require evidence from `SPIKE-005` before implementation is accepted.
-
-### Validation required
-
-- verify document links and frontmatter;
-- validate JSON state syntax;
-- review feature acceptance criteria for proportionality;
-- decide whether the configuration matrix must define interface contracts explicitly.
-
-### Recommended next action
-
-Continue with the configuration matrix, including shared concepts for plans, diagnostics, progress, outcomes and pending decisions so future CLI and TUI interfaces cannot diverge.
+`FEAT-001` and `DEC-013` remain proposed and require personal-first review.
 
 ---
 
-## 2026-08-04 — Initial configuration matrix drafted
+## 2026-08-04 — Configuration matrix drafted
 
-### Objective
+**Outcome**
 
-Translate the conceptual specification into explicit configuration ownership, defaults, overrides, materialization, validation, failure semantics and interface contracts.
+- created `DESIGN-001 — Configuration Matrix`;
+- mapped 177 possible capabilities across core lifecycle, OpenCode, OpenRouter, observability, Graphify, RTK, context, security, interfaces, installation and verification;
+- defined ownership, defaults, overrides, validation, failure semantics and spike dependencies.
 
-### Completed
+**Finding**
 
-- created `DESIGN-001` at `docs/design/CONFIGURATION_MATRIX.md`;
-- defined status, scope, materialization and failure vocabularies;
-- mapped 177 capabilities across the application core, OpenCode, OpenRouter, local observability, Graphify, RTK, project context, security, CLI/TUI, installation and verification;
-- identified the first-MVP capability groups;
-- linked uncertain mechanisms to `SPIKE-001` through `SPIKE-005`;
-- recorded ten product questions requiring owner review;
-- linked the matrix from the canonical context index;
-- recorded the draft and its review gate in project state.
+The matrix was useful for exposing the design surface, but it also revealed drift toward a generalized multi-user product.
 
-### Design outcome
+**Current status**
 
-The matrix distinguishes accepted product policies from proposed defaults and unknown upstream mechanisms. It does not treat an intended OpenCode, OpenRouter, Graphify, Phoenix or Ratatui capability as validated until a reproducible spike or implementation test provides evidence.
-
-### Current status
-
-`DESIGN-001` is `draft_pending_owner_review`. The project remains in `definition/configuring`; the next milestone is still the configuration matrix, now at the owner-review step.
-
-### Validation required
-
-- review the ten open product questions;
-- inspect the proposed defaults by domain;
-- confirm that the 177 rows are proportionate to the MVP;
-- identify duplicated or missing capabilities;
-- verify all internal links and JSON syntax;
-- mark approved defaults or create decisions where they become binding.
-
-### Recommended next action
-
-Review the matrix domain by domain, beginning with the core lifecycle and initial platform/profile choices. Only after owner verification should the project advance to technical spikes.
+`DESIGN-001` requires reduction before owner approval.
 
 ---
 
-## 2026-08-05 — Personal-first product scope adopted
+## 2026-08-05 — Personal-first scope adopted
 
-### Objective
+**Outcome**
 
-Correct the project scope before reviewing or implementing a configuration matrix that had begun to assume a generalized multi-user product.
+- accepted `DEC-014 — Design personal-first and allow reuse by others`;
+- rewrote `PROJECT.md` around the repository owner as the sole required MVP user;
+- redefined portability as reproducibility across the owner's supported machines and new projects;
+- removed third-party onboarding, teams, broad platform parity and generic profile systems from MVP requirements.
 
-### Completed
+**Design rule**
 
-- adopted `DEC-014 — Design personal-first and allow reuse by others`;
-- rewrote `PROJECT.md` around one primary user and one canonical real workflow;
-- clarified that portability initially means reuse across the owner's machines and new projects;
-- removed third-party onboarding, teams, broad platform parity and generic profile systems from MVP requirements;
-- preserved inspectability, safety, idempotence, structured state and explicit overrides because they improve personal maintainability;
-- marked `DESIGN-001` as requiring reduction against the personal-first criterion;
-- updated machine-readable project scope and decision counts.
+> Personal-first, reusable by others.
 
-### Design outcome
-
-Public GitHub availability remains valuable for versioning, transparency and possible reuse. It no longer implies that the MVP must behave as a broadly supported product.
-
-### Current status
-
-The project remains in `definition/configuring`. Scope alignment is in progress and the configuration matrix has not been approved.
-
-### Recommended next action
-
-Review `VISION.md` and remove success conditions that depend on unknown third-party users, teams or universal adoption while preserving the long-term possibility of reuse.
+Public reuse remains possible through explicit and replaceable configuration. It does not drive MVP architecture or acceptance.
 
 ---
 
 ## 2026-08-05 — Personal-first vision aligned
 
-### Objective
+**Outcome**
 
-Turn the scope correction into a precise product vision that can guide architecture and MVP reduction without drifting back toward a generalized platform.
+- rewrote `VISION.md` around one complete personal journey from fresh machine to repeated daily use;
+- defined one canonical default before additional profiles;
+- separated deterministic portable operations from semantic OpenCode workflows;
+- established evidence-based triggers for future profiles, platforms, teams or broader productization.
 
-### Completed
+**Resulting gate**
 
-- rewrote `VISION.md` around the repository owner as the sole required MVP user;
-- defined the primary moment of value as recovering the same deliberate environment on a fresh supported machine or new project;
-- described end-to-end experiences for installation, project initialization, normal development and repair;
-- replaced generic adoption goals with explicit personal workflow outcomes;
-- defined personal-first product principles and a single canonical default before profile proliferation;
-- separated deterministic lifecycle operations from semantic OpenCode workflows;
-- clarified local-first privacy, honest state, reversibility and maintainability requirements;
-- defined MVP portability without implying universal operating-system parity;
-- established evidence-based triggers for later profiles, platforms, team workflows or broader productization;
-- preserved public readability and replaceable configuration without introducing third-party support obligations.
+A capability belongs in the MVP only when it contributes directly to the canonical personal journey or protects its safety and maintainability.
 
-### Design outcome
+---
 
-The vision now optimizes for a complete and maintainable personal workflow rather than theoretical market breadth. Future reuse remains possible because assumptions are explicit, not because the MVP is generalized in advance.
+## 2026-08-05 — Personal-first architecture aligned
 
-### Current status
+**Outcome**
 
-`PROJECT.md` and `VISION.md` are aligned with `DEC-014`. Architecture and the configuration matrix still contain assumptions that require personal-first review.
+- rewrote `ARCHITECTURE.md` using the canonical personal workflow as its selection criterion;
+- replaced the platform-like architecture with a small application core, mandatory CLI and narrow external adapters;
+- removed a profile framework from the MVP in favour of one canonical personal configuration;
+- separated environment lifecycle from project lifecycle;
+- defined the operation sequence as inspect, plan, review, apply, verify and record;
+- reduced application concepts to findings, plans, decisions, operations, outcomes and state;
+- explicitly deferred multi-user systems, universal platform parity, marketplaces, public SDKs, hosted control planes and speculative adapter layers;
+- preserved Graphify, RTK, structured context, observability, safety, idempotence and diagnostics because they directly improve the owner's workflow.
 
-### Recommended next action
+**Architecture principle**
 
-Review `ARCHITECTURE.md` and remove components or abstraction requirements justified only by hypothetical users, broad platform parity or future productization. Preserve boundaries that directly improve the owner's safety, maintainability and ability to evolve the tool.
+> Preserve only components and abstractions that directly improve the canonical personal workflow or its long-term maintainability.
+
+**Current status**
+
+`PROJECT.md`, `VISION.md` and `ARCHITECTURE.md` are aligned with `DEC-014`. `CONVENTIONS.md`, `OPERATIONS.md`, `FEAT-001`, `ROADMAP.md` and `DESIGN-001` still require personal-first review.
+
+**Recommended next action**
+
+Review `CONVENTIONS.md` and remove process, abstraction and compatibility rules that serve hypothetical contributors or product variants rather than the owner's real development workflow.
