@@ -13,13 +13,13 @@
   "initialization": {
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
-    "interactive_context": "scope_alignment_in_progress",
+    "interactive_context": "personal_first_alignment_complete",
     "ready": false
   },
   "context": {
     "path": "docs/context",
     "status": "active",
-    "format": "okf-compatible-subset",
+    "format": "repository-owned-metadata-subset",
     "owner_verification": "pending"
   },
   "scope_alignment": {
@@ -28,55 +28,55 @@
     "architecture": "aligned",
     "conventions": "aligned",
     "operations": "aligned",
-    "configuration_tui": "pending_personal_first_review",
-    "roadmap": "pending_personal_first_review",
-    "configuration_matrix": "pending_personal_first_reduction"
+    "configuration_tui": "deferred",
+    "roadmap": "aligned_pending_owner_review",
+    "configuration_matrix": "reduced_pending_owner_review"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
     "control_interface": "headless-cli-required",
-    "tui": "optional-proposed-adapter",
+    "tui": "deferred-until-cli-effective",
     "profile_strategy": "single-canonical-configuration",
     "environment_lifecycle": "separate",
     "project_lifecycle": "separate",
-    "implementation_shape": "small-core-with-narrow-adapters"
+    "implementation_shape": "small-core-with-native-tool-surfaces"
   },
-  "operations": {
-    "model": "lightweight-personal-workflow",
-    "sequence": [
-      "orient",
-      "define-outcome",
-      "inspect-evidence",
-      "plan",
-      "change",
-      "verify",
-      "synchronize",
-      "close"
-    ],
-    "git_policy": "lightest-useful-review-boundary",
-    "codex_policy": "bounded-tasks-only",
-    "active_verification_profile": "docs-only"
+  "research": {
+    "configuration_surfaces": {
+      "id": "RESEARCH-001",
+      "status": "complete_pending_owner_review",
+      "document": "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
+      "reviewed_at": "2026-08-05",
+      "systems": [
+        "opencode",
+        "openrouter",
+        "graphify",
+        "rtk",
+        "phoenix"
+      ]
+    }
   },
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
-      "status": "draft_requires_personal_first_reduction",
+      "status": "reduced_pending_owner_review",
       "document": "docs/design/CONFIGURATION_MATRIX.md",
-      "capability_count": 177,
-      "reduction_required": true,
-      "next_action": "remove_or_defer_capabilities_not_required_by_canonical_personal_workflow",
-      "completion_gate": "personal_first_scope_applied_and_owner_verified"
+      "capability_count": 81,
+      "previous_capability_count": 177,
+      "reduction_required": false,
+      "next_action": "review_eight_remaining_personal_defaults",
+      "completion_gate": "owner_verified_and_spike_links_confirmed"
     }
   },
   "features": {
     "configuration_tui": {
       "id": "FEAT-001",
-      "status": "proposed_requires_personal_first_review",
+      "status": "deferred",
       "decision": "DEC-013",
       "definition": "docs/features/CONFIGURATION_TUI.md",
-      "technology": "ratatui",
+      "technology_candidate": "ratatui",
       "implementation": "not_started",
-      "validation_spike": "SPIKE-005"
+      "reconsider_after": "effective-stable-cli"
     }
   },
   "graphify": {
@@ -93,6 +93,11 @@
     "validated": false,
     "content_capture_default": false
   },
+  "operations": {
+    "model": "lightweight-personal-workflow",
+    "codex_policy": "bounded-tasks-only",
+    "active_verification_profile": "docs-only"
+  },
   "verification": {
     "profile": "docs-only",
     "last_run": null,
@@ -100,13 +105,17 @@
   },
   "decisions": {
     "accepted": 9,
-    "proposed": 4,
-    "deferred": 1
+    "proposed": 3,
+    "deferred": 2
   },
   "next": {
-    "milestone": "personal-first-scope-alignment",
-    "step": "configuration-tui-review",
-    "document": "docs/features/CONFIGURATION_TUI.md"
+    "milestone": "configuration-design-owner-review",
+    "step": "review-reduced-matrix-and-roadmap",
+    "documents": [
+      "docs/context/ROADMAP.md",
+      "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
+      "docs/design/CONFIGURATION_MATRIX.md"
+    ]
   },
-  "updated_at": "2026-08-05T00:30:00+02:00"
+  "updated_at": "2026-08-05T01:05:00+02:00"
 }
