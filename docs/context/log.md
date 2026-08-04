@@ -112,3 +112,43 @@ The proposed TUI covers installation, configuration, plan review, diagnostics, r
 ### Recommended next action
 
 Continue with the configuration matrix, including shared concepts for plans, diagnostics, progress, outcomes and pending decisions so future CLI and TUI interfaces cannot diverge.
+
+---
+
+## 2026-08-04 — Initial configuration matrix drafted
+
+### Objective
+
+Translate the conceptual specification into explicit configuration ownership, defaults, overrides, materialization, validation, failure semantics and interface contracts.
+
+### Completed
+
+- created `DESIGN-001` at `docs/design/CONFIGURATION_MATRIX.md`;
+- defined status, scope, materialization and failure vocabularies;
+- mapped 177 capabilities across the application core, OpenCode, OpenRouter, local observability, Graphify, RTK, project context, security, CLI/TUI, installation and verification;
+- identified the first-MVP capability groups;
+- linked uncertain mechanisms to `SPIKE-001` through `SPIKE-005`;
+- recorded ten product questions requiring owner review;
+- linked the matrix from the canonical context index;
+- recorded the draft and its review gate in project state.
+
+### Design outcome
+
+The matrix distinguishes accepted product policies from proposed defaults and unknown upstream mechanisms. It does not treat an intended OpenCode, OpenRouter, Graphify, Phoenix or Ratatui capability as validated until a reproducible spike or implementation test provides evidence.
+
+### Current status
+
+`DESIGN-001` is `draft_pending_owner_review`. The project remains in `definition/configuring`; the next milestone is still the configuration matrix, now at the owner-review step.
+
+### Validation required
+
+- review the ten open product questions;
+- inspect the proposed defaults by domain;
+- confirm that the 177 rows are proportionate to the MVP;
+- identify duplicated or missing capabilities;
+- verify all internal links and JSON syntax;
+- mark approved defaults or create decisions where they become binding.
+
+### Recommended next action
+
+Review the matrix domain by domain, beginning with the core lifecycle and initial platform/profile choices. Only after owner verification should the project advance to technical spikes.
