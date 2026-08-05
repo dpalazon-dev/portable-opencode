@@ -36,6 +36,7 @@ verified:
 | DEC-013 | deferred | Defer the configuration TUI until the CLI is effective |
 | DEC-014 | accepted | Design personal-first and allow reuse by others |
 | DEC-015 | accepted | Support Windows natively without WSL in the MVP |
+| DEC-016 | accepted | Use `.opencode/opencode.jsonc` as the canonical project configuration |
 
 ---
 
@@ -286,10 +287,45 @@ PowerShell is the scripting and bootstrap shell. Windows Terminal is the primary
 
 The exact Windows and PowerShell versions belong in the supported-version manifest and must be fixed before the first tagged release.
 
+---
+
+## DEC-016 — Use `.opencode/opencode.jsonc` as the canonical project configuration
+
+**Status:** accepted  
+**Date:** 2026-08-05
+
+Every project initialized by `portable-opencode` uses:
+
+```text
+<project>/.opencode/opencode.jsonc
+```
+
+as its canonical project-level OpenCode configuration file.
+
+The root-level `<project>/opencode.jsonc` form is not generated or managed by the canonical workflow.
+
+**Rationale**
+
+- keeps OpenCode-specific infrastructure grouped under `.opencode/`;
+- places configuration beside project agents, commands, skills, plugins and tools;
+- reduces root-directory noise;
+- gives the portable CLI one deterministic ownership and migration boundary;
+- avoids accidental reliance on precedence between two project configuration forms.
+
+The root `AGENTS.md` remains at `<project>/AGENTS.md` because it is the repository-level operating entry point and is not treated as an internal `.opencode/` asset.
+
+**Consequences**
+
+- `init-project` creates and manages `.opencode/opencode.jsonc`;
+- templates, schemas, fixtures, doctor checks, drift detection and migrations target this path;
+- SPIKE-001 validates that the selected OpenCode version discovers and merges this form correctly on Windows;
+- the presence of root `opencode.json` or `opencode.jsonc` is reported as an unmanaged conflict or migration finding rather than silently merged into the portable desired state;
+- project-specific agents, commands, skills, plugins and tools live under `.opencode/` unless OpenCode requires another native path;
+- documentation and examples use only the canonical form.
+
 ## Open questions
 
 - Which implementation language and packaging approach survive the technical spikes?
-- Which OpenCode project config form becomes canonical?
 - Which agents and semantic roles are required initially?
 - Which Graphify outputs are versioned?
 - What is the minimal context metadata schema?
