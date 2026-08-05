@@ -1,6 +1,6 @@
 ---
 type: Design
-aid: DESIGN-002
+id: DESIGN-002
 title: Agent and Model Role Policy
 description: Minimal mapping between native OpenCode agents, custom personal subagents and semantic OpenRouter roles.
 status: active
