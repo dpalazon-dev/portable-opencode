@@ -14,118 +14,101 @@ verified:
 
 # Context log
 
-This log records outcomes, resulting state and the next action. Detailed rationale lives in the canonical context, decision, feature, research and design documents.
+This log records outcomes, resulting state and the next action. Detailed rationale lives in canonical context, decision, research and design documents.
 
 ## 2026-08-04 — Repository foundation
 
-**Outcome**
-
-- created the public repository;
-- published the initial specification and repository policies;
+- created the public repository and initial specification;
 - defined OpenCode + OpenRouter as the coherent product foundation;
 - introduced Graphify, RTK, structured context and local observability.
 
 ## 2026-08-04 — Repository dogfooding established
 
-**Outcome**
+- added root `AGENTS.md`, context documents, decisions, state and `.graphifyignore`;
+- required the repository to expose actual state without conversation history.
 
-- added root `AGENTS.md`, canonical context documents, decision log, state and `.graphifyignore`;
-- required the repository to expose its actual status without conversation history.
+## 2026-08-04 — Broad design surface drafted
 
-## 2026-08-04 — Initial TUI and configuration matrix defined
-
-**Outcome**
-
-- created `FEAT-001` for a possible Ratatui configurator;
+- proposed a possible Ratatui configurator;
 - drafted `DESIGN-001` with 177 capabilities;
-- exposed that the design was drifting toward a generalized product.
+- exposed drift toward a generalized product.
 
 ## 2026-08-05 — Personal-first scope aligned
 
-**Outcome**
-
-- accepted `DEC-014 — Design personal-first and allow reuse by others`;
-- aligned `PROJECT.md`, `VISION.md`, `ARCHITECTURE.md`, `CONVENTIONS.md` and `OPERATIONS.md`;
-- reduced the architecture to one canonical personal configuration, a small CLI core and native external-tool surfaces.
-
-**Governing rule**
-
-> A capability belongs in the MVP only when it improves the canonical personal workflow or protects its safety and maintainability.
+- accepted `DEC-014`;
+- aligned project, vision, architecture, conventions and operations;
+- reduced architecture to one personal configuration, a small CLI core and native upstream surfaces.
 
 ## 2026-08-05 — TUI parked
 
-**Outcome**
-
 - changed `DEC-013` and `FEAT-001` to deferred;
-- removed Ratatui and SPIKE-005 from the active implementation path;
-- established that the CLI must be useful and stable before any TUI re-evaluation.
+- removed Ratatui and SPIKE-005 from the active path;
+- made a working CLI the prerequisite for any TUI reconsideration.
 
 ## 2026-08-05 — Upstream configuration research completed
 
-**Outcome**
+- reviewed OpenCode, OpenRouter, Graphify, RTK and Phoenix primary documentation;
+- created `RESEARCH-001`;
+- confirmed that upstream tools should own their native configuration and behaviour.
 
-- reviewed current primary documentation for OpenCode, OpenRouter, Graphify, RTK and Phoenix;
-- created `RESEARCH-001 — Configuration Surface Research`;
-- confirmed that most desired behaviour should use native configuration and installers rather than custom portable abstractions.
+## 2026-08-05 — Roadmap and matrix rebuilt
 
-**Key finding**
-
-```text
-OpenCode owns runtime configuration and agent assets
-OpenRouter owns model/provider policy
-Graphify owns graph extraction and ignore semantics
-RTK owns command rewriting and output reduction
-Phoenix owns OTLP trace collection
-portable-opencode owns inspect, plan, apply, verify, state and coordination
-```
-
-## 2026-08-05 — Roadmap and configuration matrix rebuilt
-
-**Outcome**
-
-- rewrote the roadmap without reducing canonical scope;
-- made specifications, configuration design, schemas, templates and scripts explicit deliverables;
-- ordered delivery around technical validation, CLI foundation, machine installation, project bootstrap, continuity and hardening;
-- reduced `DESIGN-001` from 177 to 81 capabilities;
-- removed duplicated rows, team assumptions, profile catalogues and TUI-driven concepts;
-- linked remaining uncertainty to four active technical spikes.
+- preserved complete canonical scope while simplifying delivery phases;
+- made specification, schemas, templates, scripts and CLI contracts explicit deliverables;
+- reduced the configuration matrix from 177 to 81 contracts;
+- linked remaining uncertainty to four Windows-native spikes.
 
 ## 2026-08-05 — Windows-native environment selected
 
-**Outcome**
+- accepted `DEC-015`;
+- selected PowerShell and Windows Terminal;
+- removed WSL, Bash and POSIX wrappers from MVP requirements;
+- required all spikes and E2E evidence to execute natively on Windows.
 
-- accepted `DEC-015 — Support Windows natively without WSL in the MVP`;
-- selected PowerShell as the bootstrap and recovery shell;
-- selected Windows Terminal as the primary terminal surface;
-- removed Bash, POSIX shell and WSL from MVP requirements;
-- required all active spikes and the canonical end-to-end path to run natively on Windows;
-- updated project scope, roadmap, matrix and machine-readable state;
-- reduced the unresolved personal defaults from eight to seven.
+## 2026-08-05 — OpenCode project layout corrected
 
-**Resulting constraint**
+**Initial error**
 
-A dependency or workflow that only works through WSL does not satisfy the canonical path. It must provide a native Windows route, receive a narrow Windows adapter or be replaced.
+`DEC-016` accepted `.opencode/opencode.jsonc` after incorrectly treating `.opencode/` as both runtime configuration and asset directory.
 
-## 2026-08-05 — Canonical OpenCode project configuration selected
+**Evidence**
 
-**Outcome**
+Current official OpenCode documentation defines:
 
-- accepted `DEC-016 — Use .opencode/opencode.jsonc as the canonical project configuration`;
-- selected `<project>/.opencode/opencode.jsonc` as the only project-level OpenCode config generated and managed by portable-opencode;
-- retained `<project>/AGENTS.md` at the repository root as the native operating entry point;
-- grouped project agents, commands, skills, plugins and tools under `.opencode/` where supported;
-- converted root `opencode.json` or `opencode.jsonc` into an explicit conflict or migration finding;
-- updated roadmap, matrix and machine-readable state;
-- reduced unresolved personal defaults from seven to six.
+```text
+<project>/opencode.json(c)   project runtime configuration
+<project>/.opencode/         project agents, commands, skills, plugins, tools and themes
+```
 
-**Resulting constraint**
+`OPENCODE_CONFIG_DIR` adds an asset directory and does not redefine the standard project runtime config.
 
-`SPIKE-001` must validate discovery, merge behaviour and root-config conflict handling on Windows. It must not reopen the selected path as a product decision.
+**Correction**
 
-**Current status**
+- marked `DEC-016` superseded;
+- accepted `DEC-017`;
+- selected root `opencode.jsonc` as the canonical project runtime config;
+- preserved `.opencode/` as the native asset root;
+- added explicit policies for root JSON migration, dual root ambiguity, misplaced `.opencode/opencode.json(c)` and environment override provenance;
+- corrected architecture, roadmap, research, matrix and machine-readable state;
+- retained 81 matrix capabilities and six unresolved personal defaults.
 
-The reduced matrix remains pending owner review. Two personal defaults are resolved.
+**Resulting layout**
+
+```text
+<project>/
+├── opencode.jsonc
+├── AGENTS.md
+└── .opencode/
+    ├── agents/
+    ├── commands/
+    ├── skills/
+    ├── plugins/
+    ├── tools/
+    └── themes/
+```
+
+Only asset directories with real content are created.
 
 **Recommended next action**
 
-Choose the initial semantic roles and required OpenCode agents for the canonical personal workflow.
+Define the initial OpenCode agents and OpenRouter semantic roles together, while leaving the exact OpenRouter preset reference syntax to `SPIKE-002`.
