@@ -40,6 +40,7 @@ verified:
 | DEC-016 | superseded | Use `.opencode/opencode.jsonc` as project configuration |
 | DEC-017 | accepted | Use root `opencode.jsonc` plus `.opencode/` native assets |
 | DEC-018 | accepted | Reuse native OpenCode agents and use three semantic model roles |
+| DEC-019 | accepted | Version a minimal allowlist of Graphify output |
 
 ---
 
@@ -50,12 +51,6 @@ verified:
 
 OpenCode is the runtime and interaction surface. OpenRouter is the control plane for models, providers, routing, privacy, fallbacks and cost.
 
-**Consequences**
-
-- both systems are required for the canonical environment;
-- semantic model roles belong to the portable design;
-- configuration and verification cover both systems.
-
 ---
 
 ## DEC-002 — Prefer native capabilities before custom extensions
@@ -63,15 +58,7 @@ OpenCode is the runtime and interaction surface. OpenRouter is the control plane
 **Status:** accepted  
 **Date:** 2026-08-04
 
-Use native OpenCode, OpenRouter, Graphify, RTK and Phoenix surfaces before writing custom code.
-
-**Consequences**
-
-- OpenCode owns agents, commands, skills, permissions, LSP and formatters;
-- OpenRouter owns presets, provider policy, routing and fallbacks;
-- Graphify owns graph extraction;
-- RTK owns command rewriting and output filtering;
-- custom portable code requires a concrete cross-tool or lifecycle gap.
+Use native OpenCode, OpenRouter, Graphify, RTK and Phoenix surfaces before writing custom code. Custom portable code requires a concrete cross-tool or lifecycle gap.
 
 ---
 
@@ -99,13 +86,6 @@ Graphify is installed from the beginning. The first graph is generated after a u
 **Date:** 2026-08-04
 
 The canonical path includes a local observability boundary between OpenCode and OpenRouter. Metadata, usage, cost, latency and errors are captured by default; prompt and response content is not.
-
-**Consequences**
-
-- local services bind loopback;
-- secrets are redacted before persistence;
-- bypassing observability creates an explicit degraded state;
-- Phoenix remains replaceable even if selected for the MVP.
 
 ---
 
@@ -141,16 +121,7 @@ MCPs, GitHub automation, remote servers, community catalogues, local-model profi
 **Status:** proposed  
 **Date:** 2026-08-04
 
-TypeScript is the leading option because it aligns with OpenCode extensions, schemas and generators.
-
-**Evidence required**
-
-- simple native Windows installation;
-- acceptable packaging and runtime friction;
-- reliable Windows process and filesystem operations;
-- clear startup, update and migration strategy.
-
-The deferred TUI does not influence this decision.
+TypeScript is the leading option because it aligns with OpenCode extensions, schemas and generators. Acceptance requires native Windows packaging, process, filesystem, update and migration evidence.
 
 ---
 
@@ -159,17 +130,7 @@ The deferred TUI does not influence this decision.
 **Status:** proposed  
 **Date:** 2026-08-04
 
-Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI.
-
-**Evidence required**
-
-- native Windows lifecycle without WSL;
-- resource usage;
-- trace ingestion from the proxy;
-- retention and redaction;
-- reliable loopback operation.
-
-Phoenix is not the transparent proxy itself.
+Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI. Native Windows lifecycle, resource usage, retention, redaction and ingestion require SPIKE-003. Phoenix is not the proxy itself.
 
 ---
 
@@ -187,7 +148,7 @@ Use only metadata that improves provenance, lifecycle and verification. Full for
 **Status:** deferred  
 **Date:** 2026-08-04
 
-Packaging follows the implementation language, Windows-native installation evidence and upgrade model. Candidate mechanisms include a packaged executable, package-manager command or a small PowerShell bootstrap.
+Packaging follows language, Windows-native installation evidence and the upgrade model.
 
 ---
 
@@ -197,7 +158,7 @@ Packaging follows the implementation language, Windows-native installation evide
 **Date:** 2026-08-05  
 **Feature:** [FEAT-001](../features/CONFIGURATION_TUI.md)
 
-Park Ratatui and remove SPIKE-005 from the active path. First deliver working `status`, `inspect`, `plan`, `apply`, `doctor`, `install` and `init-project`. A future TUI may only be a thin adapter over those operations.
+Park Ratatui until `status`, `inspect`, `plan`, `apply`, `doctor`, `install` and `init-project` work end to end. A future TUI may only be a thin adapter over those operations.
 
 ---
 
@@ -206,7 +167,7 @@ Park Ratatui and remove SPIKE-005 from the active path. First deliver working `s
 **Status:** accepted  
 **Date:** 2026-08-05
 
-The repository owner is the only user required for MVP acceptance. The canonical configuration represents one real personal workflow. Public reuse is enabled through explicit and replaceable configuration, not premature team, profile or universal-platform abstractions.
+The repository owner is the only user required for MVP acceptance. Public reuse is enabled through explicit, replaceable configuration rather than premature productization.
 
 ---
 
@@ -215,15 +176,7 @@ The repository owner is the only user required for MVP acceptance. The canonical
 **Status:** accepted  
 **Date:** 2026-08-05
 
-The canonical environment is Windows native, with PowerShell as bootstrap shell and Windows Terminal as primary terminal. WSL is neither required nor a valid fallback for MVP evidence.
-
-**Consequences**
-
-- required dependencies need a workable native Windows path;
-- SPIKE-001 through SPIKE-004 run from PowerShell without WSL;
-- Windows paths, quoting, subprocesses, ports, process cleanup and locked files are first-class tests;
-- Bash and POSIX wrappers are not MVP deliverables;
-- exact Windows and PowerShell versions enter the supported-version manifest before release.
+The canonical environment is Windows native, PowerShell and Windows Terminal. WSL-only behaviour is not valid MVP evidence.
 
 ---
 
@@ -232,9 +185,7 @@ The canonical environment is Windows native, with PowerShell as bootstrap shell 
 **Status:** superseded by DEC-017  
 **Date:** 2026-08-05
 
-This decision incorrectly inferred that OpenCode discovers a runtime configuration file at `.opencode/opencode.jsonc`. Current official documentation instead defines root `opencode.json` or `opencode.jsonc` as the per-project config and `.opencode/` as the native asset directory.
-
-No implementation was created from DEC-016. It is retained to make the correction auditable.
+This decision confused OpenCode's asset directory with its documented project runtime config. It produced no implementation and is retained for auditability.
 
 ---
 
@@ -243,16 +194,9 @@ No implementation was created from DEC-016. It is retained to make the correctio
 **Status:** accepted  
 **Date:** 2026-08-05
 
-Every generated project uses root `opencode.jsonc` as its canonical runtime configuration. OpenCode-specific agents, commands, skills, plugins, tools and themes use their documented `.opencode/` directories. Root `AGENTS.md` remains the repository operating entry point.
+Root `opencode.jsonc` is canonical runtime configuration. `.opencode/` stores native agents, commands, skills, plugins, tools and themes. Root `AGENTS.md` remains the repository operating entry point.
 
-**Conflict policy**
-
-- root `opencode.json` is a migration candidate;
-- both root JSON and JSONC is blocking ambiguity;
-- `.opencode/opencode.json(c)` is misplaced unmanaged content;
-- `OPENCODE_CONFIG`, `OPENCODE_CONFIG_DIR`, `OPENCODE_CONFIG_CONTENT` and managed settings are reported as provenance.
-
-SPIKE-001 validates discovery and merge behaviour on Windows without reopening the canonical path absent contradictory upstream evidence.
+Root `opencode.json` is a migration candidate; dual root configs are blocking; `.opencode/opencode.json(c)` is misplaced; environment and managed config sources are reported as provenance.
 
 ---
 
@@ -260,35 +204,11 @@ SPIKE-001 validates discovery and merge behaviour on Windows without reopening t
 
 **Status:** accepted  
 **Date:** 2026-08-05  
-**Design:** [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md)
+**Design:** [DESIGN-002](../design/AGENT_AND_MODEL_ROLES.md)
 
-### Decision
+Preserve native `build`, `plan`, `general`, `explore` and `scout`. Add only non-mutating `review` and `verify` subagents.
 
-Preserve OpenCode's native agents:
-
-```text
-primary: build, plan
-subagents: general, explore, scout
-```
-
-Do not create custom copies of those agents.
-
-Add only two custom non-mutating subagents:
-
-```text
-review
-verify
-```
-
-Use exactly three semantic OpenRouter roles:
-
-```text
-main
-reason
-fast
-```
-
-Initial mapping:
+Use exactly three roles:
 
 ```text
 build                 → main
@@ -297,32 +217,70 @@ general, explore,
 scout, small_model    → fast
 ```
 
-Expected OpenRouter preset slugs are `portable-main`, `portable-reason` and `portable-fast`. Exact OpenCode references remain subject to SPIKE-002.
+Expected preset slugs are `portable-main`, `portable-reason` and `portable-fast`. Exact OpenCode references remain SPIKE-002 work.
+
+---
+
+## DEC-019 — Version a minimal allowlist of Graphify output
+
+**Status:** accepted  
+**Date:** 2026-08-05  
+**Design:** [DESIGN-003](../design/GRAPHIFY_OUTPUT_POLICY.md)
+
+### Decision
+
+Version only:
+
+```text
+graphify-out/graph.json
+graphify-out/GRAPH_REPORT.md
+graphify-out/manifest.json   # when produced and validated portable
+```
+
+Ignore by default:
+
+```text
+graphify-out/graph.html
+graphify-out/cache/
+graphify-out/cost.json
+query logs
+wiki, SVG, GraphML, Cypher and call-flow exports
+```
 
 ### Rationale
 
-- OpenCode already supplies primary development, planning and exploration agents;
-- duplicating native agents adds prompt drift and maintenance without new capability;
-- review and verification have distinct repeated contracts and stricter permissions;
-- three model policies capture real differences in quality, reasoning and speed without creating one preset per agent;
-- semantic roles allow models and providers to change without rewriting agent definitions.
+- `graph.json` is the queryable structural memory;
+- `GRAPH_REPORT.md` is the compact review entry point;
+- the portable manifest supports incremental reuse after clone;
+- HTML, caches and exports are regenerable and high-churn;
+- cost and query data are private operational state;
+- an allowlist preserves continuity without committing the whole output directory blindly.
 
-### Permission boundary
+### Git policy
 
-- `review` and `verify` deny edits;
-- unknown shell commands ask;
-- exact verification commands may be allowed narrowly per project;
-- destructive operations, push and external-directory mutation follow the stricter global policy;
-- agent rules must be tested against OpenCode's merge and last-match-wins semantics.
+The generated project `.gitignore` uses an allowlist equivalent to:
 
-### Reconsideration
+```gitignore
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/manifest.json
+```
 
-Add an agent only for a repeated responsibility with a distinct permission or output contract. Add a model role only when the three current roles cannot express a materially different tool, privacy, latency, cost or reasoning policy.
+`.graphifyignore` excludes `graphify-out/` from source extraction.
+
+### Lifecycle
+
+- graph output is committed at meaningful synchronization boundaries, not after every edit;
+- stale output marks the project `dirty`;
+- missing/corrupt `graph.json` blocks readiness;
+- missing manifest after initial setup degrades and may trigger rebuild;
+- HTML and cache never affect readiness;
+- SPIKE-004 validates exact outputs, manifest portability, determinism, size, private-path absence and Windows clone/update behaviour.
 
 ## Open questions
 
 - Which implementation language and packaging approach survive the technical spikes?
-- Which Graphify outputs are versioned?
 - What is the minimal context metadata schema?
 - How are OpenRouter presets reconciled in the first CLI?
 - What Phoenix lifecycle and retention policy is acceptable on Windows native?
