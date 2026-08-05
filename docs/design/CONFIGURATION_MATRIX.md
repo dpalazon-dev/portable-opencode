@@ -25,242 +25,235 @@ verified:
 
 ## 1. Purpose
 
-This matrix converts the complete personal-first scope into implementable configuration contracts.
+This matrix converts the complete personal-first scope into implementable contracts without duplicating configuration already owned by OpenCode, OpenRouter, Graphify, RTK or Phoenix.
 
-It deliberately removes:
+It preserves installation, configuration, scripts, security, observability, project initialization, continuity, upgrades and verification while excluding speculative teams, profile catalogues, marketplaces, universal platform parity and the parked TUI.
 
-- duplicate rows that described the same lifecycle concept at several layers;
-- team, organization and marketplace concerns;
-- a generic profile system;
-- the parked Ratatui interface;
-- speculative adapters for alternatives not used by the canonical path;
-- configuration options already owned natively by an upstream tool.
+## 2. Evidence codes
 
-It preserves the full canonical scope: installation, OpenCode, OpenRouter, observability, Graphify, RTK, project initialization, security, continuity, scripts, upgrades and verification.
-
-## 2. Reading the matrix
-
-### Scope
-
-- **versioned** — maintained in this repository or a generated project;
-- **private** — local data that must not enter Git;
-- **remote** — OpenRouter account or preset state;
-- **generated** — derived environment or project state;
-- **external** — behaviour owned by an upstream tool.
-
-### Evidence codes
-
-- **A** — accepted repository policy;
+- **A** — accepted project policy;
 - **D** — documented upstream surface;
-- **S** — runtime behaviour still requires a spike or implementation test;
-- **P** — proposed personal default awaiting owner approval;
+- **S** — requires a runtime spike or implementation test;
+- **P** — proposed personal default awaiting approval;
 - **L** — intentionally later than the first complete CLI path.
 
-A row may contain multiple codes. Documentation proves that a surface exists; it does not prove integration behaviour on the supported environment.
+Documentation establishes that a surface exists. It does not prove the Windows-native integration.
 
-## 3. Configuration precedence
+## 3. Governing boundaries
 
-`portable-opencode` does not replace upstream precedence. It coordinates four boundaries:
-
-```text
-versioned canonical configuration
-→ generated global or project files
-→ documented upstream merge and runtime behaviour
-→ optional private local override
-```
-
-The CLI must explain effective ownership without flattening every OpenCode or OpenRouter option into a new portable abstraction.
-
-### Primary environment
-
-`DEC-015` fixes the first supported environment as **Windows native**, using PowerShell and Windows Terminal without WSL.
-
-Consequences for every matrix row:
-
-- a required dependency must have a native Windows installation and runtime path;
-- PowerShell is the only required bootstrap and recovery shell;
-- Windows filesystem paths, quoting, subprocesses, ports, process cleanup and locked files are first-class validation concerns;
-- successful Linux, macOS or WSL behaviour does not validate the MVP path;
-- unsupported Unix-only assumptions block the affected capability until resolved.
-
-### Canonical OpenCode project configuration
-
-`DEC-016` fixes the project-level OpenCode configuration at:
+### Environment
 
 ```text
-<project>/.opencode/opencode.jsonc
+Windows native
++ PowerShell
++ Windows Terminal
+- WSL
 ```
 
-The canonical workflow does not generate or manage root-level `opencode.json` or `opencode.jsonc` files. Their presence is treated as a conflict or migration finding because portable-opencode must not depend on an accidental merge between two project configuration forms.
+### OpenCode project layout
 
-The root `AGENTS.md` remains outside `.opencode/` as the repository-level operating entry point.
+```text
+<project>/
+├── opencode.jsonc          # runtime configuration
+├── AGENTS.md               # repository rules
+└── .opencode/              # native assets only
+    ├── agents/
+    ├── commands/
+    ├── skills/
+    ├── plugins/
+    ├── tools/
+    └── themes/
+```
 
-## Core configuration and lifecycle
+`DEC-017` supersedes the unsupported `.opencode/opencode.jsonc` convention.
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| CORE-01 | Canonical desired configuration | portable core / versioned | one personal configuration; no profile catalogue | repository-owned manifest and schemas | schema-valid; conflicting ownership blocks | Phase 0-2 · A |
-| CORE-02 | Local override | portable core / private | single optional local override for real machine-specific needs | private file outside Git | must not contain unsupported keys; invalid override blocks | Phase 0-2 · A |
-| CORE-03 | Environment inspection | portable core / generated | detect installed versions, Windows paths and health before change | external CLI and filesystem adapters | missing evidence becomes finding; required prerequisite blocks | Phase 2 · A |
-| CORE-04 | Deterministic plan and explain | portable core / generated | all mutation is preceded by an inspectable plan | typed plan derived from desired and current state | same inputs produce equivalent plan; unresolved decision blocks | Phase 2 · A |
-| CORE-05 | Apply and managed backups | portable core / local | apply approved operations and back up replaced managed files | managed-resource inventory + Windows filesystem adapters | partial outcome recorded; irreversible ambiguity asks or blocks | Phase 2 · A |
-| CORE-06 | Idempotence and drift | portable core / generated | second run is no-op or reports explainable drift | plan comparison against current state | unexpected divergence blocks apply | Phase 2 · A |
-| CORE-07 | Environment lifecycle state | portable core / local | absent, inspected, planned, installed, healthy, degraded, update-required, blocked | private machine state | state predicates verified by doctor | Phase 2-3 · A |
-| CORE-08 | Project lifecycle state | portable core / project | uninitialized, scaffolded, configuring, ready, dirty, degraded, blocked | project `.portable-opencode/state.json` | ready cannot be set without gates | Phase 2-4 · A |
-| CORE-09 | Structured diagnostics | portable core / generated | stable code, severity, evidence, impact and remediation | diagnostic registry | doctor output test; unsafe state blocks | Phase 2 · A |
-| CORE-10 | Schema version and migration | portable core / versioned + local | version all managed config/state; migrate only known versions | JSON Schema and explicit migration functions | backup before migration; unknown version blocks | Phase 2,5 · P |
+### Effective OpenCode provenance
 
-## OpenCode
+```text
+remote config
+→ global config
+→ OPENCODE_CONFIG
+→ project root opencode.jsonc
+→ .opencode native assets
+→ OPENCODE_CONFIG_CONTENT
+→ managed settings
+```
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| OC-01 | Installation and supported version | OpenCode / external | detect or install one supported Windows-native version | documented native Windows installer/package methods | version and executable smoke check from PowerShell; unsupported or WSL-only path blocks | Phase 1,3 · S |
-| OC-02 | Global runtime configuration | OpenCode / global | manage `~/.config/opencode/opencode.jsonc` using the effective Windows home | native JSONC config + schema | schema and OpenCode load test | Phase 0,3 · D/S |
-| OC-03 | Project runtime configuration | OpenCode / project | manage only `<project>/.opencode/opencode.jsonc` | native `.opencode/opencode.jsonc` project config | SPIKE-001 validates discovery and merge on Windows; root config presence becomes conflict or migration finding | Phase 1,4 · A/S · DEC-016 |
-| OC-04 | Configuration precedence | OpenCode / native | reuse documented merge order while preventing dual managed project forms | global config, `.opencode/opencode.jsonc` and runtime override surfaces | SPIKE-001 confirms effective behaviour on the supported Windows version | Phase 1 · D/S |
-| OC-05 | Global and project rules | OpenCode / global + project | small global `AGENTS.md`; project-specific root `AGENTS.md` | native rule discovery and precedence | load and contradiction check | Phase 1,3-4 · D/S |
-| OC-06 | OpenRouter provider and credentials | OpenCode / local + global | authenticate through `/connect`; never write key to repo | OpenCode auth store and `provider.openrouter` config | credential-presence and test-request check | Phase 1,3 · D/S |
-| OC-07 | Model and preset references | OpenCode / global | agents reference stable OpenRouter preset/model identifiers | native provider model definitions and model options | all configured references resolve | Phase 1,3 · D/S |
-| OC-08 | Primary agents | OpenCode / global + project | minimal set justified by real workflow: build, explore, review, verify; retain native plan | native JSON or Markdown agents | discovery, permissions and invocation smoke tests | Phase 0-4 · P/S |
-| OC-09 | Custom commands | OpenCode / global + project | only repeated workflows with explicit contracts | native command Markdown or config | discovery and bounded fixture execution | Phase 0,3-5 · D/S |
-| OC-10 | Skills | OpenCode / global + project | small on-demand set; no community catalogue | native `skills/<name>/SKILL.md` discovery | discovery and permission test | Phase 0,3-4 · D/S |
-| OC-11 | Plugins and custom tools | OpenCode / global + project | only RTK and proven portable gaps; V2-dependent behaviour remains spiked | native plugin/tool directories or packages | load, hook and failure tests; beta API cannot be assumed | Phase 1,3-5 · S |
-| OC-12 | Permission policy | OpenCode / global + agent | default ask/deny for risky operations; narrow allow rules; per-agent tightening | native `permission` rules and pattern order | adversarial PowerShell and command fixtures; weakening canonical deny blocks | Phase 0-4 · D/S |
-| OC-13 | LSP and formatter | OpenCode / project | enable only the selected stack's existing canonical Windows-compatible tools | native `lsp` and `formatter` config | server/formatter availability and project smoke check | Phase 1,4 · D/S |
-| OC-14 | Compaction and watcher | OpenCode / global + project | automatic compaction with explicit reserve; ignore generated and noisy paths | native `compaction` and `watcher.ignore` | long-session and self-trigger-loop fixtures | Phase 1,3-5 · D/S |
-| OC-15 | Sharing and OpenCode TUI preferences | OpenCode / global local | session sharing disabled; minimal owner TUI preferences only | native `share` and `tui.jsonc` | config load; no remote share by default | Phase 3 · D |
+`portable-opencode` manages selected canonical files and reports other active sources. It does not flatten all upstream options into a second configuration language.
 
-## OpenRouter
+---
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| OR-01 | Authentication | OpenRouter / private | one personal API key managed outside Git | OpenCode auth flow or environment/file reference | authenticated metadata or inference request; missing key blocks | Phase 1,3 · D/S |
-| OR-02 | Semantic roles through presets | OpenRouter / remote + versioned manifest | small role set backed by named presets | `@preset/<slug>` and preset API | preset exists and active version matches expected policy | Phase 0-3 · D/S |
-| OR-03 | Preset reconciliation | portable OpenRouter adapter | verify and optionally create/update known presets from local manifest | OpenRouter preset list/get/create/version APIs | diff shown before remote mutation; ambiguity blocks | Phase 1-3 · D/S |
-| OR-04 | Provider routing and fallback | OpenRouter / remote request policy | explicit personal defaults for order/sort, fallbacks and required parameters | request/provider object or preset config | test request records resolved provider and fallback behaviour | Phase 1,3 · D/S |
-| OR-05 | Model fallbacks and compatibility | OpenRouter / preset | fallback only where task semantics tolerate substitution | model arrays/fallbacks + `require_parameters` | tool-calling and parameter fixture tests | Phase 1,3 · D/S |
-| OR-06 | Privacy policy | OpenRouter / preset + account | deny data collection where required; prefer ZDR; prompt/response logging off | provider `data_collection`, `zdr`, account privacy settings | doctor verifies request policy where API permits; unverifiable account state warns | Phase 1,3 · D/S |
-| OR-07 | Usage, cost and resolved model | OpenRouter / response | consume usage already returned in every response | response `usage` and resolved `model` fields | streaming and non-streaming capture fixtures | Phase 1,3-5 · D/S |
-| OR-08 | Personal budget guardrail | OpenRouter / remote | optional personal spending cap after actual usage baseline | account/key guardrail where available | doctor reports configured limit; absence does not block first setup | Phase 3-5 · P |
+## 4. Core configuration and lifecycle — 10
 
-## Local observability
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| CORE-01 | One canonical personal desired configuration; no profile catalogue | repository manifest + schemas | ownership conflicts block · A |
+| CORE-02 | One optional private local override for demonstrated machine needs | private file outside Git | unsupported keys block · A |
+| CORE-03 | Inspect installed versions, Windows paths, active overrides and health before mutation | filesystem, env and CLI adapters | missing required evidence blocks · A |
+| CORE-04 | Produce deterministic inspectable plans before every mutation | typed plan | equivalent input produces equivalent plan · A |
+| CORE-05 | Apply approved operations and back up managed files before replacement | managed-resource inventory | partial outcome recorded; ambiguity asks or blocks · A |
+| CORE-06 | Second run is no-op or explained drift | current vs desired state | unexplained divergence blocks apply · A |
+| CORE-07 | Environment states: absent, inspected, planned, installed, healthy, degraded, update-required, blocked | private environment state | predicates verified by doctor · A |
+| CORE-08 | Project states: uninitialized, scaffolded, configuring, ready, dirty, degraded, blocked | `.portable-opencode/state.json` | ready requires gates · A |
+| CORE-09 | Diagnostics expose stable code, severity, evidence, impact and remediation | diagnostic registry | JSON and human-output fixtures · A |
+| CORE-10 | Version all managed config and state; migrate only known versions | JSON Schema + explicit migrations | backup first; unknown version blocks · P |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| OBS-01 | Transparent proxy boundary | portable observability / local | OpenCode sends OpenRouter-compatible traffic through a Windows localhost proxy | OpenCode provider `baseURL` + native local process | SPIKE-003 proves request/response transparency | Phase 1,3 · S |
-| OBS-02 | Streaming, tools and errors | portable observability / local | preserve SSE, tool calls, structured outputs, headers and errors unchanged | proxy pass-through contract | protocol fixture suite; corruption blocks proxy use | Phase 1,3 · S |
-| OBS-03 | Metadata event schema | portable observability / local | project, session, agent, command, requested/resolved model, provider, usage, cost, latency, cache, fallback and error | OpenInference/OTel spans + OpenRouter response data | required-field coverage; missing optional fields degrade | Phase 0-3 · P/S |
-| OBS-04 | Privacy and redaction | portable observability / local | content capture off; redact keys, auth headers and secret-like values before export | proxy redaction layer and Phoenix/OpenInference attributes | secret fixtures must never persist | Phase 1,3 · A/S |
-| OBS-05 | Phoenix local backend | Phoenix / local | run collector and UI on Windows without WSL; native process or Windows-compatible container choice remains open | Phoenix lifecycle + OTLP/OpenInference exporter | health, process cleanup and trace-ingestion check | Phase 1,3 · D/S |
-| OBS-06 | Trace correlation | portable observability + OpenCode | correlate inference with project, session, agent and command when available | OpenCode metadata/plugin events + propagated attributes | single-session trace fixture; partial correlation degrades | Phase 1,3 · S |
-| OBS-07 | Lifecycle, retention and bypass | portable CLI / local | explicit start, stop, status and bounded retention; direct OpenRouter bypass is degraded | CLI commands, Windows local config and state | health, cleanup, locked-file and bypass-state tests | Phase 1,3-5 · P/S |
+## 5. OpenCode — 15
 
-## Graphify
+| ID | Contract and personal default | Native/managed surface | Validation / evidence |
+|---|---|---|---|
+| OC-01 | Detect or install one supported Windows-native OpenCode version | official installer/package path | PowerShell smoke test · S |
+| OC-02 | Manage global runtime configuration in the effective Windows home using JSONC | `~/.config/opencode/opencode.jsonc` | schema + load test · D/S |
+| OC-03 | Manage project runtime configuration only at root `opencode.jsonc` | `<project>/opencode.jsonc` | root discovery and load test · A/D/S · DEC-017 |
+| OC-04 | Explain native config merge and provenance instead of replacing it | remote/global/env/project/inline/managed layers | SPIKE-001 precedence fixture · D/S |
+| OC-05 | Keep global rules small and project rules in root `AGENTS.md` | native rule discovery | precedence and contradiction test · D/S |
+| OC-06 | Authenticate OpenRouter through `/connect` or supported private references; never write keys to Git | OpenCode auth store + provider config | credential and test-request check · D/S |
+| OC-07 | Agents reference stable OpenRouter model or preset identifiers; exact preset syntax remains spiked | native model/provider fields | every identifier resolves · S |
+| OC-08 | Initial primary/subagents remain minimal and tied to real workflow | `.opencode/agents/` or config `agent` | discovery, permission and invocation test · P/S |
+| OC-09 | Create custom commands only for repeated workflows with explicit contracts | `.opencode/commands/` | discovery and bounded execution · D/S |
+| OC-10 | Keep a small on-demand skill set; no community catalogue | `.opencode/skills/<name>/SKILL.md` | discovery and permission test · D/S |
+| OC-11 | Use plugins and tools only for RTK or verified gaps | `.opencode/plugins/`, `.opencode/tools/` | load, hook and failure tests · S |
+| OC-12 | Risky operations ask or deny; safe rules are narrow and ordered | native permissions + per-agent overrides | adversarial PowerShell fixtures · D/S |
+| OC-13 | Enable only the selected stack's Windows-compatible LSP and formatter | native `lsp` and `formatter` config | availability and project smoke test · D/S |
+| OC-14 | Use native compaction and watcher ignores; avoid self-trigger loops | native `compaction`, `watcher.ignore` | long-session and loop fixtures · D/S |
+| OC-15 | Sharing disabled; project TUI settings only when needed and stored at root `tui.jsonc` | native `share` and TUI config | load and no-share check · D |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| GR-01 | Installation and OpenCode integration | Graphify / external + global | use Graphify's native Windows package and documented OpenCode installer | `graphifyy`, `graphify install --platform opencode`, `graphify opencode install` | PowerShell installation, version, executable discovery and guidance check | Phase 1,3 · D/S |
-| GR-02 | First project graph | Graphify / project | generate during semantic project initialization after source baseline exists | Graphify extraction/update command | graph exists and covers intended source set | Phase 1,4 · A/S |
-| GR-03 | Generated `.graphifyignore` | portable Graphify adapter / project | derive from stack, repo tree and owner decisions; never copy blindly | versioned template fragments + generated project file | ignore audit and graph-size/quality comparison | Phase 0,4 · A/S |
-| GR-04 | `.gitignore` interaction | Graphify / native | respect documented merge semantics; use `--no-gitignore` only explicitly | Graphify ignore engine | fixture confirms exclusions, negation and Windows path behaviour | Phase 1,4 · D/S |
-| GR-05 | Graph output ownership | project policy | version only graph artefacts that improve personal continuity; keep cost/cache private | explicit output inventory | clone/rebuild comparison and repository-noise review | Phase 0-1 · P/S |
-| GR-06 | Explicit update workflow | Graphify / project | manual/command update before automatic hooks | Graphify update command exposed through OpenCode/CLI | source change marks dirty; update returns fresh | Phase 1,4-5 · A/S |
-| GR-07 | Hook automation | Graphify / project | deferred until explicit updates are stable and observable | `graphify hook install` | no loops, acceptable latency and reliable recovery on Windows | Phase 5 · P/S |
-| GR-08 | Freshness and quality audit | portable state + Graphify | record last graph update, dirty state and quality findings | project state + Graphify diagnostics | stale graph visible; noisy graph cannot silently pass ready gate | Phase 4-5 · A/S |
+### OpenCode conflict policy
 
-## RTK
+| Finding | Treatment |
+|---|---|
+| root `opencode.json` only | migration candidate to canonical JSONC |
+| root `opencode.json` and `opencode.jsonc` | blocking ambiguity |
+| `.opencode/opencode.json(c)` | misplaced unmanaged file; not runtime config |
+| `OPENCODE_CONFIG` | explicit custom-file provenance |
+| `OPENCODE_CONFIG_DIR` | explicit additional asset provenance |
+| `OPENCODE_CONFIG_CONTENT` | explicit runtime override provenance |
+| `%ProgramData%\opencode` managed settings | report highest-priority managed provenance |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| RTK-01 | Installation and identity verification | RTK / external local | install the supported native Windows binary and verify it is `rtk-ai/rtk` | official Windows install path, `rtk --version`, `rtk gain` | PowerShell installation and executable discovery; wrong package or missing command blocks activation | Phase 1,3 · D/S |
-| RTK-02 | OpenCode integration | RTK / global | use RTK's native OpenCode integration | `rtk init -g --opencode` TypeScript plugin | plugin installed and representative commands rewritten on Windows | Phase 1,3 · D/S |
-| RTK-03 | Local configuration and exclusions | RTK / private | minimal TOML config; exclude commands where filtered output harms task | RTK config file and rewrite registry | excluded commands remain untouched | Phase 1,3 · D/S |
-| RTK-04 | Failure tee output | RTK / private local | retain full raw output on failures only | RTK tee configuration | failing test exposes private Windows full-output path | Phase 1,3 · D/S |
-| RTK-05 | Health and savings | portable doctor + RTK | report plugin status, rewrite health and `rtk gain` without making savings a readiness gate | RTK CLI queries | doctor fixture; failure degrades terminal optimization only | Phase 3-5 · P/S |
+## 6. OpenRouter — 8
 
-## Context and continuity
+| ID | Contract and personal default | Native/managed surface | Validation / evidence |
+|---|---|---|---|
+| OR-01 | One personal API key outside Git | OpenCode auth or private reference | authenticated request · D/S |
+| OR-02 | A small semantic-role set maps to named OpenRouter presets | local intent manifest + `@preset/<slug>` | exact OpenCode reference syntax in SPIKE-002 · D/S |
+| OR-03 | CLI verifies and may reconcile known presets only after showing a remote diff | preset list/get/create/version APIs | ambiguity blocks mutation · D/S |
+| OR-04 | Provider order/sort, fallbacks and required parameters remain OpenRouter policy | preset or request `provider` object | resolved provider fixture · D/S |
+| OR-05 | Model fallback is allowed only when task semantics tolerate substitution | model arrays/preset config | tool and parameter compatibility test · D/S |
+| OR-06 | Prefer ZDR and deny data collection where required; prompt/response logging off | provider and account privacy settings | doctor verifies what APIs expose · D/S |
+| OR-07 | Consume usage, cost, cache and resolved-model data already returned | response fields | streaming and non-streaming fixtures · D/S |
+| OR-08 | Personal spending cap is optional until actual usage establishes a useful threshold | account/key guardrail | absence does not block initial setup · P |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| CTX-01 | Repository and project `AGENTS.md` | OpenCode rules / versioned | global rules remain small; project rules point to canonical context | native `AGENTS.md` files | load and contradiction review | Phase 0,3-4 · A |
-| CTX-02 | Canonical context set | project / versioned | PROJECT, VISION, ARCHITECTURE, CONVENTIONS, OPERATIONS, DECISIONS, ROADMAP and concise log as needed | Markdown templates under `docs/context/` | required-file and link validation | Phase 0,4 · A |
-| CTX-03 | Minimal metadata schema | project docs / versioned | small repository-owned subset compatible with useful OKF concepts | YAML frontmatter + schema | schema validation; unsupported bureaucracy removed | Phase 0,4 · P |
-| CTX-04 | Decision, feature and design records | project / versioned | create only for durable choices or independently reviewable behaviour | `DEC-*`, `FEAT-*`, `DESIGN-*` conventions | cross-link and status consistency | Phase 0-5 · A |
-| CTX-05 | Concise log and handoff | project / versioned | record meaningful transitions and next action, not session transcripts | `docs/context/log.md` and handoff workflow | entry required only when state materially changes | Phase 0,5 · A |
-| CTX-06 | Semantic `/init-project` workflow | OpenCode / project | agent-led interview completes context and technical baseline | native OpenCode command/agent assets | fixture reaches ready only after gates | Phase 4 · A/S |
-| CTX-07 | Source hierarchy and recovery | project / versioned + state | accepted decisions and current context override older specification or history | AGENTS hierarchy + machine state | new session can identify current truth and next action | Phase 0,4-5 · A |
+## 7. Local observability — 7
 
-## Security and privacy
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| OBS-01 | OpenCode sends OpenRouter-compatible traffic through a Windows localhost proxy | provider `baseURL` + native process | transparent inference test · S |
+| OBS-02 | Preserve SSE, tool calls, structured output, headers and errors unchanged | proxy contract | protocol fixture suite · S |
+| OBS-03 | Record project, session, agent, command, requested/resolved model, provider, usage, cost, latency, cache, fallback and error where available | OTel/OpenInference spans | field coverage; optional gaps degrade · P/S |
+| OBS-04 | Content capture off; redact keys, auth headers and secret-like values before export | proxy redaction layer | secret persistence fixtures · A/S |
+| OBS-05 | Phoenix is proposed as local OTLP collector and UI, not proxy | native process or Windows-compatible container | health and ingestion test · D/S |
+| OBS-06 | Correlate inference with OpenCode context when runtime metadata permits | plugin/events + span attributes | session fixture; partial correlation degrades · S |
+| OBS-07 | Explicit start, stop, status, retention and bypass; bypass is degraded | CLI + local state | process, port, locked-file and cleanup tests · P/S |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| SEC-01 | Secret ownership | all components / private | credentials remain in OpenCode auth store, env or explicit private files | native auth stores and secret references | secret scan; repository value blocks verification | Phase 0-6 · A/D |
-| SEC-02 | Least-privilege OpenCode permissions | OpenCode / global + agent | risky actions ask or deny; narrow safe reads and commands allowed | native permission patterns | adversarial PowerShell and executable fixture suite | Phase 0-4 · A/S |
-| SEC-03 | Destructive and external operations | portable core + OpenCode | explicit plan and approval for deletion, replacement, push, external directories and remote mutation | plan approval + OpenCode permissions | unapproved action must not execute | Phase 2-6 · A |
-| SEC-04 | Local service exposure | observability / local | proxy and Phoenix bind loopback unless explicitly changed | Windows service/process configuration | socket/bind check; unsafe exposure blocks healthy | Phase 1,3 · A/S |
-| SEC-05 | Sharing and trace content | OpenCode/OpenRouter/observability | OpenCode sharing disabled; remote and local prompt/response logging off | native share/privacy settings + redaction | doctor and persistence fixtures | Phase 1,3 · A/S |
-| SEC-06 | Backup and recovery | portable core / private | backup managed files before replacement or migration; document recovery | managed-resource inventory | restore fixture including locked-file and path cases | Phase 2-6 · A |
+## 8. Graphify — 8
 
-## CLI, scripts and installation
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| GR-01 | Use Graphify's native Windows package and OpenCode installer | `graphifyy` + documented commands | PowerShell install/version check · D/S |
+| GR-02 | Generate first graph during semantic initialization after a useful source baseline | Graphify extraction/update | source coverage and useful graph · A/S |
+| GR-03 | Generate `.graphifyignore` from stack, tree and owner decisions; never copy blindly | template fragments + project file | graph quality comparison · A/S |
+| GR-04 | Respect `.gitignore` merge semantics; use `--no-gitignore` only explicitly | native ignore engine | Windows path and negation fixture · D/S |
+| GR-05 | Version only graph artefacts that improve continuity; keep cost/cache private | explicit output inventory | clone/rebuild and repo-noise review · P/S |
+| GR-06 | Use explicit graph updates before automatic hooks | native update exposed through command/CLI | dirty-to-fresh fixture · A/S |
+| GR-07 | Defer hooks until explicit updates are reliable and observable | native hook installer | loop, latency and recovery test · P/S |
+| GR-08 | Record freshness and quality findings in project state | portable state + diagnostics | stale/noisy graph visible at ready gate · A/S |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| CLI-01 | Implementation language and packaging | repository | choose after spikes; optimize for Windows-native installation, updates and process control | decision + prototype evidence | Windows build, startup, packaging and clean-machine comparison | Phase 1-2 · S |
-| CLI-02 | Core control commands | portable CLI | `status`, `inspect`, `plan`, `apply`, `doctor` | CLI command contracts and structured output | unit/integration command fixtures | Phase 0-2 · A |
-| CLI-03 | Global installation | portable CLI | `install` converges the personal Windows machine to canonical desired state | core plans + OpenCode/OpenRouter/Graphify/RTK/observability adapters | clean and existing-config Windows fixtures | Phase 3 · A |
-| CLI-04 | Project bootstrap | portable CLI | `init-project <path>` creates `.opencode/opencode.jsonc`, deterministic assets and project state | templates, stack detection and Windows filesystem adapters | empty-project fixture, spaces-in-path fixture, root-config conflict fixture and rerun | Phase 4 · A · DEC-016 |
-| CLI-05 | Component lifecycle | portable CLI | explicit observability and graph lifecycle commands where native tools are insufficient | narrow Windows subprocess adapters | health, interruption and failure tests | Phase 3-5 · P |
-| CLI-06 | Update and migration | portable CLI | compare installed and target versions, plan migration, back up and apply | version manifest + migration functions | upgrade, locked-file and rollback fixtures | Phase 5-6 · P |
-| CLI-07 | Primary-platform scripts | scripts / local | small PowerShell scripts only where bootstrap or recovery cannot be handled by the main CLI; no Bash or WSL requirement | versioned `.ps1` scripts with strict error handling | clean PowerShell session, path-with-spaces and non-zero exit smoke tests | Phase 0-3 · A/S · DEC-015 |
-| CLI-08 | Machine-readable output and exit codes | portable CLI | JSON for status, plans, diagnostics and outcomes; stable non-zero failure classes | CLI serialization contract | schema and PowerShell exit-code tests | Phase 0-2 · A |
-| CLI-09 | Uninstall and detach | portable CLI | defer until ownership inventory and install path are stable | managed-resource inventory | dry-run and preserve-user-data tests | Later · L |
+## 9. RTK — 5
 
-## Verification and readiness
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| RTK-01 | Install supported native Windows binary and verify identity | official install + `rtk --version` | PowerShell executable discovery · D/S |
+| RTK-02 | Use RTK's native OpenCode integration | `rtk init -g --opencode` | representative rewrite test · D/S |
+| RTK-03 | Minimal private TOML with exclusions where filtering harms work | RTK config | exclusions remain untouched · D/S |
+| RTK-04 | Preserve full raw output locally on failures only | failure tee | private Windows path fixture · D/S |
+| RTK-05 | Doctor reports integration and `rtk gain`; savings do not gate readiness | RTK CLI queries | failure degrades optimization only · P/S |
 
-| ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
-|---|---|---|---|---|---|---|
-| VER-01 | Documentation and schema checks | repository/project | links, frontmatter, JSON/JSONC and state schemas | verification scripts | current docs-only profile must pass | Phase 0-6 · A |
-| VER-02 | OpenCode configuration smoke test | OpenCode | load global configuration plus `.opencode/opencode.jsonc`, discover assets and exercise permission fixtures on Windows | OpenCode CLI/TUI test project | invalid load or unresolved root-config conflict blocks healthy/ready | Phase 1,3-4 · S · DEC-016 |
-| VER-03 | OpenRouter policy smoke test | OpenRouter | resolve required presets, routing, privacy and usage fields from Windows OpenCode | authenticated test inference | missing required policy blocks global healthy | Phase 1,3 · S |
-| VER-04 | Graphify and RTK smoke test | Graphify/RTK | build useful graph and verify command rewriting without losing failure detail on Windows | fixture project and representative PowerShell-invoked commands | Graphify failure blocks project ready; RTK failure degrades | Phase 1,3-4 · S |
-| VER-05 | Project ready gate | portable project state | context, app baseline, canonical OpenCode config, LSP/formatter, graph and verification manifest pass | `project doctor` and canonical checks | critical unresolved decision or conflicting root OpenCode config blocks ready | Phase 4 · A |
-| VER-06 | Canonical end-to-end path | repository | clean supported Windows machine to healthy environment to ready project to recoverable later session, without WSL | disposable Windows environment and fixture repo | must be reproducible without hidden conversation context | Phase 6 · A/S · DEC-015 |
+## 10. Context and continuity — 7
 
-## 4. Matrix result
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| CTX-01 | Global rules stay small; project root `AGENTS.md` points to canonical context | native OpenCode rules | load and contradiction review · A/D |
+| CTX-02 | Canonical context may include project, vision, architecture, conventions, operations, decisions, roadmap and concise log as needed | `docs/context/` templates | required-file and link checks · A |
+| CTX-03 | Use a small repository-owned metadata schema compatible with useful OKF concepts | YAML frontmatter + schema | remove fields without operational value · P |
+| CTX-04 | Create DEC, FEAT, DESIGN and SPIKE records only for durable or independently reviewable behaviour | docs conventions | link/status consistency · A |
+| CTX-05 | Log meaningful transitions and next action, never full session transcripts | `docs/context/log.md` | required only for material state change · A |
+| CTX-06 | `/init-project` is an agent-led OpenCode workflow completing semantic and technical baseline | native command/agent assets | fixture reaches ready only after gates · A/S |
+| CTX-07 | Accepted decisions and active context override older specification or chat history | AGENTS hierarchy + state | new session recovers truth and next action · A |
 
-The reduced matrix contains **81 capabilities**, down from 177.
+## 11. Security and privacy — 6
 
-The reduction does not remove canonical scope. It removes duplicate concepts and speculative productization, while binding each remaining capability to:
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| SEC-01 | Credentials remain in auth stores, environment or explicit private files | native private surfaces | repository secret scan · A/D |
+| SEC-02 | OpenCode permissions follow least privilege | native patterns | adversarial fixtures · A/S |
+| SEC-03 | Deletion, replacement, push, external paths and remote mutation require explicit plan/approval | core plan + permissions | unapproved action cannot execute · A |
+| SEC-04 | Proxy and Phoenix bind loopback unless explicitly changed | Windows process/service config | socket check; unsafe exposure blocks healthy · A/S |
+| SEC-05 | Session sharing disabled and prompt/response logging off by default | OpenCode/OpenRouter/observability settings | doctor and persistence fixtures · A/S |
+| SEC-06 | Back up managed files before replacement or migration and document recovery | resource inventory | restore, locked-file and path fixtures · A |
 
-- one owner;
-- one real configuration or lifecycle surface;
-- one personal default;
-- one validation rule;
-- one roadmap position.
+## 12. CLI, scripts and installation — 9
 
-Two personal defaults are now accepted:
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| CLI-01 | Choose language and packaging after spikes; optimize native Windows install, updates and process control | decision + prototypes | clean-machine comparison · S |
+| CLI-02 | Core commands are `status`, `inspect`, `plan`, `apply`, `doctor` | CLI contracts | unit/integration fixtures · A |
+| CLI-03 | `install` converges the Windows machine to desired global state | adapters + plans | clean and existing-config fixtures · A |
+| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017 |
+| CLI-05 | Add explicit observability and graph lifecycle commands only where native commands are insufficient | narrow subprocess adapters | interruption and failure tests · P |
+| CLI-06 | Updates compare versions, plan migrations, back up and apply | version manifest + migrations | upgrade and rollback fixtures · P |
+| CLI-07 | Use small `.ps1` scripts only for bootstrap/recovery that cannot belong to the CLI | PowerShell scripts | clean session, quoting and exit tests · A/S |
+| CLI-08 | JSON output for status, plans, diagnostics and outcomes; stable failure classes | serialization contract | schema and exit-code tests · A |
+| CLI-09 | Uninstall/detach remain later until managed ownership is proven | resource inventory | dry-run and preserve-user-data tests · L |
 
-- Windows native, PowerShell and Windows Terminal, without WSL;
-- `<project>/.opencode/opencode.jsonc` as the only managed project OpenCode configuration.
+## 13. Verification and readiness — 6
 
-## 5. Decisions required before approval
+| ID | Contract and personal default | Surface | Validation / evidence |
+|---|---|---|---|
+| VER-01 | Validate links, frontmatter, JSON/JSONC and schemas | verification scripts | active docs-only profile · A |
+| VER-02 | Load root `opencode.jsonc`, discover `.opencode/` assets and exercise permissions on Windows | OpenCode fixture | invalid config blocks healthy/ready · S |
+| VER-03 | Resolve required OpenRouter policy and returned metadata through OpenCode | authenticated inference | missing required policy blocks healthy · S |
+| VER-04 | Build a useful Graphify graph and verify RTK rewriting without losing failure detail | fixture project | Graphify blocks ready; RTK degrades · S |
+| VER-05 | Ready requires context, application baseline, valid root OpenCode config, no blocking conflict, LSP/formatter, graph and verification manifest | `project doctor` | critical unresolved decision blocks · A |
+| VER-06 | E2E: clean Windows → healthy environment → ready project → recoverable later session | disposable Windows environment | no WSL or hidden chat context · A/S |
 
-Owner review should resolve these remaining product defaults:
+## 14. Matrix result
 
-1. implementation language and packaging approach after the spikes;
+The matrix contains **81 capabilities**, reduced from 177 without reducing canonical scope.
+
+The correction from DEC-016 to DEC-017 changes ownership, not capability count:
+
+```text
+root opencode.jsonc
+  owns project runtime configuration
+
+.opencode/
+  owns native project assets
+```
+
+## 15. Remaining personal defaults
+
+1. implementation language and packaging after spikes;
 2. initial semantic roles and required agents;
-3. which Graphify outputs are versioned;
-4. minimal metadata schema for context documents;
-5. Phoenix retention and native Windows process/container choice;
-6. whether OpenRouter presets are created automatically or only verified in the first CLI release.
+3. Graphify output versioning policy;
+4. minimal context metadata schema;
+5. Phoenix lifecycle and retention on Windows;
+6. OpenRouter preset reconciliation behaviour in the first CLI.
 
-Everything else is either accepted policy, documented upstream surface or bounded spike work.
+## 16. Approval gate
 
-## 6. Approval gate
+Move this document to `active` when:
 
-Move this document from `draft` to `active` when:
-
-- the six defaults above are accepted or delegated to a named spike;
-- every `S` row is linked to SPIKE-001 through SPIKE-004 or an implementation test;
-- the canonical file tree and CLI contract are documented;
-- the repository owner confirms that the matrix represents the actual personal workflow.
+- the six defaults are accepted or delegated to named evidence;
+- every `S` contract maps to SPIKE-001 through SPIKE-004 or an implementation test;
+- canonical global/project file trees and CLI contracts are documented;
+- the repository owner confirms this is the actual personal workflow.
