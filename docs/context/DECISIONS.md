@@ -39,6 +39,7 @@ verified:
 | DEC-015 | accepted | Support Windows natively without WSL in the MVP |
 | DEC-016 | superseded | Use `.opencode/opencode.jsonc` as project configuration |
 | DEC-017 | accepted | Use root `opencode.jsonc` plus `.opencode/` native assets |
+| DEC-018 | accepted | Reuse native OpenCode agents and use three semantic model roles |
 
 ---
 
@@ -242,51 +243,85 @@ No implementation was created from DEC-016. It is retained to make the correctio
 **Status:** accepted  
 **Date:** 2026-08-05
 
-Every generated project uses:
-
-```text
-<project>/opencode.jsonc
-```
-
-as its canonical OpenCode runtime configuration.
-
-OpenCode-specific assets use their documented project locations:
-
-```text
-<project>/.opencode/agents/
-<project>/.opencode/commands/
-<project>/.opencode/skills/
-<project>/.opencode/plugins/
-<project>/.opencode/tools/
-<project>/.opencode/themes/
-```
-
-Only directories containing actual assets are created. Root `AGENTS.md` remains the repository operating entry point. Project-specific `tui.jsonc`, when needed, lives beside `opencode.jsonc` in the project root.
-
-**Rationale**
-
-- follows OpenCode's documented per-project configuration surface;
-- preserves `.opencode/` for its documented asset-discovery role;
-- lets OpenCode apply its native global/project precedence without environment-variable tricks;
-- gives `portable-opencode` one deterministic runtime config path and one deterministic asset root;
-- avoids maintaining an unsupported convention.
+Every generated project uses root `opencode.jsonc` as its canonical runtime configuration. OpenCode-specific agents, commands, skills, plugins, tools and themes use their documented `.opencode/` directories. Root `AGENTS.md` remains the repository operating entry point.
 
 **Conflict policy**
 
-- root `opencode.json` is a migration candidate because the canonical format is JSONC;
-- both root `opencode.json` and `opencode.jsonc` is a blocking ambiguity;
-- `.opencode/opencode.json` or `.opencode/opencode.jsonc` is a misplaced unmanaged file and never treated as runtime configuration;
-- `OPENCODE_CONFIG` and `OPENCODE_CONFIG_CONTENT` are explicit runtime overrides and must be reported in provenance when present;
-- `OPENCODE_CONFIG_DIR` may add assets but does not replace the canonical project runtime config.
+- root `opencode.json` is a migration candidate;
+- both root JSON and JSONC is blocking ambiguity;
+- `.opencode/opencode.json(c)` is misplaced unmanaged content;
+- `OPENCODE_CONFIG`, `OPENCODE_CONFIG_DIR`, `OPENCODE_CONFIG_CONTENT` and managed settings are reported as provenance.
 
-**Validation**
+SPIKE-001 validates discovery and merge behaviour on Windows without reopening the canonical path absent contradictory upstream evidence.
 
-SPIKE-001 verifies root-config discovery, merge with global configuration, asset discovery from `.opencode/`, environment overrides and conflict diagnostics on the supported Windows version. It does not reopen the canonical path unless upstream documentation or observed behaviour materially changes.
+---
+
+## DEC-018 — Reuse native OpenCode agents and use three semantic model roles
+
+**Status:** accepted  
+**Date:** 2026-08-05  
+**Design:** [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md)
+
+### Decision
+
+Preserve OpenCode's native agents:
+
+```text
+primary: build, plan
+subagents: general, explore, scout
+```
+
+Do not create custom copies of those agents.
+
+Add only two custom non-mutating subagents:
+
+```text
+review
+verify
+```
+
+Use exactly three semantic OpenRouter roles:
+
+```text
+main
+reason
+fast
+```
+
+Initial mapping:
+
+```text
+build                 → main
+plan, review, verify  → reason
+general, explore,
+scout, small_model    → fast
+```
+
+Expected OpenRouter preset slugs are `portable-main`, `portable-reason` and `portable-fast`. Exact OpenCode references remain subject to SPIKE-002.
+
+### Rationale
+
+- OpenCode already supplies primary development, planning and exploration agents;
+- duplicating native agents adds prompt drift and maintenance without new capability;
+- review and verification have distinct repeated contracts and stricter permissions;
+- three model policies capture real differences in quality, reasoning and speed without creating one preset per agent;
+- semantic roles allow models and providers to change without rewriting agent definitions.
+
+### Permission boundary
+
+- `review` and `verify` deny edits;
+- unknown shell commands ask;
+- exact verification commands may be allowed narrowly per project;
+- destructive operations, push and external-directory mutation follow the stricter global policy;
+- agent rules must be tested against OpenCode's merge and last-match-wins semantics.
+
+### Reconsideration
+
+Add an agent only for a repeated responsibility with a distinct permission or output contract. Add a model role only when the three current roles cannot express a materially different tool, privacy, latency, cost or reasoning policy.
 
 ## Open questions
 
 - Which implementation language and packaging approach survive the technical spikes?
-- Which agents and semantic roles are required initially?
 - Which Graphify outputs are versioned?
 - What is the minimal context metadata schema?
 - How are OpenRouter presets reconciled in the first CLI?
