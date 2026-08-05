@@ -81,6 +81,22 @@ No additional user personas are required for MVP acceptance.
 
 Other developers may inspect, fork or reuse the repository, but their needs do not justify new abstractions until they align with or reveal a concrete limitation in the primary workflow.
 
+## Primary environment
+
+The first supported environment is **Windows native**, operated through PowerShell and Windows Terminal.
+
+WSL is not part of the canonical path and must not be required by installation, execution, testing or recovery workflows.
+
+This means:
+
+- installation and lifecycle scripts are PowerShell-first;
+- dependencies must provide a usable native Windows path;
+- subprocess, filesystem, path, quoting and process-lifecycle behaviour must be validated on Windows;
+- unsupported Unix-only assumptions are implementation blockers rather than hidden prerequisites;
+- Linux, macOS and WSL support are deferred until a real need appears.
+
+The exact supported Windows version and PowerShell version will be recorded in the supported-version manifest before the first release.
+
 ## Initial use case
 
 The first supported path is a **new project created by the repository owner from an empty or freshly created directory**.
@@ -101,7 +117,7 @@ normal agentic development with maintained context and graph
 
 The initial success case is not “works for every developer”. It is:
 
-> The repository owner can reproduce the same understood, observable and safe environment on the primary machine and use it repeatedly across new projects.
+> The repository owner can reproduce the same understood, observable and safe environment on Windows and use it repeatedly across new projects.
 
 ## Core scope
 
@@ -125,7 +141,7 @@ The initial success case is not “works for every developer”. It is:
 - supporting multiple user personas or team roles;
 - team workspaces, shared governance or organization administration;
 - a generic profile marketplace or extensive profile hierarchy;
-- equal support for Windows, Linux and macOS from the first release;
+- WSL, Linux or macOS as required or equivalent first-release paths;
 - optimizing installation and onboarding for unknown third parties;
 - mandatory MCP infrastructure;
 - autonomous background agents;
@@ -139,7 +155,8 @@ The initial success case is not “works for every developer”. It is:
 - public GitHub repository created;
 - conceptual specification v0.2 published;
 - initial curated context established;
-- initial configuration matrix drafted but requiring personal-first reduction;
+- reduced personal-first configuration matrix awaiting owner review;
+- Windows native selected as the primary environment;
 - no executable implementation yet;
 - no language or package manager permanently selected;
 - no technical spike completed;
@@ -149,10 +166,10 @@ The initial success case is not “works for every developer”. It is:
 ## Constraints
 
 - the system must solve the repository owner's actual workflow before optimizing for reuse;
-- configuration must be portable across the owner's machines and projects;
+- the canonical MVP must run on Windows without WSL;
+- configuration must be portable across the owner's supported Windows machines and projects;
 - secrets and private state must remain outside Git;
 - native OpenCode and OpenRouter capabilities must be preferred over duplication;
-- the primary platform should be selected from the owner's real environment before broader platform support;
 - default behaviour must be safe and understandable;
 - optional components must not blur core responsibility boundaries;
 - the system must remain maintainable by one person;
@@ -165,8 +182,8 @@ The definition phase is complete when:
 
 - context documents consistently express the personal-first scope;
 - architecture boundaries are explicit;
-- the configuration matrix has been reduced to the canonical personal workflow;
-- MVP acceptance criteria are testable against the owner's environment;
+- the configuration matrix represents the canonical Windows-native workflow;
+- MVP acceptance criteria are testable against the owner's Windows environment;
 - major technical uncertainties have named spikes;
 - implementation can begin without rediscovering product intent;
 - deferred generalization is clearly separated from MVP requirements.
