@@ -71,44 +71,43 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 
 `DEC-016` accepted `.opencode/opencode.jsonc` after incorrectly treating `.opencode/` as both runtime configuration and asset directory.
 
-**Evidence**
-
-Current official OpenCode documentation defines:
-
-```text
-<project>/opencode.json(c)   project runtime configuration
-<project>/.opencode/         project agents, commands, skills, plugins, tools and themes
-```
-
-`OPENCODE_CONFIG_DIR` adds an asset directory and does not redefine the standard project runtime config.
-
 **Correction**
 
 - marked `DEC-016` superseded;
 - accepted `DEC-017`;
-- selected root `opencode.jsonc` as the canonical project runtime config;
-- preserved `.opencode/` as the native asset root;
-- added explicit policies for root JSON migration, dual root ambiguity, misplaced `.opencode/opencode.json(c)` and environment override provenance;
-- corrected architecture, roadmap, research, matrix and machine-readable state;
-- retained 81 matrix capabilities and six unresolved personal defaults.
+- selected root `opencode.jsonc` as project runtime config;
+- preserved `.opencode/` as native asset root;
+- added conflict and provenance policies;
+- corrected architecture, roadmap, research, matrix, project, operations and state.
 
-**Resulting layout**
+## 2026-08-05 — Minimal agent and model policy accepted
+
+**Evidence**
+
+Current OpenCode documentation includes built-in primary agents `build` and `plan`, and built-in subagents `general`, `explore` and `scout`. Agents support per-agent permissions, Markdown definitions and task invocation.
+
+**Decision**
+
+- accepted `DEC-018`;
+- created `DESIGN-002`;
+- retained all five relevant native agents;
+- added only custom `review` and `verify` subagents;
+- denied edits for both custom agents;
+- defined exactly three semantic OpenRouter roles: `main`, `reason`, `fast`;
+- selected expected preset slugs `portable-main`, `portable-reason`, `portable-fast`;
+- left exact OpenCode preset reference syntax to `SPIKE-002`;
+- added `/review` and `/verify` as intended subtask commands;
+- reduced remaining resolution items from six to five.
+
+**Mapping**
 
 ```text
-<project>/
-├── opencode.jsonc
-├── AGENTS.md
-└── .opencode/
-    ├── agents/
-    ├── commands/
-    ├── skills/
-    ├── plugins/
-    ├── tools/
-    └── themes/
+build                 → main
+plan, review, verify  → reason
+general, explore,
+scout, small_model    → fast
 ```
-
-Only asset directories with real content are created.
 
 **Recommended next action**
 
-Define the initial OpenCode agents and OpenRouter semantic roles together, while leaving the exact OpenRouter preset reference syntax to `SPIKE-002`.
+Decide which Graphify artefacts are versioned and which remain private or reproducible local output.
