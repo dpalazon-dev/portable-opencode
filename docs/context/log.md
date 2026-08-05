@@ -67,39 +67,20 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 
 ## 2026-08-05 — OpenCode project layout corrected
 
-**Initial error**
-
-`DEC-016` accepted `.opencode/opencode.jsonc` after incorrectly treating `.opencode/` as both runtime configuration and asset directory.
-
-**Correction**
-
-- marked `DEC-016` superseded;
+- marked erroneous `DEC-016` superseded;
 - accepted `DEC-017`;
 - selected root `opencode.jsonc` as project runtime config;
-- preserved `.opencode/` as native asset root;
+- preserved `.opencode/` as the native asset root;
 - added conflict and provenance policies;
 - corrected architecture, roadmap, research, matrix, project, operations and state.
 
 ## 2026-08-05 — Minimal agent and model policy accepted
 
-**Evidence**
-
-Current OpenCode documentation includes built-in primary agents `build` and `plan`, and built-in subagents `general`, `explore` and `scout`. Agents support per-agent permissions, Markdown definitions and task invocation.
-
-**Decision**
-
-- accepted `DEC-018`;
-- created `DESIGN-002`;
-- retained all five relevant native agents;
-- added only custom `review` and `verify` subagents;
-- denied edits for both custom agents;
-- defined exactly three semantic OpenRouter roles: `main`, `reason`, `fast`;
-- selected expected preset slugs `portable-main`, `portable-reason`, `portable-fast`;
-- left exact OpenCode preset reference syntax to `SPIKE-002`;
-- added `/review` and `/verify` as intended subtask commands;
-- reduced remaining resolution items from six to five.
-
-**Mapping**
+- accepted `DEC-018` and created `DESIGN-002`;
+- retained native `build`, `plan`, `general`, `explore` and `scout`;
+- added only non-mutating `review` and `verify`;
+- defined `main`, `reason` and `fast` roles;
+- left exact preset reference syntax to `SPIKE-002`.
 
 ```text
 build                 → main
@@ -108,6 +89,23 @@ general, explore,
 scout, small_model    → fast
 ```
 
+## 2026-08-05 — Graphify output ownership accepted
+
+- accepted `DEC-019` and created `DESIGN-003`;
+- selected a minimal versioned allowlist:
+
+```text
+graphify-out/graph.json
+graphify-out/GRAPH_REPORT.md
+graphify-out/manifest.json
+```
+
+- kept HTML, cache, cost, query logs and optional exports out of Git;
+- required `.graphifyignore` to exclude `graphify-out/` from source extraction;
+- defined stale graph as `dirty`, corrupt graph as `blocked`, and rebuildable manifest absence as `degraded`;
+- delegated manifest portability, determinism and clone/update behaviour to `SPIKE-004`;
+- reduced remaining resolution items from five to four.
+
 **Recommended next action**
 
-Decide which Graphify artefacts are versioned and which remain private or reproducible local output.
+Define the minimal context metadata schema and remove frontmatter fields that do not improve provenance, lifecycle or verification.
