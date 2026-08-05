@@ -1,7 +1,7 @@
 ---
 type: Operations
 title: Portable OpenCode Development Operations
-description: Personal-first workflow for understanding, changing, verifying and handing off the repository.
+description: Personal-first Windows-native workflow for understanding, changing, verifying and handing off the repository.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
@@ -22,7 +22,7 @@ verified:
 
 Repository operations should help the owner move from intent to a verified change with the least process necessary to preserve safety, clarity and continuity.
 
-The workflow is personal-first. It does not assume a team, release train, support organization or permanent pull-request process.
+The workflow is personal-first and Windows-native. It does not assume a team, release train, support organization, permanent pull-request process or WSL execution layer.
 
 The governing sequence is:
 
@@ -39,17 +39,19 @@ orient
 
 ## 2. Current operating mode
 
-The repository remains in definition and architectural design.
+The repository remains in definition and configuration design.
 
 Current facts:
 
 - no executable product exists;
-- no runtime or package manager has been accepted;
+- Windows native, PowerShell and Windows Terminal are accepted under `DEC-015`;
+- WSL is not an MVP dependency or valid substitute for Windows-native evidence;
+- no runtime, package manager or packaging mechanism has been accepted;
 - the active verification profile is `docs-only`;
-- `PROJECT.md`, `VISION.md` and `ARCHITECTURE.md` are aligned with `DEC-014`;
-- `CONVENTIONS.md` and this document are now under personal-first alignment;
-- `FEAT-001`, `ROADMAP.md` and `DESIGN-001` still require personal-first review;
-- technical spikes must not begin until the reduced MVP design provides bounded questions.
+- the configuration TUI is deferred;
+- `ROADMAP.md` is aligned and pending owner review;
+- `DESIGN-001` contains 81 capabilities and seven unresolved personal defaults;
+- technical spikes begin only after their questions and Windows evidence requirements are bounded.
 
 ## 3. Starting a session
 
@@ -71,7 +73,8 @@ Before changing anything, identify:
 - the canonical personal workflow affected;
 - whether the task is documentation, design, spike, implementation or maintenance;
 - which source of truth owns the result;
-- what evidence will count as verification.
+- what evidence will count as verification;
+- whether the evidence was produced natively on Windows when the capability belongs to the canonical path.
 
 ## 4. Task classes
 
@@ -83,7 +86,7 @@ Rules:
 
 - change the narrowest canonical documents;
 - preserve distinctions between fact, decision, proposal and hypothesis;
-- update state and log only when the project state or next action changes materially;
+- update state and log only when project state or next action changes materially;
 - do not create implementation claims.
 
 ### Technical spike
@@ -92,11 +95,13 @@ Use when an upstream capability or architectural mechanism is materially uncerta
 
 A spike is bounded research, not production implementation. It must answer named questions with reproducible evidence and may be discarded afterward.
 
+An active MVP spike must run from PowerShell on Windows without WSL. Cross-platform observations may be recorded, but they do not replace Windows-native evidence.
+
 ### Implementation
 
 Use only after the relevant behaviour and acceptance boundary are clear enough that the agent is not forced to invent the product.
 
-Implementation must follow the canonical personal path first. Generalization is not part of the task unless explicitly approved.
+Implementation must follow the canonical Windows-native personal path first. Generalization is not part of the task unless explicitly approved.
 
 ### Maintenance and repair
 
@@ -114,9 +119,9 @@ Read current state and the relevant context. Identify accepted constraints and u
 
 State the change as an observable result, for example:
 
-- “The architecture describes one canonical personal configuration.”
-- “SPIKE-001 determines actual OpenCode configuration precedence.”
-- “The installer produces the same plan on a second run.”
+- “SPIKE-001 determines actual OpenCode configuration precedence on Windows.”
+- “The installer produces the same plan on a second Windows run.”
+- “PowerShell bootstrap completes without requiring WSL.”
 
 Avoid activity-based goals such as “work on the CLI”.
 
@@ -132,7 +137,7 @@ curated context
 → textual search
 → direct file reading
 → current primary upstream documentation
-→ controlled experiment
+→ controlled Windows-native experiment
 ```
 
 External behaviour that can change must be verified against current primary documentation before implementation.
@@ -145,6 +150,7 @@ For non-trivial work, identify:
 - intended changes;
 - decisions applied or challenged;
 - risky or destructive boundaries;
+- Windows-specific path, quoting, process or port concerns;
 - verification method;
 - rollback or discard boundary.
 
@@ -161,6 +167,7 @@ Do not:
 - abstract around alternatives that are not used;
 - mix a spike with production architecture silently;
 - broaden platform support as a side effect;
+- introduce Bash or WSL as hidden prerequisites;
 - preserve obsolete text solely to avoid editing several documents.
 
 ### Step 6 — Verify
@@ -172,11 +179,13 @@ Verification must answer the actual risk of the change. Examples:
 - documentation change: links, frontmatter, state consistency and unsupported claims;
 - schema change: parsing, fixtures and migration behaviour;
 - planner change: deterministic output and no unintended mutation;
-- installer change: first-run and repeated-run behaviour;
-- adapter change: contract fixture and real-environment spike where required;
+- installer change: clean Windows run and repeated-run behaviour;
+- adapter change: contract fixture and real Windows-native spike;
+- PowerShell change: strict error propagation, spaces in paths and non-zero exit codes;
+- local service change: loopback binding, port ownership, process cleanup and locked files;
 - safety change: denied paths, redaction and destructive-command boundaries.
 
-Report skipped checks explicitly.
+Report skipped checks explicitly. A WSL-only success must be reported as insufficient for the MVP path.
 
 ### Step 7 — Synchronize
 
@@ -261,8 +270,9 @@ Required spike content:
 - identifier and status;
 - question and why it matters;
 - hypotheses;
-- tested environment and versions;
-- reproducible procedure;
+- tested Windows, PowerShell and dependency versions;
+- confirmation that WSL was not used;
+- reproducible PowerShell procedure;
 - evidence and observed behaviour;
 - limitations;
 - impact on architecture and decisions;
@@ -288,7 +298,7 @@ A Codex task should specify:
 
 - exact outcome;
 - repository sources to read;
-- accepted constraints;
+- accepted constraints, including Windows native and no WSL;
 - files or directories in scope;
 - operations that are forbidden;
 - required evidence or tests;
@@ -302,7 +312,7 @@ Bad task:
 
 Good task:
 
-> On `spike/001-opencode-lifecycle`, create a reproducible experiment that determines global versus project configuration precedence in the current OpenCode version. Do not create production abstractions. Record commands, fixtures, observed behaviour and implications in `docs/spikes/SPIKE-001.md`.
+> On `spike/001-opencode-lifecycle`, determine global versus project configuration precedence in the current OpenCode version from PowerShell on Windows without WSL. Do not create production abstractions. Record commands, fixtures, versions, observed behaviour and implications in `docs/spikes/SPIKE-001.md`.
 
 Review Codex output against the repository sources of truth, not against how convincing the implementation appears.
 
@@ -326,7 +336,7 @@ Activate only when executable repository code exists. It should include the cano
 
 ### Future: `canonical-journey`
 
-Activate when installation and project initialization exist. It validates the real owner workflow:
+Activate when installation and project initialization exist. It validates the real owner workflow on a clean supported Windows environment:
 
 ```text
 inspect environment
@@ -341,7 +351,7 @@ inspect environment
 
 ### Additional platform checks
 
-Add smoke tests only for environments the owner actually supports. Do not build a universal compatibility matrix in advance.
+WSL, Linux and macOS checks are deferred. Add them only after the owner actually supports those environments or sustained external use justifies the cost.
 
 ## 10. State management
 
@@ -364,10 +374,11 @@ When an operation fails:
 1. stop before broadening the mutation scope;
 2. preserve the original error and affected operation;
 3. determine whether partial changes occurred;
-4. restore from backup or execute the known rollback when available;
-5. mark state honestly as `degraded` or `blocked`;
-6. provide a narrow remediation action;
-7. avoid repeated blind retries.
+4. release or report owned processes, ports and file handles;
+5. restore from backup or execute the known rollback when available;
+6. mark state honestly as `degraded` or `blocked`;
+7. provide a narrow PowerShell-compatible remediation action;
+8. avoid repeated blind retries.
 
 Repair should converge toward the versioned desired state. Avoid undocumented manual fixes that cannot be reproduced later.
 
@@ -418,17 +429,15 @@ The repository is ready for the next session when another agent can identify:
 
 No release process is active.
 
-Do not design release trains, support windows, public compatibility guarantees or distribution channels until an executable personal version exists and the owner needs to install or update it outside the development checkout.
+Do not design release trains, public compatibility guarantees or cross-platform distribution channels until an executable Windows-native personal version exists and the owner needs to install or update it outside the development checkout.
 
-When that need appears, define the smallest release process that supports the actual distribution method and primary environment.
+When that need appears, define the smallest release process that supports the selected Windows distribution method.
 
 ## 15. Current next sequence
 
-After this conventions and operations alignment:
-
-1. review `FEAT-001` against personal-first value;
-2. review `ROADMAP.md` and remove productization phases or gates;
-3. reduce `DESIGN-001` to the canonical personal MVP;
-4. verify the complete context set;
-5. create bounded technical spikes;
-6. pass the first spike to Codex.
+1. choose the canonical OpenCode project configuration form;
+2. resolve the remaining semantic roles, Graphify ownership, context metadata, Phoenix and OpenRouter preset defaults;
+3. define the canonical file tree and CLI contracts;
+4. verify the complete context and reduced matrix;
+5. create bounded Windows-native technical spikes;
+6. pass SPIKE-001 to Codex on an isolated branch.
