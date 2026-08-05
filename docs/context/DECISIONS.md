@@ -35,6 +35,7 @@ verified:
 | DEC-012 | deferred | Final packaging and distribution mechanism |
 | DEC-013 | deferred | Defer the configuration TUI until the CLI is effective |
 | DEC-014 | accepted | Design personal-first and allow reuse by others |
+| DEC-015 | accepted | Support Windows natively without WSL in the MVP |
 
 ---
 
@@ -164,9 +165,9 @@ TypeScript is the leading option for the portable core, OpenCode extensions, sch
 
 **Evidence required**
 
-- simple installation on the primary environment;
+- simple installation on Windows native;
 - packaging without excessive runtime friction;
-- reliable process and filesystem operations;
+- reliable Windows process and filesystem operations;
 - startup, update and migration strategy.
 
 The parked TUI does not influence this decision.
@@ -182,11 +183,11 @@ Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI.
 
 **Evidence required**
 
-- local installation and lifecycle;
+- native Windows installation and lifecycle;
 - resource use;
 - trace ingestion from the proxy;
 - retention and redaction;
-- primary-environment reliability.
+- reliable loopback operation without WSL.
 
 Phoenix is not the transparent proxy itself.
 
@@ -215,9 +216,9 @@ Full formal compliance is not an MVP goal.
 **Status:** deferred  
 **Date:** 2026-08-04
 
-Packaging depends on the selected implementation language, primary platform and upgrade model.
+Packaging depends on the selected implementation language, Windows-native installation path and upgrade model.
 
-Candidate mechanisms include a packaged executable, package-manager command or small bootstrap wrapper.
+Candidate mechanisms include a packaged executable, package-manager command or small PowerShell bootstrap wrapper.
 
 The choice follows SPIKE-001 through SPIKE-004 and the CLI prototype.
 
@@ -261,13 +262,36 @@ The canonical configuration represents one real personal workflow. Public reuse 
 - add configurability only for demonstrated needs;
 - preserve safety, idempotence, diagnostics and explicit state because they improve personal maintainability.
 
+---
+
+## DEC-015 — Support Windows natively without WSL in the MVP
+
+**Status:** accepted  
+**Date:** 2026-08-05
+
+The canonical personal environment is Windows native. WSL is not installed, required or treated as a fallback execution layer for the MVP.
+
+PowerShell is the scripting and bootstrap shell. Windows Terminal is the primary interactive terminal surface.
+
+**Consequences**
+
+- every required dependency must expose a workable native Windows installation and runtime path;
+- SPIKE-001 through SPIKE-004 must execute on Windows without WSL;
+- filesystem paths, quoting, subprocesses, signals, ports, process cleanup and local-service lifecycle must be tested on Windows;
+- versioned bootstrap and recovery scripts are PowerShell-first;
+- Bash and POSIX shell wrappers are not MVP deliverables;
+- Unix-only assumptions block adoption of a dependency or require a documented Windows adapter;
+- CI on other platforms may be added later, but it does not substitute for Windows-native end-to-end evidence;
+- Linux, macOS and WSL support remain deferred until a real personal or external need appears.
+
+The exact Windows and PowerShell versions belong in the supported-version manifest and must be fixed before the first tagged release.
+
 ## Open questions
 
-- What is the primary supported environment and shell?
 - Which implementation language and packaging approach survive the technical spikes?
 - Which OpenCode project config form becomes canonical?
 - Which agents and semantic roles are required initially?
 - Which Graphify outputs are versioned?
 - What is the minimal context metadata schema?
 - How are OpenRouter presets reconciled in the first CLI?
-- What Phoenix lifecycle and retention policy is acceptable?
+- What Phoenix lifecycle and retention policy is acceptable on Windows native?
