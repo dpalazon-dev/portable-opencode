@@ -43,24 +43,10 @@
   "agent_model_policy": {
     "decision": "DEC-018",
     "design": "docs/design/AGENT_AND_MODEL_ROLES.md",
-    "native_primary_agents": [
-      "build",
-      "plan"
-    ],
-    "native_subagents": [
-      "general",
-      "explore",
-      "scout"
-    ],
-    "custom_subagents": [
-      "review",
-      "verify"
-    ],
-    "semantic_roles": [
-      "main",
-      "reason",
-      "fast"
-    ],
+    "native_primary_agents": ["build", "plan"],
+    "native_subagents": ["general", "explore", "scout"],
+    "custom_subagents": ["review", "verify"],
+    "semantic_roles": ["main", "reason", "fast"],
     "preset_slugs": {
       "main": "portable-main",
       "reason": "portable-reason",
@@ -87,17 +73,24 @@
   "context": {
     "path": "docs/context",
     "status": "active",
-    "format": "repository-owned-metadata-subset",
+    "format": "repository-owned-okf-compatible-subset",
+    "decision": "DEC-011",
+    "design": "docs/design/CONTEXT_METADATA_SCHEMA.md",
+    "schema": "schemas/context-document.schema.json",
+    "required_frontmatter": ["type", "title", "description", "status"],
+    "reserved_frontmatter_free": ["index.md", "log.md"],
+    "deprecated_fields": ["created", "modified", "verified"],
+    "migration_status": "pending",
     "owner_verification": "pending"
   },
   "scope_alignment": {
     "project": "aligned",
     "vision": "aligned",
     "architecture": "aligned",
-    "conventions": "aligned",
-    "operations": "aligned",
+    "conventions": "pending-metadata-policy-update",
+    "operations": "pending-metadata-policy-update",
     "configuration_tui": "deferred",
-    "roadmap": "aligned_pending_owner_review",
+    "roadmap": "pending-metadata-policy-update",
     "configuration_matrix": "reduced_pending_owner_review"
   },
   "architecture": {
@@ -115,13 +108,7 @@
       "status": "corrected_complete_pending_owner_review",
       "document": "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
       "reviewed_at": "2026-08-05",
-      "systems": [
-        "opencode",
-        "openrouter",
-        "graphify",
-        "rtk",
-        "phoenix"
-      ],
+      "systems": ["opencode", "openrouter", "graphify", "rtk", "phoenix"],
       "correction": "project-runtime-config-is-root-opencode-jsonc"
     }
   },
@@ -137,10 +124,11 @@
         "primary-environment-windows-native",
         "opencode-project-config-root-jsonc-with-dot-opencode-assets",
         "native-agents-with-main-reason-fast-roles",
-        "graphify-minimal-versioned-output-allowlist"
+        "graphify-minimal-versioned-output-allowlist",
+        "minimal-repository-owned-context-metadata"
       ],
-      "remaining_personal_defaults": 4,
-      "next_action": "define_minimal_context_metadata_schema",
+      "remaining_personal_defaults": 3,
+      "next_action": "decide_phoenix_windows_lifecycle_and_retention",
       "completion_gate": "owner_verified_and_spike_links_confirmed"
     },
     "agent_model_roles": {
@@ -152,6 +140,12 @@
       "id": "DESIGN-003",
       "status": "active_pending_spike-004-validation",
       "document": "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
+    },
+    "context_metadata_schema": {
+      "id": "DESIGN-004",
+      "status": "active_pending-repository-migration",
+      "document": "docs/design/CONTEXT_METADATA_SCHEMA.md",
+      "schema": "schemas/context-document.schema.json"
     }
   },
   "features": {
@@ -205,22 +199,22 @@
   "verification": {
     "profile": "docs-only",
     "last_run": null,
-    "result": "pending"
+    "result": "pending-metadata-migration"
   },
   "decisions": {
-    "accepted": 13,
-    "proposed": 3,
+    "accepted": 14,
+    "proposed": 2,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
     "milestone": "configuration-design-owner-review",
-    "step": "define-minimal-context-metadata-schema",
+    "step": "decide-phoenix-windows-lifecycle-and-retention",
     "documents": [
       "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
       "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
+      "docs/design/CONTEXT_METADATA_SCHEMA.md"
     ]
   },
   "updated_at": "2026-08-05T10:24:00+02:00"
