@@ -21,6 +21,14 @@
     "exact_windows_version": "pending-supported-version-manifest",
     "exact_powershell_version": "pending-supported-version-manifest"
   },
+  "opencode": {
+    "project_config_decision": "DEC-016",
+    "project_config_path": ".opencode/opencode.jsonc",
+    "root_project_config_managed": false,
+    "root_agents_path": "AGENTS.md",
+    "root_config_conflict_policy": "report-conflict-or-migration-finding",
+    "runtime_validation": "pending-spike-001"
+  },
   "initialization": {
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
@@ -76,10 +84,11 @@
       "previous_capability_count": 177,
       "reduction_required": false,
       "resolved_personal_defaults": [
-        "primary-environment-windows-native"
+        "primary-environment-windows-native",
+        "opencode-project-config-dot-opencode-jsonc"
       ],
-      "remaining_personal_defaults": 7,
-      "next_action": "choose_canonical_opencode_project_config_form",
+      "remaining_personal_defaults": 6,
+      "next_action": "choose_initial_semantic_roles_and_required_agents",
       "completion_gate": "owner_verified_and_spike_links_confirmed"
     }
   },
@@ -121,18 +130,18 @@
     "result": "pending"
   },
   "decisions": {
-    "accepted": 10,
+    "accepted": 11,
     "proposed": 3,
     "deferred": 2
   },
   "next": {
     "milestone": "configuration-design-owner-review",
-    "step": "choose-canonical-opencode-project-config-form",
+    "step": "choose-initial-semantic-roles-and-required-agents",
     "documents": [
       "docs/context/DECISIONS.md",
-      "docs/context/ROADMAP.md",
-      "docs/design/CONFIGURATION_MATRIX.md"
+      "docs/design/CONFIGURATION_MATRIX.md",
+      "docs/research/CONFIGURATION_SURFACE_RESEARCH.md"
     ]
   },
-  "updated_at": "2026-08-05T09:47:00+02:00"
+  "updated_at": "2026-08-05T09:57:00+02:00"
 }
