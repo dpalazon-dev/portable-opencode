@@ -10,6 +10,17 @@
     "reuse_policy": "public-reuse-allowed-not-mvp-driver",
     "scope_decision": "DEC-014"
   },
+  "environment": {
+    "decision": "DEC-015",
+    "primary_os": "windows-native",
+    "wsl_required": false,
+    "wsl_supported_in_mvp": false,
+    "bootstrap_shell": "powershell",
+    "primary_terminal": "windows-terminal",
+    "posix_shell_scripts_required": false,
+    "exact_windows_version": "pending-supported-version-manifest",
+    "exact_powershell_version": "pending-supported-version-manifest"
+  },
   "initialization": {
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
@@ -64,7 +75,11 @@
       "capability_count": 81,
       "previous_capability_count": 177,
       "reduction_required": false,
-      "next_action": "review_eight_remaining_personal_defaults",
+      "resolved_personal_defaults": [
+        "primary-environment-windows-native"
+      ],
+      "remaining_personal_defaults": 7,
+      "next_action": "choose_canonical_opencode_project_config_form",
       "completion_gate": "owner_verified_and_spike_links_confirmed"
     }
   },
@@ -91,12 +106,14 @@
     "status": "proposed",
     "backend": "phoenix",
     "validated": false,
-    "content_capture_default": false
+    "content_capture_default": false,
+    "windows_native_validation_required": true
   },
   "operations": {
     "model": "lightweight-personal-workflow",
     "codex_policy": "bounded-tasks-only",
-    "active_verification_profile": "docs-only"
+    "active_verification_profile": "docs-only",
+    "bootstrap_shell": "powershell"
   },
   "verification": {
     "profile": "docs-only",
@@ -104,18 +121,18 @@
     "result": "pending"
   },
   "decisions": {
-    "accepted": 9,
+    "accepted": 10,
     "proposed": 3,
     "deferred": 2
   },
   "next": {
     "milestone": "configuration-design-owner-review",
-    "step": "review-reduced-matrix-and-roadmap",
+    "step": "choose-canonical-opencode-project-config-form",
     "documents": [
+      "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
-      "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
       "docs/design/CONFIGURATION_MATRIX.md"
     ]
   },
-  "updated_at": "2026-08-05T01:05:00+02:00"
+  "updated_at": "2026-08-05T09:47:00+02:00"
 }
