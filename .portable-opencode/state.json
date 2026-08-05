@@ -22,11 +22,22 @@
     "exact_powershell_version": "pending-supported-version-manifest"
   },
   "opencode": {
-    "project_config_decision": "DEC-016",
-    "project_config_path": ".opencode/opencode.jsonc",
-    "root_project_config_managed": false,
+    "project_config_decision": "DEC-017",
+    "superseded_project_config_decision": "DEC-016",
+    "project_config_path": "opencode.jsonc",
+    "project_asset_root": ".opencode",
     "root_agents_path": "AGENTS.md",
-    "root_config_conflict_policy": "report-conflict-or-migration-finding",
+    "project_tui_config_path": "tui.jsonc",
+    "project_tui_config_required": false,
+    "root_json_policy": "migration-candidate",
+    "dual_root_config_policy": "blocking-ambiguity",
+    "misplaced_dot_opencode_config_policy": "report-unmanaged-misplaced-file",
+    "runtime_override_provenance": [
+      "OPENCODE_CONFIG",
+      "OPENCODE_CONFIG_DIR",
+      "OPENCODE_CONFIG_CONTENT",
+      "%ProgramData%\\opencode"
+    ],
     "runtime_validation": "pending-spike-001"
   },
   "initialization": {
@@ -63,7 +74,7 @@
   "research": {
     "configuration_surfaces": {
       "id": "RESEARCH-001",
-      "status": "complete_pending_owner_review",
+      "status": "corrected_complete_pending_owner_review",
       "document": "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
       "reviewed_at": "2026-08-05",
       "systems": [
@@ -72,7 +83,8 @@
         "graphify",
         "rtk",
         "phoenix"
-      ]
+      ],
+      "correction": "project-runtime-config-is-root-opencode-jsonc"
     }
   },
   "design": {
@@ -85,7 +97,7 @@
       "reduction_required": false,
       "resolved_personal_defaults": [
         "primary-environment-windows-native",
-        "opencode-project-config-dot-opencode-jsonc"
+        "opencode-project-config-root-jsonc-with-dot-opencode-assets"
       ],
       "remaining_personal_defaults": 6,
       "next_action": "choose_initial_semantic_roles_and_required_agents",
@@ -132,16 +144,17 @@
   "decisions": {
     "accepted": 11,
     "proposed": 3,
-    "deferred": 2
+    "deferred": 2,
+    "superseded": 1
   },
   "next": {
     "milestone": "configuration-design-owner-review",
     "step": "choose-initial-semantic-roles-and-required-agents",
     "documents": [
       "docs/context/DECISIONS.md",
-      "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/research/CONFIGURATION_SURFACE_RESEARCH.md"
+      "docs/context/ROADMAP.md",
+      "docs/design/CONFIGURATION_MATRIX.md"
     ]
   },
-  "updated_at": "2026-08-05T09:57:00+02:00"
+  "updated_at": "2026-08-05T10:24:00+02:00"
 }
