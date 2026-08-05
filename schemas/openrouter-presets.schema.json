@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dpalazon-dev/portable-opencode/schemas/openrouter-presets.schema.json",
+  "title": "Portable OpenCode OpenRouter preset intent manifest",
+  "type": "object",
+  "required": [
+    "version",
+    "presets"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "presets": {
+      "type": "object",
+      "required": [
+        "main",
+        "reason",
+        "fast"
+      ],
+      "properties": {
+        "main": {
+          "$ref": "#/$defs/mainPreset"
+        },
+        "reason": {
+          "$ref": "#/$defs/reasonPreset"
+        },
+        "fast": {
+          "$ref": "#/$defs/fastPreset"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "presetBase": {
+      "type": "object",
+      "required": [
+        "slug",
+        "skin",
+        "config"
+      ],
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "skin": {
+          "type": "string",
+          "enum": [
+            "chat-completions",
+            "messages",
+            "responses"
+          ]
+        },
+        "system_prompt": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "mainPreset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/presetBase"
+        },
+        {
+          "properties": {
+            "slug": {
+              "const": "portable-main"
+            }
+          }
+        }
+      ]
+    },
+    "reasonPreset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/presetBase"
+        },
+        {
+          "properties": {
+            "slug": {
+              "const": "portable-reason"
+            }
+          }
+        }
+      ]
+    },
+    "fastPreset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/presetBase"
+        },
+        {
+          "properties": {
+            "slug": {
+              "const": "portable-fast"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
