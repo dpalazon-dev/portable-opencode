@@ -16,6 +16,7 @@ sources:
   - ../research/CONFIGURATION_SURFACE_RESEARCH.md
   - ../design/CONFIGURATION_MATRIX.md
   - ../design/AGENT_AND_MODEL_ROLES.md
+  - ../design/GRAPHIFY_OUTPUT_POLICY.md
 verified:
   - by: repository-owner
     status: pending
@@ -35,7 +36,7 @@ define
 → harden and release
 ```
 
-The canonical environment is Windows native with PowerShell and Windows Terminal. OpenCode project configuration follows root `opencode.jsonc` plus native `.opencode/` assets. Native OpenCode agents are reused; only `review` and `verify` are added. The portable TUI remains parked.
+The canonical environment is Windows native with PowerShell and Windows Terminal. Project configuration uses root `opencode.jsonc` plus native `.opencode/` assets. Native OpenCode agents are reused; only `review` and `verify` are added. Graphify output follows a minimal versioned allowlist. The portable TUI remains parked.
 
 ## 2. Phase 0 — Canonical specification and design
 
@@ -60,11 +61,11 @@ The canonical environment is Windows native with PowerShell and Windows Terminal
 - [x] preserve native `build`, `plan`, `general`, `explore` and `scout`;
 - [x] define custom `review` and `verify` subagents;
 - [x] define `main`, `reason` and `fast` semantic roles;
-- [ ] approve the reduced personal-first matrix;
-- [ ] decide Graphify output ownership;
+- [x] define Graphify versioned output allowlist;
 - [ ] define minimal context metadata;
 - [ ] decide Phoenix lifecycle and retention;
 - [ ] decide first-CLI OpenRouter preset reconciliation;
+- [ ] approve the reduced personal-first matrix;
 - [ ] define complete canonical global and project file trees;
 - [ ] define generated, copied, linked and private ownership;
 - [ ] define private local override mechanism;
@@ -82,7 +83,7 @@ The canonical environment is Windows native with PowerShell and Windows Terminal
 ### Exit criteria
 
 - every MVP capability has one owner and one real surface;
-- canonical paths, agent roles and conflict policies are explicit;
+- canonical paths, agents, roles, graph ownership and conflict policies are explicit;
 - technical mechanisms are separated from product defaults;
 - CLI and PowerShell work can be implemented from bounded contracts.
 
@@ -98,12 +99,12 @@ Validate on Windows without WSL:
 - global config in the effective Windows home;
 - root project `opencode.jsonc` discovery and merge order;
 - `.opencode/` asset discovery;
-- built-in `build`, `plan`, `general`, `explore` and `scout` availability and customization;
+- built-in agent availability and customization;
 - Markdown `review` and `verify` discovery;
-- primary/subagent modes, `permission.task` and permission merge order;
+- primary/subagent modes, task permissions and permission merge order;
 - `/review` and `/verify` subtask commands;
 - root config conflicts, environment overrides and managed settings;
-- `AGENTS.md`, shell `pwsh`, LSP, formatter, compaction and watcher behaviour;
+- `AGENTS.md`, `pwsh`, LSP, formatter, compaction and watcher behaviour;
 - plugin stability and session metadata.
 
 ### SPIKE-002 — OpenRouter policy
@@ -112,7 +113,7 @@ Validate:
 
 - exact OpenCode representation of `@preset/<slug>`;
 - `portable-main`, `portable-reason` and `portable-fast` mapping;
-- `build → main`, `plan/review/verify → reason`, and lightweight agents/`small_model → fast`;
+- agent-to-role mapping and `small_model`;
 - preset list, get, create and version workflow;
 - provider routing, model fallbacks and required-parameter compatibility;
 - privacy, ZDR, usage, cost, cache and resolved-model metadata.
@@ -123,7 +124,17 @@ Validate transparent proxying, streaming, tool calls, errors, metadata-only reda
 
 ### SPIKE-004 — Graphify and RTK
 
-Validate native installation, OpenCode integrations, ignore semantics, first graph, explicit updates, optional hooks, RTK exclusions, failure tee output and recovery.
+Validate:
+
+- native installation and OpenCode integrations;
+- ignore semantics and explicit graph updates;
+- exact output set and deterministic regeneration;
+- portability and private-path safety of `manifest.json`;
+- clone plus incremental-update behaviour;
+- repository size and diff churn;
+- exclusion of `graphify-out/` from graph input;
+- RTK exclusions, failure tee output and recovery;
+- optional hooks only after explicit updates are reliable.
 
 ### Exit criteria
 
@@ -140,7 +151,7 @@ Validate native installation, OpenCode integrations, ignore semantics, first gra
 - create source, schema, template, PowerShell script, fixture and test structure;
 - define Windows path, process and filesystem primitives;
 - implement canonical configuration, local overrides, state schemas, plans, diagnostics, resource inventory, provenance and migrations;
-- retain native OpenCode assets rather than wrapping them.
+- retain native OpenCode and Graphify assets rather than wrapping them.
 
 Initial commands:
 
@@ -167,15 +178,7 @@ portable-opencode doctor
 portable-opencode observability start|stop|status
 ```
 
-Manage:
-
-- supported OpenCode version and global config;
-- global `AGENTS.md` and necessary native assets;
-- safe permissions and `pwsh` shell;
-- OpenRouter authentication and three-preset reconciliation;
-- RTK and Graphify native integrations;
-- localhost proxy and Phoenix lifecycle;
-- backups, drift and provenance.
+Manage supported OpenCode, global rules/assets, safe permissions, OpenRouter authentication and three-preset reconciliation, RTK/Graphify integrations, localhost observability, backups, drift and provenance.
 
 ## 6. Phase 4 — New-project bootstrap
 
@@ -186,29 +189,28 @@ Manage:
 ├── opencode.jsonc
 ├── AGENTS.md
 ├── .opencode/
-│   ├── agents/
-│   │   ├── review.md
-│   │   └── verify.md
-│   ├── commands/
-│   │   ├── review.md
-│   │   └── verify.md
-│   ├── skills/      # only when required
-│   ├── plugins/     # only when required
-│   ├── tools/       # only when required
-│   └── themes/      # only when required
+│   ├── agents/review.md
+│   ├── agents/verify.md
+│   ├── commands/review.md
+│   ├── commands/verify.md
+│   └── ... only required assets
 ├── docs/context/
 ├── .portable-opencode/
+├── graphify-out/
+│   ├── graph.json
+│   ├── GRAPH_REPORT.md
+│   └── manifest.json
 ├── .gitignore
 └── .graphifyignore
 ```
 
-`init-project` must handle root JSON migration, dual config ambiguity, misplaced `.opencode/opencode.json(c)` and active override provenance.
+`init-project` handles OpenCode config conflicts and provenance, generates the Graphify allowlist, and excludes `graphify-out/` from source extraction.
 
 The semantic `/init-project` workflow confirms purpose, stack, architecture, dependencies, LSP, formatter, required assets, ignore files, first Graphify graph and canonical verification before `ready`.
 
 ## 7. Phase 5 — Daily continuity and maintenance
 
-Implement environment/project status, provenance, drift, graph freshness, context review, handoff, verification, model/provider/token/cost inspection, health, upgrades, migrations, backups and Windows process recovery.
+Implement environment/project status, provenance, drift, graph freshness, explicit graph synchronization, context review, handoff, verification, model/provider/token/cost inspection, health, upgrades, migrations, backups and Windows process recovery.
 
 ## 8. Phase 6 — Hardening and first release
 
@@ -220,6 +222,7 @@ Deliver documentation/schema checks, unit/integration/contract tests, disposable
 - WSL, Linux and macOS support;
 - broad legacy-repository adoption;
 - additional agents or semantic roles without repeated evidence;
+- additional Graphify exports without a repeated personal use;
 - profiles, teams and organizations;
 - MCP/local-model profiles;
 - alternate observability backends;
