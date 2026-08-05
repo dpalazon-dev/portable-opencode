@@ -10,6 +10,7 @@ sources:
   - VISION.md
   - DECISIONS.md
   - ../SPECIFICATION.es.md
+  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
 verified:
   - by: repository-owner
     status: pending
@@ -19,24 +20,13 @@ verified:
 
 ## 1. Architectural objective
 
-`portable-opencode` exists to reproduce and maintain one deliberate personal agentic coding environment across the repository owner's Windows machine and new projects.
+`portable-opencode` reproduces and maintains one deliberate personal agentic coding environment on the repository owner's Windows machine and across new projects.
 
-The architecture should be no more general than that problem requires.
+The governing test is:
 
-Its value is that the owner can:
+> Does this component directly improve the canonical personal workflow or its long-term maintainability?
 
-1. inspect the current environment;
-2. understand proposed changes;
-3. install or initialize safely;
-4. verify the resulting state;
-5. use OpenCode with explicit routing, permissions, context and observability;
-6. recover the same working model later without relying on memory.
-
-The governing test for every architectural element is:
-
-> Does this component or abstraction directly improve the canonical personal workflow, or is it only preparing for hypothetical users and scenarios?
-
-Elements that fail this test are removed from the MVP, deferred or kept as implementation details rather than promoted to product concepts.
+Anything that exists only for hypothetical users, profiles or platforms is removed, deferred or kept as an internal implementation detail.
 
 ## 2. Canonical environment
 
@@ -49,13 +39,11 @@ Windows native
 - WSL
 ```
 
-All required dependencies, scripts, spikes and end-to-end verification must work through native Windows paths. Linux, macOS and WSL support are deferred.
+All required dependencies, scripts, spikes and end-to-end verification must work through native Windows paths.
 
 ## 3. Two paths, one system
 
 ### Configuration path
-
-Used to inspect, install, initialize, diagnose and repair the environment.
 
 ```text
 User
@@ -71,8 +59,6 @@ User
 
 ### Daily coding path
 
-Used after the environment and project are configured.
-
 ```text
 User
   → OpenCode
@@ -80,67 +66,52 @@ User
   → agents, commands, skills and tools
   → local observability boundary
   → OpenRouter
-  → selected model and provider
+  → model and provider
   → response, usage, cost and errors
 ```
 
-RTK reduces noisy terminal output before it enters agent context. Verification determines whether code and project state are correct.
+RTK reduces terminal noise before it enters agent context. `portable-opencode` configures and maintains the environment; OpenCode remains the agent runtime.
 
-`portable-opencode` configures and maintains the environment. OpenCode remains the agent runtime.
-
-## 4. Minimal architectural components
+## 4. Minimal components
 
 ### 4.1. Portable application core
 
-The core owns only deterministic lifecycle behaviour that cannot belong to OpenCode, OpenRouter or another selected component:
+The core owns only lifecycle behaviour that cannot belong to an upstream tool:
 
 - environment inspection;
 - desired-state resolution;
-- change planning;
-- safe application of approved changes;
+- deterministic change planning;
+- safe application and managed backups;
 - project scaffolding;
 - diagnostics and repair suggestions;
 - verification orchestration;
-- explicit lifecycle state;
-- structured operation results.
+- environment and project state;
+- structured outcomes.
 
-The core is not a generic workflow engine, plugin platform or agent runtime.
-
-For the MVP there is one canonical personal configuration. Local overrides appear only for demonstrated machine-specific needs.
+It is not a generic workflow engine, plugin platform or agent runtime.
 
 ### 4.2. Headless CLI
 
-The CLI is the mandatory control interface.
-
-It supports:
-
-- interactive command use;
-- explicit lifecycle commands;
-- dry-run and explain output;
-- machine-readable output;
-- non-interactive execution for repeatability and testing.
-
-The CLI calls the application core and does not contain a second configuration model.
+The CLI is the mandatory control interface. It exposes explicit commands, dry-run and explain output, structured JSON and non-interactive execution. It calls the application core and does not contain a second configuration model.
 
 ### 4.3. Deferred configuration TUI
 
-`DEC-013` and [FEAT-001](../features/CONFIGURATION_TUI.md) defer the Ratatui interface until the CLI is effective and stable.
-
-The TUI does not influence the MVP language, packaging, core contracts or release gate. A future TUI may only project the same plans, diagnostics and operations already exposed by the CLI.
+`DEC-013` defers Ratatui until the CLI is effective. A future TUI may only project existing plans, diagnostics and operations.
 
 ### 4.4. OpenCode
 
-OpenCode owns the coding interaction layer:
+OpenCode owns:
 
-- sessions;
+- sessions and interaction;
 - primary agents and subagents;
 - commands and skills;
 - custom tools and plugins;
-- permissions and tool execution;
+- permissions;
 - LSP and formatters;
-- compaction, watcher behaviour and project instruction loading.
+- compaction and watcher behaviour;
+- loading project instructions and configuration.
 
-`portable-opencode` configures these native capabilities rather than recreating them.
+`portable-opencode` generates and validates OpenCode's documented native files rather than recreating these concepts.
 
 ### 4.5. OpenRouter
 
@@ -148,72 +119,32 @@ OpenRouter owns:
 
 - model and provider selection;
 - routing and fallbacks;
-- privacy-related provider policy;
+- provider privacy policy;
+- presets;
 - usage and cost information;
-- personal API credentials and remote account limits.
+- personal API credentials and remote limits.
 
-OpenCode-facing configuration uses a small set of stable semantic roles where that reduces repeated model coupling.
+Semantic roles are a portable-opencode design abstraction mapped to native OpenRouter policy. The exact OpenCode reference syntax remains subject to `SPIKE-002`.
 
 ### 4.6. Local observability
 
-Observability answers personal operational questions:
-
-- which model and provider handled a request;
-- latency, tokens and cost;
-- whether a fallback or error occurred;
-- which project, OpenCode session or operation produced it.
-
-The intended boundary is a native Windows localhost proxy between OpenCode and OpenRouter, subject to `SPIKE-003`.
-
-Metadata, usage and errors are collected by default. Prompt and response capture remains opt-in. Observability databases and raw traces are private local state.
+The intended boundary is a native Windows localhost proxy between OpenCode and OpenRouter. It records metadata, usage, cost, latency, fallback and errors by default. Prompt and response capture remains opt-in. Phoenix is the proposed OTLP/OpenInference backend, not the proxy itself.
 
 ### 4.7. Graphify
 
-Graphify is the structural memory of the codebase and remains part of the canonical setup.
-
-The portable layer owns only:
-
-- installation and health checks;
-- `.graphifyignore` composition;
-- explicit update commands and later optional triggers;
-- graph freshness state;
-- quality auditing;
-- persisted inclusion and exclusion decisions.
-
-Graphify does not replace LSP, textual search or curated context.
+Graphify provides structural memory. The portable layer owns installation checks, `.graphifyignore` composition, explicit update workflows, freshness state and quality auditing. It does not own graph extraction internals.
 
 ### 4.8. RTK
 
-RTK reduces verbose terminal output before it consumes agent context.
+RTK owns command rewriting and output reduction. The portable layer installs and verifies its native OpenCode integration and minimal local configuration.
 
-The portable layer installs it, verifies it and applies its native OpenCode integration. It does not build a competing output-processing pipeline.
+### 4.9. Curated context
 
-### 4.9. Curated project context
-
-Versioned context owns information that should survive sessions:
-
-- project definition and vision;
-- architecture, conventions and operations;
-- durable decisions;
-- roadmap;
-- concise context log;
-- independently reviewable feature, design and spike documents.
-
-Context is curated knowledge, not a chat archive or event store.
+Versioned context preserves project definition, vision, architecture, conventions, operations, decisions, roadmap and concise transitions. It is curated knowledge, not a chat archive or event store.
 
 ### 4.10. Machine-readable state
 
-Machine-readable state records operational facts:
-
-- environment and project lifecycle;
-- readiness;
-- degraded or blocked conditions;
-- graph freshness;
-- verification result;
-- managed versions;
-- pending decisions required to continue.
-
-State remains small, inspectable and schema-validated.
+State records lifecycle, readiness, degradation, graph freshness, verification results, managed versions and pending decisions. It remains small, inspectable and schema-validated.
 
 ## 5. Configuration ownership
 
@@ -221,238 +152,192 @@ State remains small, inspectable and schema-validated.
 
 Stored in this repository:
 
-- default OpenCode configuration;
-- agents, commands, skills, tools and plugins actually used;
-- OpenRouter semantic-role intent;
-- installation and project templates;
-- Graphify and RTK integration policy;
-- schemas and verification rules;
+- desired OpenCode configuration and native assets;
+- OpenRouter semantic-role and preset intent;
+- templates and schemas;
+- Graphify and RTK policy;
+- verification rules;
 - documentation and decisions.
 
 ### B. Managed personal environment
 
 Materialized on Windows:
 
-- active global OpenCode configuration;
-- installed portable components;
+- active global OpenCode configuration and assets;
+- installed components;
 - observability processes;
 - generated non-secret tool configuration;
-- local installation metadata.
+- private installation metadata.
 
 ### C. Project-versioned configuration
 
-`DEC-016` fixes the OpenCode project layout:
+`DEC-017` fixes the project layout:
 
 ```text
 <project>/
+├── opencode.jsonc
 ├── AGENTS.md
 ├── .opencode/
-│   ├── opencode.jsonc
 │   ├── agents/
 │   ├── commands/
 │   ├── skills/
 │   ├── plugins/
-│   └── tools/
+│   ├── tools/
+│   └── themes/
 ├── docs/context/
 ├── .portable-opencode/
 └── .graphifyignore
 ```
 
-The exact presence of each `.opencode/` subdirectory depends on real project needs and OpenCode's native discovery rules. Empty speculative directories are not required.
+Only `.opencode/` directories containing real assets are created.
 
-`<project>/.opencode/opencode.jsonc` is the only project-level OpenCode configuration generated and managed by portable-opencode.
+Responsibilities are explicit:
 
-Root `opencode.json` or `opencode.jsonc` files are not silently merged into the portable desired state. Their presence produces a conflict or migration finding.
+- `opencode.jsonc`: canonical project runtime configuration;
+- `AGENTS.md`: root operating rules and context reading order;
+- `.opencode/`: native project agents, commands, skills, plugins, tools and themes;
+- `tui.jsonc`: optional project TUI preferences beside `opencode.jsonc`, only when a project-specific need exists;
+- `.portable-opencode/`: portable lifecycle state and safe generated metadata;
+- `docs/context/`: curated project knowledge;
+- `.graphifyignore`: versioned Graphify scope policy.
 
-`<project>/AGENTS.md` remains at the root because it is the repository operating entry point, not an internal OpenCode asset.
+OpenCode's documented project merge semantics remain upstream behaviour. The portable layer chooses and manages one canonical file, then explains additional active sources rather than pretending they do not exist.
 
 ### D. Private local data
 
 Never committed:
 
 - API keys and authentication;
-- SSH keys and certificates;
 - `.env` values;
-- secret-bearing local overrides;
+- SSH keys and certificates;
+- secret-bearing overrides;
 - observability databases and raw traces;
 - caches, temporary files and private logs.
 
-## 6. One canonical configuration
+## 6. OpenCode configuration provenance
 
-The MVP does not begin with a profile catalogue.
+The effective OpenCode configuration can combine:
+
+```text
+remote organizational config
+→ global config
+→ OPENCODE_CONFIG override
+→ project root opencode.jsonc
+→ .opencode native assets
+→ OPENCODE_CONFIG_CONTENT runtime override
+→ managed settings when present
+```
+
+For the personal MVP, portable-opencode manages the global configuration it installs, the root project `opencode.jsonc`, and selected native assets. It does not silently absorb arbitrary external overrides.
+
+Diagnostics must report:
+
+- root `opencode.json` as a migration candidate;
+- simultaneous root `opencode.json` and `opencode.jsonc` as blocking ambiguity;
+- `.opencode/opencode.json(c)` as misplaced unmanaged files;
+- active `OPENCODE_CONFIG`, `OPENCODE_CONFIG_DIR` or `OPENCODE_CONFIG_CONTENT` as explicit provenance layers;
+- managed Windows settings under `%ProgramData%\opencode` when they affect the result.
+
+## 7. One canonical personal configuration
+
+The MVP uses:
 
 ```text
 canonical personal configuration
-+ explicit project-specific values
-+ minimal private overrides when required
++ project-specific values
++ minimal private override when demonstrated
 ```
 
-A new profile, abstraction or override layer requires a second real configuration that cannot be expressed cleanly through the current model.
+There is no profile catalogue. New variability requires a real second configuration or verified technical need.
 
-## 7. Separate lifecycle models
+## 8. Separate lifecycle models
 
-### Personal environment lifecycle
+### Environment
 
 ```text
-absent
-  → inspected
-  → planned
-  → installed
-  → healthy
-      ↘ degraded
-      ↘ update-required
-      ↘ blocked
+absent → inspected → planned → installed → healthy
+                                      ↘ degraded
+                                      ↘ update-required
+                                      ↘ blocked
 ```
 
-### Project lifecycle
+### Project
 
 ```text
-uninitialized
-  → scaffolded
-  → configuring
-  → ready
-      ↘ dirty
-      ↘ degraded
-      ↘ blocked
+uninitialized → scaffolded → configuring → ready
+                                      ↘ dirty
+                                      ↘ degraded
+                                      ↘ blocked
 ```
 
-A generated scaffold is not automatically ready. Readiness requires context, OpenCode configuration, technical baseline, Graphify state and verification gates.
+Generated files alone do not make a project ready. Readiness requires context, application baseline, valid OpenCode configuration, Graphify state and canonical verification.
 
-## 8. Operation contract
+## 9. Operation contract
 
 Every state-changing operation follows:
 
 ```text
 inspect
-  → resolve desired state
-  → produce deterministic plan
-  → show consequences
-  → obtain approval when required
-  → apply narrow reversible changes
-  → verify
-  → record outcome and resulting state
+→ resolve desired state
+→ plan
+→ show consequences
+→ approve when required
+→ apply narrow reversible changes
+→ verify
+→ record outcome and state
 ```
 
-Core concepts remain limited to:
-
-- `Finding`;
-- `Plan`;
-- `Decision`;
-- `Operation`;
-- `Outcome`;
-- `State`.
-
-## 9. Daily coding and inference path
-
-```text
-OpenCode session
-  → semantic role and request metadata
-  → local observability adapter
-  → OpenRouter
-  → selected model and provider
-  → streamed response
-  → usage, cost and error correlation
-  → OpenCode
-```
-
-The project-understanding path is:
-
-```text
-user intent
-  → curated context
-  → Graphify for repository structure
-  → LSP for precise language semantics
-  → targeted textual search and direct reads
-  → plan or implementation
-  → canonical verification
-  → context, graph or state update when required
-```
+Core concepts remain limited to `Finding`, `Plan`, `Decision`, `Operation`, `Outcome` and `State`.
 
 ## 10. Extension model
 
-| Mechanism | Responsibility |
+| Surface | Responsibility |
 |---|---|
+| Root `opencode.jsonc` | Project runtime configuration |
 | Root `AGENTS.md` | Permanent repository operating rules |
-| `.opencode/opencode.jsonc` | Canonical project OpenCode runtime configuration |
-| Agent | Coding role with tools and permissions |
-| Command | Explicit user-triggered OpenCode workflow |
-| Skill | Reusable procedure loaded when relevant |
-| Plugin | Minimal event-driven OpenCode integration |
-| Custom tool | Typed operation unavailable through native tools |
-| Portable CLI | Installation, inspection, diagnosis and lifecycle control |
+| `.opencode/agents/` | Coding roles and permissions |
+| `.opencode/commands/` | Explicit user-triggered workflows |
+| `.opencode/skills/` | Reusable procedures loaded on demand |
+| `.opencode/plugins/` | Minimal event-driven integration |
+| `.opencode/tools/` | Typed operations unavailable natively |
+| Portable CLI | Installation, inspection, planning, diagnosis and lifecycle control |
 
 Each asset must correspond to an actual repeated behaviour.
 
-## 11. Deliberately deferred architecture
+## 11. Deferred architecture
 
-The MVP does not require:
-
-- WSL, Linux or macOS parity;
-- multi-user accounts, teams or organizations;
-- shared workspace policy distribution;
-- a generic profile framework;
-- marketplaces;
-- remote management or hosted control planes;
-- multiple observability backends implemented in advance;
-- coding clients other than OpenCode;
-- a public SDK;
-- autonomous background agents;
-- arbitrary legacy-repository migration;
-- a configuration TUI before the CLI is proven.
+The MVP does not require WSL/Linux/macOS parity, teams, shared workspace policies, generic profiles, marketplaces, hosted control planes, multiple observability backends, coding clients other than OpenCode, a public SDK, autonomous background agents, arbitrary legacy-repository migration or a configuration TUI before the CLI is proven.
 
 ## 12. Initial implementation shape
 
 The smallest credible implementation contains:
 
-- one application core for inspect, plan, apply, verify and state;
+- one application core;
 - one mandatory Windows-native CLI;
-- narrow adapters for the filesystem, processes and selected tools;
-- versioned configuration and templates;
-- PowerShell bootstrap and recovery scripts only where necessary;
-- schemas and tests;
-- native OpenCode assets under the selected global and project paths;
-- one local observability integration validated by a spike.
+- narrow filesystem, process and external-tool adapters;
+- versioned native configuration and templates;
+- PowerShell bootstrap and recovery only where needed;
+- schemas, fixtures and tests;
+- one observability integration validated by a spike.
 
-The implementation language and distribution mechanism remain open until targeted Windows-native spikes produce evidence.
+The implementation language and distribution mechanism remain open until targeted Windows-native evidence exists.
 
-## 13. Quality priorities
+## 13. Remaining technical uncertainties
 
-1. reproducibility;
-2. inspectability;
-3. safety;
-4. idempotence;
-5. diagnosability;
-6. low maintenance overhead;
-7. recoverability;
-8. focused Windows-native portability.
+Bounded spikes still need to validate:
 
-Generic extensibility and universal compatibility are not MVP priorities.
+- root project config discovery and effective precedence on the supported OpenCode version;
+- `.opencode/` asset discovery;
+- environment and managed-config provenance on Windows;
+- OpenCode plugin stability and available session metadata;
+- OpenRouter preset integration through OpenCode;
+- proxy transparency and Phoenix viability;
+- Graphify and RTK lifecycle on Windows;
+- minimal context metadata;
+- safe Windows packaging and updates.
 
-## 14. Remaining technical uncertainties
+A spike validates mechanisms. It does not replace current official documentation with an unsupported convention.
 
-Only uncertainties capable of changing the personal MVP architecture should be spiked:
+## 14. Completion gate
 
-- whether OpenCode discovers and merges `.opencode/opencode.jsonc` exactly as expected on the selected Windows version;
-- how unmanaged root OpenCode config conflicts should be detected and migrated;
-- which OpenCode extension mechanisms are reliable;
-- how session metadata can be correlated with inference requests;
-- which OpenRouter preset operations can be automated safely;
-- whether the localhost proxy preserves streaming and tool calls;
-- whether Phoenix is proportionate and reliable on Windows native;
-- how Graphify updates and RTK integration behave on Windows;
-- the smallest useful context metadata schema;
-- the simplest safe Windows distribution and update mechanism.
-
-A spike removes uncertainty; it does not reopen accepted product defaults without contradictory evidence.
-
-## 15. Architecture completion gate
-
-The architecture is sufficient for implementation when:
-
-- the Windows machine and new-project journey are unambiguous;
-- each MVP component has direct personal value;
-- configuration ownership and canonical paths are explicit;
-- environment and project lifecycles are separately testable;
-- operations can be represented without a TUI;
-- unresolved mechanisms have bounded spikes;
-- the configuration matrix contains no requirement justified only by hypothetical users.
+Architecture is sufficient for implementation when canonical paths and ownership are explicit, lifecycle states are testable, operations do not assume a TUI, every uncertain mechanism has a bounded spike and the configuration matrix contains no speculative productization.
