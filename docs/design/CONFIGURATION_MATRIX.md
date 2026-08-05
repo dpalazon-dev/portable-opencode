@@ -18,6 +18,7 @@ sources:
   - ../research/CONFIGURATION_SURFACE_RESEARCH.md
   - AGENT_AND_MODEL_ROLES.md
   - GRAPHIFY_OUTPUT_POLICY.md
+  - CONTEXT_METADATA_SCHEMA.md
 verified:
   - by: repository-owner
     status: pending
@@ -56,9 +57,9 @@ Windows native
 
 ```text
 <project>/
-├── opencode.jsonc          # runtime configuration
-├── AGENTS.md               # repository rules
-└── .opencode/              # native assets only
+├── opencode.jsonc
+├── AGENTS.md
+└── .opencode/
     ├── agents/
     ├── commands/
     ├── skills/
@@ -91,6 +92,16 @@ ignored:
   query logs
   optional exports
 ```
+
+### Context metadata policy
+
+Non-reserved curated documents require:
+
+```text
+type · title · description · status
+```
+
+`id`, structured `sources`, `resource`, `tags`, `generated` and `decision` are conditional. `created`, `modified` and generic `verified` are deprecated. `index.md` and `log.md` have no frontmatter. Parsed metadata is validated by `schemas/context-document.schema.json`.
 
 ### Effective OpenCode provenance
 
@@ -209,9 +220,9 @@ remote config
 |---|---|---|---|
 | CTX-01 | Global rules stay small; project root `AGENTS.md` points to canonical context | native OpenCode rules | load and contradiction review · A/D |
 | CTX-02 | Canonical context may include project, vision, architecture, conventions, operations, decisions, roadmap and concise log as needed | `docs/context/` templates | required-file and link checks · A |
-| CTX-03 | Use a small repository-owned metadata schema compatible with useful OKF concepts | YAML frontmatter + schema | remove fields without operational value · P |
+| CTX-03 | Require `type`, `title`, `description`, `status`; conditionally allow `id`, structured `sources`, `resource`, `tags`, `generated`, `decision`; reserve frontmatter-free `index.md` and `log.md` | DESIGN-004 + `schemas/context-document.schema.json` | schema and migration checks · A/D · DEC-011 |
 | CTX-04 | Create DEC, FEAT, DESIGN and SPIKE records only for durable or independently reviewable behaviour | docs conventions | link/status consistency · A |
-| CTX-05 | Log meaningful transitions and next action, never full session transcripts | `docs/context/log.md` | required only for material state change · A |
+| CTX-05 | Log meaningful transitions and next action, never full session transcripts | `docs/context/log.md` | reserved-file structure; required only for material state change · A |
 | CTX-06 | `/init-project` is an agent-led OpenCode workflow completing semantic and technical baseline | native command/agent assets | fixture reaches ready only after gates · A/S |
 | CTX-07 | Accepted decisions and active context override older specification or chat history | AGENTS hierarchy + state | new session recovers truth and next action · A |
 
@@ -233,7 +244,7 @@ remote config
 | CLI-01 | Choose language and packaging after spikes; optimize native Windows install, updates and process control | decision + prototypes | clean-machine comparison · S |
 | CLI-02 | Core commands are `status`, `inspect`, `plan`, `apply`, `doctor` | CLI contracts | unit/integration fixtures · A |
 | CLI-03 | `install` converges the Windows machine to desired global state | adapters + plans | clean and existing-config fixtures · A |
-| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets, Graphify allowlist, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017/018/019 |
+| CLI-04 | `init-project <path>` generates canonical OpenCode assets, context metadata, Graphify allowlist and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-011/017/018/019 |
 | CLI-05 | Add explicit observability and graph lifecycle commands only where native commands are insufficient | narrow subprocess adapters | interruption and failure tests · P |
 | CLI-06 | Updates compare versions, plan migrations, back up and apply | version manifest + migrations | upgrade and rollback fixtures · P |
 | CLI-07 | Use small `.ps1` scripts only for bootstrap/recovery that cannot belong to the CLI | PowerShell scripts | clean session, quoting and exit tests · A/S |
@@ -244,11 +255,11 @@ remote config
 
 | ID | Contract and personal default | Surface | Validation / evidence |
 |---|---|---|---|
-| VER-01 | Validate links, frontmatter, JSON/JSONC and schemas | verification scripts | active docs-only profile · A |
+| VER-01 | Validate links, non-reserved frontmatter, reserved index/log structure, JSON/JSONC and schemas | verification scripts | active docs-only profile remains pending until metadata migration · A |
 | VER-02 | Load root `opencode.jsonc`, discover `.opencode/` assets and exercise permissions on Windows | OpenCode fixture | invalid config blocks healthy/ready · S |
 | VER-03 | Resolve `main`, `reason` and `fast` presets and returned policy metadata through OpenCode | authenticated inference | missing required role blocks healthy · S |
 | VER-04 | Build and persist useful Graphify allowlist output; verify RTK rewriting without losing failure detail | fixture project | graph failure blocks ready; RTK failure degrades · A/S |
-| VER-05 | Ready requires context, valid OpenCode config, agent/role resolution, LSP/formatter, versioned `graph.json` and report, and verification manifest | `project doctor` | critical unresolved decision blocks · A |
+| VER-05 | Ready requires valid context metadata, OpenCode config, agent/role resolution, LSP/formatter, versioned graph and verification manifest | `project doctor` | critical unresolved decision blocks · A |
 | VER-06 | E2E: clean Windows → healthy environment → ready project → recoverable later session | disposable Windows environment | no WSL or hidden chat context · A/S |
 
 ## 14. Matrix result
@@ -263,20 +274,21 @@ root opencode.jsonc + .opencode assets
 native OpenCode agents + review/verify
 main/reason/fast semantic roles
 minimal Graphify output allowlist
+minimal repository-owned context metadata
 ```
 
 ## 15. Remaining resolution items
 
 1. implementation language and packaging after spikes;
-2. minimal context metadata schema;
-3. Phoenix lifecycle and retention on Windows;
-4. OpenRouter preset reconciliation behaviour in the first CLI.
+2. Phoenix lifecycle and retention on Windows;
+3. OpenRouter preset reconciliation behaviour in the first CLI.
 
 ## 16. Approval gate
 
 Move this document to `active` when:
 
-- the four remaining items are accepted or delegated to named evidence;
+- the three remaining items are accepted or delegated to named evidence;
+- metadata migration and schema validation complete;
 - every `S` contract maps to SPIKE-001 through SPIKE-004 or an implementation test;
 - canonical global/project file trees and CLI contracts are documented;
 - the repository owner confirms this is the actual personal workflow.
