@@ -1,48 +1,35 @@
----
-type: Knowledge Index
-title: Portable OpenCode Project Context
-description: Canonical entry point for current context, evidence and design.
-status: active
-created: 2026-08-04
-modified: 2026-08-05
-verified:
-  - by: repository-owner
-    status: pending
-sources:
-  - ../SPECIFICATION.es.md
----
-
 # Project context
 
 ## Canonical reading order
 
-1. [PROJECT.md](PROJECT.md) — what the project is now.
-2. [VISION.md](VISION.md) — the personal outcome it should enable.
-3. [ARCHITECTURE.md](ARCHITECTURE.md) — boundaries and lifecycle.
+1. [PROJECT.md](PROJECT.md) — current project identity, scope and status.
+2. [VISION.md](VISION.md) — desired personal outcome.
+3. [ARCHITECTURE.md](ARCHITECTURE.md) — boundaries, ownership and lifecycle.
 4. [CONVENTIONS.md](CONVENTIONS.md) — repeated repository rules.
-5. [OPERATIONS.md](OPERATIONS.md) — how work is performed and verified.
+5. [OPERATIONS.md](OPERATIONS.md) — work and verification workflow.
 6. [DECISIONS.md](DECISIONS.md) — accepted, proposed, superseded and deferred choices.
 7. [ROADMAP.md](ROADMAP.md) — ordered delivery path.
 8. [log.md](log.md) — concise meaningful transitions.
 
-The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.md). Accepted decisions and current context take precedence until the specification is revised to personal-first v0.3.
+The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.md). Accepted decisions and current context take precedence until it is synchronized as personal-first v0.3.
 
 ## Supporting evidence and design
 
-- [RESEARCH-001 — Configuration Surface Research](../research/CONFIGURATION_SURFACE_RESEARCH.md) records current official configuration surfaces and the correction of the OpenCode project config path.
-- [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) maps 81 personal-first configuration contracts.
-- [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md) defines native/custom OpenCode agents and `main`, `reason`, `fast` roles.
-- [DESIGN-003 — Graphify Output Ownership Policy](../design/GRAPHIFY_OUTPUT_POLICY.md) defines the versioned graph allowlist, private output and readiness consequences.
-- [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) preserves the deferred Ratatui concept and re-evaluation gate.
-
-Research and design support decisions; they do not silently override accepted context.
+- [RESEARCH-001 — Configuration Surface Research](../research/CONFIGURATION_SURFACE_RESEARCH.md) records official upstream surfaces and the corrected OpenCode project layout.
+- [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) maps 81 personal-first contracts.
+- [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md) defines native/custom agents and semantic roles.
+- [DESIGN-003 — Graphify Output Ownership Policy](../design/GRAPHIFY_OUTPUT_POLICY.md) defines versioned and private graph output.
+- [DESIGN-004 — Minimal Context Metadata Schema](../design/CONTEXT_METADATA_SCHEMA.md) defines curated document metadata and migration.
+- [DESIGN-005 — Windows-Native Observability Lifecycle](../design/OBSERVABILITY_LIFECYCLE.md) defines the Phoenix/proxy intent pending SPIKE-003.
+- [DESIGN-006 — OpenRouter Preset Reconciliation](../design/OPENROUTER_PRESET_RECONCILIATION.md) defines declarative three-preset management.
+- [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) is deferred until the CLI is effective.
 
 ## Source responsibilities
 
 | Source | Responsibility |
 |---|---|
 | `PROJECT.md` | current identity, user, scope and status |
-| `VISION.md` | desired personal outcome and success |
+| `VISION.md` | desired outcome and success conditions |
 | `ARCHITECTURE.md` | component ownership and lifecycle |
 | `CONVENTIONS.md` | stable repeated rules |
 | `OPERATIONS.md` | work and verification workflow |
@@ -54,15 +41,14 @@ Research and design support decisions; they do not silently override accepted co
 | `.portable-opencode/state.json` | machine-readable current state |
 | `log.md` | concise chronological transitions |
 
-## Status model
+## Current state
 
-- `active`: current source of truth;
-- `proposed`: awaiting decision;
-- `superseded`: replaced but retained for auditability;
-- `deferred`: intentionally postponed;
-- `draft`: useful but not approved;
-- `archived`: historical and non-operational.
+- all owner-level configuration defaults are resolved;
+- `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
+- metadata migration is in progress;
+- canonical file-tree and CLI contracts are the next work;
+- no executable implementation exists yet.
 
 ## Maintenance rule
 
-A material behavioural, architectural or lifecycle change is incomplete until its canonical context, decision status, supporting design and machine-readable state agree.
+A material behavioural, architectural or lifecycle change is incomplete until its owning context, decision, design, roadmap and machine-readable state agree.
