@@ -32,7 +32,7 @@ verified:
 | DEC-008 | accepted | Keep MCPs and broad integrations outside the initial core |
 | DEC-009 | proposed | Use TypeScript as the principal implementation language |
 | DEC-010 | proposed | Use Arize Phoenix as the MVP observability backend |
-| DEC-011 | proposed | Adopt a practical subset of OKF-like metadata |
+| DEC-011 | accepted | Use a minimal repository-owned OKF-compatible metadata schema |
 | DEC-012 | deferred | Final packaging and distribution mechanism |
 | DEC-013 | deferred | Defer the configuration TUI until the CLI is effective |
 | DEC-014 | accepted | Design personal-first and allow reuse by others |
@@ -134,12 +134,62 @@ Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI. 
 
 ---
 
-## DEC-011 — Adopt a practical subset of OKF-like metadata
+## DEC-011 — Use a minimal repository-owned OKF-compatible metadata schema
 
-**Status:** proposed  
-**Date:** 2026-08-04
+**Status:** accepted  
+**Date:** 2026-08-05  
+**Design:** [DESIGN-004](../design/CONTEXT_METADATA_SCHEMA.md)
 
-Use only metadata that improves provenance, lifecycle and verification. Full formal OKF compliance is not an MVP goal.
+### Decision
+
+Every non-reserved curated Markdown document requires only:
+
+```yaml
+type: <document type>
+title: <display title>
+description: <one-line responsibility>
+status: <document lifecycle>
+```
+
+Conditional fields are limited to:
+
+```text
+id
+sources
+resource
+tags
+generated
+decision
+```
+
+`index.md` and `log.md` are reserved navigation/history files and have no frontmatter.
+
+### Removed fields
+
+- `created` and `modified` are removed because Git already owns history and manual timestamps create churn;
+- generic `verified` is removed because permanent `pending` values are not evidence;
+- verification belongs to decisions, spikes, tests and `.portable-opencode/state.json`;
+- string-only source lists are replaced by optional source objects containing at least `resource`.
+
+### Compatibility position
+
+The schema preserves the useful OKF model—Markdown, YAML frontmatter, typed concepts, optional provenance and reserved index/log files—but remains repository-owned. Full trust, attestation and computation families are not MVP requirements.
+
+Parsed frontmatter is validated against:
+
+```text
+schemas/context-document.schema.json
+```
+
+### Migration consequence
+
+Existing documents still contain inherited fields. The decision is accepted, but `docs-only` verification remains pending until a controlled migration:
+
+1. removes deprecated fields;
+2. removes frontmatter from `index.md` and `log.md`;
+3. converts only material sources to structured objects;
+4. validates all non-reserved frontmatter;
+5. preserves document bodies except necessary link corrections.
 
 ---
 
@@ -208,8 +258,6 @@ Root `opencode.json` is a migration candidate; dual root configs are blocking; `
 
 Preserve native `build`, `plan`, `general`, `explore` and `scout`. Add only non-mutating `review` and `verify` subagents.
 
-Use exactly three roles:
-
 ```text
 build                 → main
 plan, review, verify  → reason
@@ -227,60 +275,18 @@ Expected preset slugs are `portable-main`, `portable-reason` and `portable-fast`
 **Date:** 2026-08-05  
 **Design:** [DESIGN-003](../design/GRAPHIFY_OUTPUT_POLICY.md)
 
-### Decision
-
 Version only:
 
 ```text
 graphify-out/graph.json
 graphify-out/GRAPH_REPORT.md
-graphify-out/manifest.json   # when produced and validated portable
+graphify-out/manifest.json
 ```
 
-Ignore by default:
-
-```text
-graphify-out/graph.html
-graphify-out/cache/
-graphify-out/cost.json
-query logs
-wiki, SVG, GraphML, Cypher and call-flow exports
-```
-
-### Rationale
-
-- `graph.json` is the queryable structural memory;
-- `GRAPH_REPORT.md` is the compact review entry point;
-- the portable manifest supports incremental reuse after clone;
-- HTML, caches and exports are regenerable and high-churn;
-- cost and query data are private operational state;
-- an allowlist preserves continuity without committing the whole output directory blindly.
-
-### Git policy
-
-The generated project `.gitignore` uses an allowlist equivalent to:
-
-```gitignore
-graphify-out/*
-!graphify-out/graph.json
-!graphify-out/GRAPH_REPORT.md
-!graphify-out/manifest.json
-```
-
-`.graphifyignore` excludes `graphify-out/` from source extraction.
-
-### Lifecycle
-
-- graph output is committed at meaningful synchronization boundaries, not after every edit;
-- stale output marks the project `dirty`;
-- missing/corrupt `graph.json` blocks readiness;
-- missing manifest after initial setup degrades and may trigger rebuild;
-- HTML and cache never affect readiness;
-- SPIKE-004 validates exact outputs, manifest portability, determinism, size, private-path absence and Windows clone/update behaviour.
+Ignore HTML, cache, cost, query logs and optional exports. The manifest remains conditional on SPIKE-004 portability and private-path validation. Stale output marks `dirty`; corrupt graph blocks readiness.
 
 ## Open questions
 
 - Which implementation language and packaging approach survive the technical spikes?
-- What is the minimal context metadata schema?
 - How are OpenRouter presets reconciled in the first CLI?
 - What Phoenix lifecycle and retention policy is acceptable on Windows native?
