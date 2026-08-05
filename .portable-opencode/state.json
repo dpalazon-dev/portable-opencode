@@ -86,17 +86,25 @@
     "required_frontmatter": ["type", "title", "description", "status"],
     "reserved_frontmatter_free": ["index.md", "log.md"],
     "deprecated_fields": ["created", "modified", "verified"],
-    "migration_status": "pending",
+    "migration_status": "in-progress",
+    "migrated_files": [
+      "docs/context/PROJECT.md",
+      "docs/context/CONVENTIONS.md",
+      "docs/context/OPERATIONS.md",
+      "docs/context/ROADMAP.md",
+      "docs/context/index.md",
+      "docs/context/log.md"
+    ],
     "owner_verification": "pending"
   },
   "scope_alignment": {
-    "project": "pending-final-sync",
+    "project": "aligned",
     "vision": "aligned",
     "architecture": "aligned",
     "conventions": "aligned",
     "operations": "aligned",
     "configuration_tui": "deferred",
-    "roadmap": "pending-final-sync",
+    "roadmap": "aligned_pending_owner_review",
     "configuration_matrix": "owner-defaults-resolved-pending-contracts-and-evidence"
   },
   "architecture": {
