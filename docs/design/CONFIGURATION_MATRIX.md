@@ -16,6 +16,7 @@ sources:
   - ../context/ROADMAP.md
   - ../SPECIFICATION.es.md
   - ../research/CONFIGURATION_SURFACE_RESEARCH.md
+  - AGENT_AND_MODEL_ROLES.md
 verified:
   - by: repository-owner
     status: pending
@@ -67,6 +68,17 @@ Windows native
 
 `DEC-017` supersedes the unsupported `.opencode/opencode.jsonc` convention.
 
+### Agent and model policy
+
+```text
+native primary: build, plan
+native subagents: general, explore, scout
+custom subagents: review, verify
+semantic roles: main, reason, fast
+```
+
+`DEC-018` and `DESIGN-002` govern mappings and permissions. Exact OpenCode preset references remain spike evidence.
+
 ### Effective OpenCode provenance
 
 ```text
@@ -108,12 +120,12 @@ remote config
 | OC-04 | Explain native config merge and provenance instead of replacing it | remote/global/env/project/inline/managed layers | SPIKE-001 precedence fixture · D/S |
 | OC-05 | Keep global rules small and project rules in root `AGENTS.md` | native rule discovery | precedence and contradiction test · D/S |
 | OC-06 | Authenticate OpenRouter through `/connect` or supported private references; never write keys to Git | OpenCode auth store + provider config | credential and test-request check · D/S |
-| OC-07 | Agents reference stable OpenRouter model or preset identifiers; exact preset syntax remains spiked | native model/provider fields | every identifier resolves · S |
-| OC-08 | Initial primary/subagents remain minimal and tied to real workflow | `.opencode/agents/` or config `agent` | discovery, permission and invocation test · P/S |
-| OC-09 | Create custom commands only for repeated workflows with explicit contracts | `.opencode/commands/` | discovery and bounded execution · D/S |
+| OC-07 | Map agents to `main`, `reason` and `fast`; do not embed concrete models in prompts | root config + local preset manifest | preset representation and resolution in SPIKE-002 · A/S · DEC-018 |
+| OC-08 | Preserve native `build`, `plan`, `general`, `explore`, `scout`; add only non-mutating `review` and `verify` | built-ins + `.opencode/agents/review.md` and `verify.md` | discovery, modes and permissions · A/D/S · DESIGN-002 |
+| OC-09 | Create custom commands only for repeated workflows; initial `/review` and `/verify` invoke subagents as subtasks | `.opencode/commands/` | discovery and bounded execution · A/D/S |
 | OC-10 | Keep a small on-demand skill set; no community catalogue | `.opencode/skills/<name>/SKILL.md` | discovery and permission test · D/S |
 | OC-11 | Use plugins and tools only for RTK or verified gaps | `.opencode/plugins/`, `.opencode/tools/` | load, hook and failure tests · S |
-| OC-12 | Risky operations ask or deny; safe rules are narrow and ordered | native permissions + per-agent overrides | adversarial PowerShell fixtures · D/S |
+| OC-12 | Risky operations ask or deny; `review` and `verify` deny edits; safe rules are narrow and ordered | native permissions + per-agent overrides | adversarial PowerShell and last-match fixtures · A/D/S |
 | OC-13 | Enable only the selected stack's Windows-compatible LSP and formatter | native `lsp` and `formatter` config | availability and project smoke test · D/S |
 | OC-14 | Use native compaction and watcher ignores; avoid self-trigger loops | native `compaction`, `watcher.ignore` | long-session and loop fixtures · D/S |
 | OC-15 | Sharing disabled; project TUI settings only when needed and stored at root `tui.jsonc` | native `share` and TUI config | load and no-share check · D |
@@ -135,7 +147,7 @@ remote config
 | ID | Contract and personal default | Native/managed surface | Validation / evidence |
 |---|---|---|---|
 | OR-01 | One personal API key outside Git | OpenCode auth or private reference | authenticated request · D/S |
-| OR-02 | A small semantic-role set maps to named OpenRouter presets | local intent manifest + `@preset/<slug>` | exact OpenCode reference syntax in SPIKE-002 · D/S |
+| OR-02 | Exactly three semantic roles map to presets: `main`, `reason`, `fast` with slugs `portable-main`, `portable-reason`, `portable-fast` | DESIGN-002 + local intent manifest + OpenRouter presets | exact OpenCode syntax in SPIKE-002 · A/D/S |
 | OR-03 | CLI verifies and may reconcile known presets only after showing a remote diff | preset list/get/create/version APIs | ambiguity blocks mutation · D/S |
 | OR-04 | Provider order/sort, fallbacks and required parameters remain OpenRouter policy | preset or request `provider` object | resolved provider fixture · D/S |
 | OR-05 | Model fallback is allowed only when task semantics tolerate substitution | model arrays/preset config | tool and parameter compatibility test · D/S |
@@ -208,7 +220,7 @@ remote config
 | CLI-01 | Choose language and packaging after spikes; optimize native Windows install, updates and process control | decision + prototypes | clean-machine comparison · S |
 | CLI-02 | Core commands are `status`, `inspect`, `plan`, `apply`, `doctor` | CLI contracts | unit/integration fixtures · A |
 | CLI-03 | `install` converges the Windows machine to desired global state | adapters + plans | clean and existing-config fixtures · A |
-| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017 |
+| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets including `review` and `verify`, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017/018 |
 | CLI-05 | Add explicit observability and graph lifecycle commands only where native commands are insufficient | narrow subprocess adapters | interruption and failure tests · P |
 | CLI-06 | Updates compare versions, plan migrations, back up and apply | version manifest + migrations | upgrade and rollback fixtures · P |
 | CLI-07 | Use small `.ps1` scripts only for bootstrap/recovery that cannot belong to the CLI | PowerShell scripts | clean session, quoting and exit tests · A/S |
@@ -221,39 +233,37 @@ remote config
 |---|---|---|---|
 | VER-01 | Validate links, frontmatter, JSON/JSONC and schemas | verification scripts | active docs-only profile · A |
 | VER-02 | Load root `opencode.jsonc`, discover `.opencode/` assets and exercise permissions on Windows | OpenCode fixture | invalid config blocks healthy/ready · S |
-| VER-03 | Resolve required OpenRouter policy and returned metadata through OpenCode | authenticated inference | missing required policy blocks healthy · S |
+| VER-03 | Resolve `main`, `reason` and `fast` presets and returned policy metadata through OpenCode | authenticated inference | missing required role blocks healthy · S |
 | VER-04 | Build a useful Graphify graph and verify RTK rewriting without losing failure detail | fixture project | Graphify blocks ready; RTK degrades · S |
-| VER-05 | Ready requires context, application baseline, valid root OpenCode config, no blocking conflict, LSP/formatter, graph and verification manifest | `project doctor` | critical unresolved decision blocks · A |
+| VER-05 | Ready requires context, application baseline, valid root OpenCode config, no blocking conflict, agent/role resolution, LSP/formatter, graph and verification manifest | `project doctor` | critical unresolved decision blocks · A |
 | VER-06 | E2E: clean Windows → healthy environment → ready project → recoverable later session | disposable Windows environment | no WSL or hidden chat context · A/S |
 
 ## 14. Matrix result
 
 The matrix contains **81 capabilities**, reduced from 177 without reducing canonical scope.
 
-The correction from DEC-016 to DEC-017 changes ownership, not capability count:
+Resolved defaults:
 
 ```text
-root opencode.jsonc
-  owns project runtime configuration
-
-.opencode/
-  owns native project assets
+Windows native
+root opencode.jsonc + .opencode assets
+native OpenCode agents + review/verify
+main/reason/fast semantic roles
 ```
 
 ## 15. Remaining personal defaults
 
 1. implementation language and packaging after spikes;
-2. initial semantic roles and required agents;
-3. Graphify output versioning policy;
-4. minimal context metadata schema;
-5. Phoenix lifecycle and retention on Windows;
-6. OpenRouter preset reconciliation behaviour in the first CLI.
+2. Graphify output versioning policy;
+3. minimal context metadata schema;
+4. Phoenix lifecycle and retention on Windows;
+5. OpenRouter preset reconciliation behaviour in the first CLI.
 
 ## 16. Approval gate
 
 Move this document to `active` when:
 
-- the six defaults are accepted or delegated to named evidence;
+- the five defaults are accepted or delegated to named evidence;
 - every `S` contract maps to SPIKE-001 through SPIKE-004 or an implementation test;
 - canonical global/project file trees and CLI contracts are documented;
 - the repository owner confirms this is the actual personal workflow.
