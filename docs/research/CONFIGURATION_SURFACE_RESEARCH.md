@@ -20,190 +20,219 @@ verified:
 
 ## 1. Purpose
 
-This document records what the selected upstream tools already support and how those capabilities should shape `portable-opencode`.
+This document records what selected upstream tools support and how those surfaces constrain `portable-opencode`.
 
-It is evidence for [DESIGN-001](../design/CONFIGURATION_MATRIX.md), not a replacement for upstream documentation. Facts below come from current primary documentation reviewed on **2026-08-05**. Product choices remain governed by accepted repository decisions.
+It is evidence for [DESIGN-001](../design/CONFIGURATION_MATRIX.md), not a substitute for upstream documentation. Facts were reviewed against current primary sources on **2026-08-05**.
 
 ## 2. Research rule
 
-For every desired capability:
+For each desired capability:
 
-1. use the upstream native surface when it is sufficient;
+1. use the upstream native surface when sufficient;
 2. configure it through its documented file, command or API;
-3. wrap it only when lifecycle coordination, validation or reproducibility is missing;
-4. create a spike when the documented surface does not prove runtime behaviour;
-5. avoid building generic abstractions for a single personal configuration.
+3. wrap only missing lifecycle, validation or coordination behaviour;
+4. create a spike when documentation does not prove runtime integration;
+5. never promote an inference into an accepted path without verification.
 
 ## 3. OpenCode
 
-### Documented configuration surfaces
+### Documented runtime configuration
 
-OpenCode supports JSON or JSONC configuration and publishes a JSON Schema. It loads global configuration from `~/.config/opencode/opencode.json(c)` and project configuration from direct `opencode.json(c)` files and `.opencode/opencode.json(c)` directories. Project files are merged according to documented precedence, with `.opencode` configuration overriding direct configuration in the same hierarchy.
+OpenCode supports JSON and JSONC and publishes a JSON Schema.
 
-OpenCode also exposes runtime override locations through environment variables such as `OPENCODE_CONFIG`, `OPENCODE_CONFIG_DIR` and `OPENCODE_CONFIG_CONTENT`.
+The relevant standard locations are:
 
-Native configurable capabilities relevant to this project include:
+```text
+Global runtime config
+~/.config/opencode/opencode.json(c)
 
-- global and project configuration;
+Project runtime config
+<project>/opencode.json(c)
+
+Project TUI config
+<project>/tui.json(c)
+```
+
+OpenCode searches for project configuration from the current directory upward to the nearest Git worktree. Configuration sources are merged rather than replaced; later sources override only conflicting keys.
+
+The documented order includes:
+
+```text
+remote organizational config
+→ global config
+→ OPENCODE_CONFIG custom file
+→ project root opencode.json(c)
+→ .opencode asset directories
+→ OPENCODE_CONFIG_CONTENT
+→ managed settings
+```
+
+On Windows, file-based managed settings may exist under `%ProgramData%\opencode`.
+
+### Documented project assets
+
+`.opencode/` is the native project asset directory. Documented plural subdirectories include:
+
+```text
+.opencode/agents/
+.opencode/commands/
+.opencode/modes/
+.opencode/plugins/
+.opencode/skills/
+.opencode/tools/
+.opencode/themes/
+```
+
+OpenCode also discovers root `AGENTS.md` rules. Skills are loaded on demand from `.opencode/skills/<name>/SKILL.md`.
+
+`OPENCODE_CONFIG_DIR` adds a directory searched like `.opencode/` for assets. It does not redefine the standard project runtime config file.
+
+### Other relevant native capabilities
+
 - provider and model definitions;
-- environment and file substitution for secret references;
-- global and project `AGENTS.md` rules;
+- environment and file substitution;
 - primary agents and subagents;
-- custom commands;
-- on-demand skills;
-- permissions with `allow`, `ask` and `deny`;
-- per-agent permission overrides;
+- custom commands and skills;
+- `allow`, `ask` and `deny` permissions;
+- per-agent overrides;
 - LSP and formatter configuration;
-- context compaction;
-- watcher ignore patterns;
+- compaction and watcher ignores;
 - plugins and custom tools;
-- separate `tui.json(c)` preferences;
-- session sharing policy.
+- separate TUI preferences;
+- session sharing policy;
+- explicit shell selection such as `"shell": "pwsh"`.
 
-Credentials added through `/connect` are stored by OpenCode in its local authentication store rather than in project configuration.
+Credentials added through `/connect` are stored locally by OpenCode rather than in project configuration.
+
+### Correction recorded on 2026-08-05
+
+An earlier version of this note incorrectly stated that `.opencode/opencode.json(c)` was a documented project runtime configuration location. It is not. That inference confused the asset directory with the runtime config file.
+
+The corrected design is:
+
+```text
+<project>/opencode.jsonc       runtime configuration
+<project>/AGENTS.md            repository rules
+<project>/.opencode/...        native assets
+```
 
 ### Design implications
 
-- `portable-opencode` should generate or manage documented OpenCode files instead of creating a parallel configuration format for OpenCode concepts.
-- The canonical project should choose one project config form and use it consistently. Mixing direct and `.opencode` config forms should be avoided unless precedence is intentional.
-- `AGENTS.md`, agents, commands and skills should remain native assets.
-- Permission policy is a first-class generated configuration because OpenCode defaults are permissive.
-- OpenCode plugins should be limited to gaps that cannot be solved with configuration. The V2 plugin API is currently documented as beta, so plugin-dependent lifecycle behaviour requires a spike.
-- OpenCode's own TUI preferences are distinct from the deferred portable configuration TUI.
+- generate native OpenCode files rather than a parallel format;
+- use root `opencode.jsonc` as the canonical project runtime config;
+- use `.opencode/` only for documented native assets;
+- report active environment and managed overrides in configuration provenance;
+- limit plugins to verified gaps because plugin behaviour can change;
+- keep OpenCode TUI preferences separate from the deferred portable TUI.
 
 ### Primary sources
 
 - [OpenCode configuration](https://opencode.ai/docs/config/)
-- [OpenCode rules and AGENTS.md precedence](https://opencode.ai/docs/rules/)
-- [OpenCode providers and OpenRouter integration](https://opencode.ai/docs/providers/)
+- [OpenCode rules](https://opencode.ai/docs/rules/)
+- [OpenCode providers](https://opencode.ai/docs/providers/)
 - [OpenCode agents](https://opencode.ai/docs/agents/)
 - [OpenCode permissions](https://opencode.ai/docs/permissions/)
 - [OpenCode commands](https://opencode.ai/docs/commands/)
 - [OpenCode skills](https://opencode.ai/docs/skills/)
-- [OpenCode tools](https://opencode.ai/docs/tools/)
-- [OpenCode TUI configuration](https://opencode.ai/docs/tui/)
-- [OpenCode V2 plugins](https://opencode.ai/v2/docs/build/plugins)
+- [OpenCode custom tools](https://opencode.ai/docs/custom-tools/)
+- [OpenCode plugins](https://opencode.ai/docs/plugins/)
 
 ## 4. OpenRouter
 
-### Documented configuration surfaces
+### Documented surfaces
 
-OpenRouter supports request-level provider routing through the `provider` object, including ordered providers, sorting by price, throughput or latency, provider fallbacks, parameter compatibility, data-collection restrictions and Zero Data Retention routing.
+OpenRouter supports request-level provider routing through the `provider` object, including order or sorting, provider fallbacks, parameter compatibility, data-collection restrictions and Zero Data Retention routing.
 
-It supports model fallback arrays and returns the model ultimately used.
+Presets are named and versioned remote configurations. They may encapsulate:
 
-Presets are named, versioned remote configurations that can encapsulate:
-
-- model selection;
-- model fallbacks;
+- model selection and model fallbacks;
 - provider routing;
 - system prompts;
 - generation parameters;
-- provider inclusion or exclusion.
+- provider inclusion and exclusion.
 
-Presets can be referenced as `@preset/<slug>` and can be created or versioned through API endpoints from known-good inference request bodies.
+Presets can be referenced directly as:
 
-Usage accounting is included in every response, including streaming responses, and exposes tokens, cost, reasoning and cache information. Prompt and response logging is off by default; OpenRouter still retains operational metadata.
+```text
+@preset/<slug>
+```
+
+They can also be combined with a model or supplied through a preset field. Current API endpoints support listing, retrieving, creating or versioning presets from known-good inference request bodies.
+
+Usage accounting is returned in responses, including streaming responses, and can expose token, cost, reasoning and cache data.
 
 ### Design implications
 
-- Semantic model roles can be implemented with a small set of OpenRouter presets rather than a custom routing service.
-- A versioned local manifest should describe the expected preset names and policy. The CLI should reconcile or verify remote presets instead of treating remote state as invisible.
-- Provider routing and privacy should remain OpenRouter policy, while OpenCode references the resulting model or preset.
-- Personal guardrails and key-management automation are optional. Organization administration is outside the MVP.
-- Cost and usage capture should consume the response data already returned by OpenRouter.
-- Session affinity should not be assumed until verified.
+- semantic roles are a portable-opencode abstraction that can map to OpenRouter presets;
+- the local repository should describe expected preset intent and remote identity;
+- routing and privacy remain OpenRouter policy;
+- usage capture should consume response fields already returned;
+- the exact syntax accepted by OpenCode for preset references is not documented sufficiently and remains `SPIKE-002` work;
+- session affinity must not be assumed without evidence.
 
 ### Primary sources
 
 - [OpenRouter presets](https://openrouter.ai/docs/guides/features/presets)
+- [OpenRouter preset API](https://openrouter.ai/docs/api/api-reference/presets/list-presets)
 - [OpenRouter provider routing](https://openrouter.ai/docs/guides/routing/provider-selection)
 - [OpenRouter model fallbacks](https://openrouter.ai/docs/guides/routing/model-fallbacks)
 - [OpenRouter usage accounting](https://openrouter.ai/docs/cookbook/administration/usage-accounting)
-- [OpenRouter data collection and privacy](https://openrouter.ai/docs/guides/privacy/data-collection)
-- [OpenRouter guardrails](https://openrouter.ai/docs/guides/features/guardrails/overview)
+- [OpenRouter privacy](https://openrouter.ai/docs/guides/privacy/data-collection)
 
 ## 5. Graphify
 
-### Documented configuration surfaces
+Graphify is distributed through the `graphifyy` Python package and documents OpenCode-specific installation, graph extraction and updates, optional hooks and `.graphifyignore`.
 
-Graphify is distributed through the `graphifyy` Python package and provides platform-specific installation for OpenCode. Its documented OpenCode workflow includes:
-
-- `graphify install --platform opencode`;
-- `graphify opencode install` to install persistent OpenCode guidance;
-- graph extraction and update commands;
-- optional Git hooks;
-- `.graphifyignore`.
-
-`.graphifyignore` uses gitignore-style syntax. Graphify also respects `.gitignore`. Current documentation states that `.graphifyignore` is evaluated as an additional exclusion layer and cannot re-include a file already excluded by `.gitignore`; `--no-gitignore` is the explicit escape hatch when ignored generated code must be analyzed.
-
-Graphify documentation recommends versioning useful graph output for shared use, while local cost and cache artefacts can remain ignored. A personal project may choose a narrower output policy, but it must be explicit.
+`.graphifyignore` uses gitignore-style syntax and acts as an additional exclusion layer over `.gitignore`. Files already excluded by `.gitignore` are not reintroduced unless `--no-gitignore` is used explicitly.
 
 ### Design implications
 
-- Installation and OpenCode integration already exist and should be invoked, verified and recorded rather than reimplemented.
-- `.graphifyignore` generation must account for `.gitignore` merge semantics.
-- The first graph and ignore audit remain part of project initialization.
-- Automatic hooks should follow a stable explicit-update workflow, not precede it.
-- Graph freshness and graph quality are portable lifecycle concerns.
-- MCP exposure remains optional and is not needed for the canonical path.
+- call and verify native installation rather than reimplementing it;
+- generate `.graphifyignore` from stack, repository structure and owner decisions;
+- make the first graph and quality audit part of semantic project initialization;
+- establish explicit updates before automatic hooks;
+- record graph freshness and quality in portable state.
 
 ### Primary sources
 
-- [Graphify repository and command reference](https://github.com/safishamsi/graphify)
-- [Graphify Spanish installation and platform integration](https://github.com/Graphify-Labs/graphify/blob/v8/docs/translations/README.es-ES.md)
+- [Graphify repository](https://github.com/safishamsi/graphify)
+- [Graphify documentation](https://github.com/Graphify-Labs/graphify/blob/v8/docs/translations/README.es-ES.md)
 - [graphifyy package](https://pypi.org/project/graphifyy/)
 
 ## 6. RTK
 
-### Documented configuration surfaces
+RTK is a standalone Rust binary that reduces verbose command output before it reaches agent context.
 
-RTK is a standalone Rust binary that filters verbose command output before it reaches an agent context.
-
-Current documentation provides a native OpenCode integration:
+Its native OpenCode integration is installed with:
 
 ```text
 rtk init -g --opencode
 ```
 
-The integration uses an OpenCode TypeScript plugin and the `tool.execute.before` hook to rewrite supported commands transparently.
-
-RTK maintains local configuration in a TOML file and supports:
-
-- exclusions for commands that should not be rewritten;
-- raw-output tee files, especially on failures;
-- token-saving statistics through `rtk gain`;
-- prebuilt binaries, including Windows;
-- verification that the installed `rtk` is the intended token-reduction project rather than another package with the same name.
+It uses an OpenCode TypeScript plugin and `tool.execute.before` to rewrite supported commands. RTK also supports local TOML configuration, command exclusions, raw-output tee files and `rtk gain` statistics. Windows binaries are documented.
 
 ### Design implications
 
-- `portable-opencode` should call RTK's own installer and verify the resulting OpenCode plugin.
-- It should not implement command filtering itself.
-- The canonical configuration only needs a small local RTK configuration and exclusions.
-- Full raw output on failures is important for diagnosis and should remain locally private.
-- Platform behaviour, particularly Windows versus WSL, must be validated on the owner's primary environment.
+- invoke and verify RTK's native integration;
+- do not implement a competing command-filtering layer;
+- keep raw failure output locally private;
+- validate Windows-native installation and command rewriting in `SPIKE-004`.
 
 ### Primary sources
 
 - [RTK repository](https://github.com/rtk-ai/rtk)
 - [RTK supported agents](https://github.com/rtk-ai/rtk/blob/master/docs/guide/getting-started/supported-agents.md)
-- [RTK installation guide](https://github.com/rtk-ai/rtk/blob/develop/INSTALL.md)
-- [RTK hook architecture](https://github.com/rtk-ai/rtk/blob/develop/hooks/README.md)
+- [RTK installation](https://github.com/rtk-ai/rtk/blob/develop/INSTALL.md)
 
-## 7. Arize Phoenix and local observability
+## 7. Phoenix and observability
 
-### Documented configuration surfaces
+Phoenix is an open-source OpenTelemetry/OpenInference collector and UI. It accepts OTLP and can store and display traces, spans, latency and model/tool activity.
 
-Phoenix is an open-source local observability collector and UI built on OpenTelemetry and OpenInference. It accepts OTLP over HTTP and supports Python and TypeScript instrumentation.
-
-Phoenix can store and display traces, spans, latency and model/tool activity. Project routing can be set with OpenInference resource attributes or an OTLP HTTP header.
-
-Phoenix does not itself make an uninstrumented OpenCode-to-OpenRouter request observable. `portable-opencode` still needs an instrumentation boundary, most likely:
+Phoenix does not automatically observe an uninstrumented OpenCode-to-OpenRouter request. A separate instrumentation boundary remains necessary:
 
 ```text
 OpenCode
-→ transparent local proxy or compatible instrumentation layer
+→ transparent localhost proxy or compatible instrumentation
 → OpenRouter
 → OTLP/OpenInference spans
 → Phoenix
@@ -211,78 +240,45 @@ OpenCode
 
 ### Design implications
 
-- Phoenix is a backend candidate, not the proxy itself.
-- The proxy must preserve streaming, tool calls, errors and OpenRouter-specific fields.
-- The default trace policy should capture metadata, usage, cost and errors while redacting secrets and excluding prompt/response content.
-- Observability must have explicit start, stop, health and bypass behaviour.
-- The exact proxy and correlation mechanism requires a technical spike.
+- Phoenix is a backend candidate, not the proxy;
+- the proxy must preserve streaming, tool calls, errors and OpenRouter fields;
+- default capture remains metadata-only with redaction;
+- lifecycle, retention and Windows-native viability require `SPIKE-003`.
 
 ### Primary sources
 
 - [Phoenix overview](https://arize.com/docs/phoenix)
-- [How Phoenix tracing works](https://arize.com/docs/phoenix/tracing/concepts-tracing/how-tracing-works)
+- [Phoenix tracing](https://arize.com/docs/phoenix/tracing/concepts-tracing/how-tracing-works)
 - [Phoenix OTEL setup](https://www.arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-using-phoenix-otel)
 
-## 8. Resulting design boundaries
-
-The research supports these boundaries:
+## 8. Resulting ownership
 
 ```text
-portable-opencode owns
-  inspection
-  planning
-  safe materialization
-  verification
-  lifecycle state
-  cross-tool coordination
+portable-opencode
+  inspect · plan · apply · verify · state · coordinate
 
-OpenCode owns
-  agent runtime
-  rules
-  agents
-  commands
-  skills
-  tools
-  permissions
-  LSP
-  formatters
-  compaction
-  user interaction
+OpenCode
+  runtime config · rules · agents · commands · skills · tools
+  permissions · LSP · formatters · compaction · interaction
 
-OpenRouter owns
-  model and provider policy
-  presets
-  routing
-  fallbacks
-  privacy
-  usage and cost
+OpenRouter
+  models · providers · presets · routing · fallbacks · privacy · usage
 
-Graphify owns
-  graph extraction
-  graph updates
-  graph files
-  ignore semantics
+Graphify
+  graph extraction · updates · graph files · ignore semantics
 
-RTK owns
-  command rewriting
-  output filtering
-  failure tee output
+RTK
+  command rewriting · output filtering · failure tee output
 
-Phoenix owns
-  OTLP collection
-  trace storage
-  trace inspection
+Phoenix
+  OTLP collection · trace storage · trace inspection
 ```
 
-## 9. Required technical spikes
+## 9. Required spikes
 
-Documentation is sufficient to reduce the configuration matrix, but not to prove all runtime contracts.
-
-The remaining spikes are:
-
-1. **OpenCode lifecycle:** precedence, asset discovery, plugin stability, session metadata and permissions.
-2. **OpenRouter policy:** preset reconciliation, provider options through OpenCode, fallbacks, privacy and returned metadata.
+1. **OpenCode lifecycle:** root config discovery, precedence, native asset discovery, environment overrides, managed Windows settings, plugin stability, permissions and session metadata.
+2. **OpenRouter policy:** exact preset representation through OpenCode, reconciliation, provider options, fallbacks, privacy and returned metadata.
 3. **Observability:** transparent proxying, streaming, redaction, correlation and Phoenix ingestion.
-4. **Graphify and RTK on the primary platform:** installation, OpenCode integration, explicit updates, hooks and failure recovery.
+4. **Graphify and RTK:** Windows-native installation, OpenCode integration, explicit updates, hooks and recovery.
 
-The Ratatui spike is parked until a useful CLI exists.
+The Ratatui spike remains parked.
