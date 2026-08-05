@@ -1,17 +1,3 @@
----
-type: Knowledge Log
-title: Portable OpenCode Context Log
-description: Concise chronological record of meaningful project transitions.
-status: active
-created: 2026-08-04
-modified: 2026-08-05
-sources:
-  - index.md
-verified:
-  - by: repository-owner
-    status: pending
----
-
 # Context log
 
 This log records outcomes, resulting state and the next action. Detailed rationale lives in canonical context, decision, research and design documents.
@@ -71,8 +57,7 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - accepted `DEC-017`;
 - selected root `opencode.jsonc` as project runtime config;
 - preserved `.opencode/` as the native asset root;
-- added conflict and provenance policies;
-- corrected architecture, roadmap, research, matrix, project, operations and state.
+- added conflict and provenance policies.
 
 ## 2026-08-05 — Minimal agent and model policy accepted
 
@@ -82,30 +67,52 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - defined `main`, `reason` and `fast` roles;
 - left exact preset reference syntax to `SPIKE-002`.
 
-```text
-build                 → main
-plan, review, verify  → reason
-general, explore,
-scout, small_model    → fast
-```
-
 ## 2026-08-05 — Graphify output ownership accepted
 
 - accepted `DEC-019` and created `DESIGN-003`;
-- selected a minimal versioned allowlist:
-
-```text
-graphify-out/graph.json
-graphify-out/GRAPH_REPORT.md
-graphify-out/manifest.json
-```
-
+- versioned `graph.json`, `GRAPH_REPORT.md` and conditional portable `manifest.json`;
 - kept HTML, cache, cost, query logs and optional exports out of Git;
-- required `.graphifyignore` to exclude `graphify-out/` from source extraction;
-- defined stale graph as `dirty`, corrupt graph as `blocked`, and rebuildable manifest absence as `degraded`;
-- delegated manifest portability, determinism and clone/update behaviour to `SPIKE-004`;
-- reduced remaining resolution items from five to four.
+- delegated determinism and portability to `SPIKE-004`.
+
+## 2026-08-05 — Minimal context metadata accepted
+
+- accepted `DEC-011` and created `DESIGN-004`;
+- added `schemas/context-document.schema.json`;
+- required only `type`, `title`, `description` and `status` for non-reserved documents;
+- removed `created`, `modified` and generic `verified` from the target schema;
+- made `index.md` and `log.md` frontmatter-free;
+- migrated conventions, operations, project, roadmap, index and this log;
+- left the remaining inherited documents for a controlled validation migration;
+- kept `docs-only` pending until migration completes.
+
+## 2026-08-05 — Windows observability intent defined
+
+- created `DESIGN-005` under proposed `DEC-010`;
+- selected native `phoenix serve` in an isolated Python environment;
+- selected loopback-only SQLite storage under `%LOCALAPPDATA%`;
+- selected on-demand start/stop and 30-day retention;
+- disabled Phoenix telemetry and external resources by default;
+- excluded Docker, WSL, PostgreSQL, boot services and indefinite retention;
+- delegated Phoenix acceptance to `SPIKE-003`.
+
+## 2026-08-05 — Declarative OpenRouter reconciliation accepted
+
+- accepted `DEC-020` and created `DESIGN-006`;
+- added `schemas/openrouter-presets.schema.json`;
+- fixed managed slugs to `portable-main`, `portable-reason` and `portable-fast`;
+- selected inspect, normalized diff, plan, explicit apply and verification;
+- missing presets are created after approval;
+- drift creates a new active version while preserving history;
+- remote deletion, rename and archival are never automatic;
+- exact OpenCode preset representation remains `SPIKE-002` evidence.
+
+## 2026-08-05 — Owner defaults closed
+
+- all personal product defaults in `DESIGN-001` are resolved;
+- `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
+- the matrix remains draft pending contracts, metadata migration, spike mapping and owner approval;
+- project state advances from owner-default review to configuration-contract definition.
 
 **Recommended next action**
 
-Define the minimal context metadata schema and remove frontmatter fields that do not improve provenance, lifecycle or verification.
+Define canonical global and project file trees, ownership and exact CLI command contracts before delegating the four spikes.
