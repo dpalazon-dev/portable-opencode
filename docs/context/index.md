@@ -32,6 +32,7 @@ The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.
 - [RESEARCH-001 — Configuration Surface Research](../research/CONFIGURATION_SURFACE_RESEARCH.md) records current official configuration surfaces and the correction of the OpenCode project config path.
 - [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) maps 81 personal-first configuration contracts.
 - [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md) defines native/custom OpenCode agents and `main`, `reason`, `fast` roles.
+- [DESIGN-003 — Graphify Output Ownership Policy](../design/GRAPHIFY_OUTPUT_POLICY.md) defines the versioned graph allowlist, private output and readiness consequences.
 - [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) preserves the deferred Ratatui concept and re-evaluation gate.
 
 Research and design support decisions; they do not silently override accepted context.
