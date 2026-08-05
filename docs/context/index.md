@@ -21,19 +21,20 @@ sources:
 3. [ARCHITECTURE.md](ARCHITECTURE.md) — boundaries and lifecycle.
 4. [CONVENTIONS.md](CONVENTIONS.md) — repeated repository rules.
 5. [OPERATIONS.md](OPERATIONS.md) — how work is performed and verified.
-6. [DECISIONS.md](DECISIONS.md) — binding, proposed and deferred choices.
+6. [DECISIONS.md](DECISIONS.md) — accepted, proposed, superseded and deferred choices.
 7. [ROADMAP.md](ROADMAP.md) — ordered delivery path.
 8. [log.md](log.md) — concise meaningful transitions.
 
-The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.md). Accepted decisions and current context take precedence when the older specification has not yet been revised.
+The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.md). Accepted decisions and current context take precedence until the specification is revised to personal-first v0.3.
 
 ## Supporting evidence and design
 
-- [RESEARCH-001 — Configuration Surface Research](../research/CONFIGURATION_SURFACE_RESEARCH.md) records current official configuration surfaces for OpenCode, OpenRouter, Graphify, RTK and Phoenix.
-- [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) maps the reduced personal-first configuration contracts.
-- [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) preserves the parked Ratatui concept and its re-evaluation gate.
+- [RESEARCH-001 — Configuration Surface Research](../research/CONFIGURATION_SURFACE_RESEARCH.md) records current official configuration surfaces and the correction of the OpenCode project config path.
+- [DESIGN-001 — Configuration Matrix](../design/CONFIGURATION_MATRIX.md) maps 81 personal-first configuration contracts.
+- [DESIGN-002 — Agent and Model Role Policy](../design/AGENT_AND_MODEL_ROLES.md) defines native/custom OpenCode agents and `main`, `reason`, `fast` roles.
+- [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) preserves the deferred Ratatui concept and re-evaluation gate.
 
-Research and design documents support decisions; they do not silently override accepted context.
+Research and design support decisions; they do not silently override accepted context.
 
 ## Source responsibilities
 
@@ -52,6 +53,15 @@ Research and design documents support decisions; they do not silently override a
 | `.portable-opencode/state.json` | machine-readable current state |
 | `log.md` | concise chronological transitions |
 
+## Status model
+
+- `active`: current source of truth;
+- `proposed`: awaiting decision;
+- `superseded`: replaced but retained for auditability;
+- `deferred`: intentionally postponed;
+- `draft`: useful but not approved;
+- `archived`: historical and non-operational.
+
 ## Maintenance rule
 
-A material behavioural, architectural or lifecycle change is incomplete until its canonical context, decision status and machine-readable state agree.
+A material behavioural, architectural or lifecycle change is incomplete until its canonical context, decision status, supporting design and machine-readable state agree.
