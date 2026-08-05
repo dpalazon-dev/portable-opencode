@@ -1,7 +1,7 @@
 ---
 type: Roadmap
 title: Portable OpenCode Roadmap
-description: Personal-first delivery path from validated design to a complete CLI-driven workflow.
+description: Personal-first Windows-native delivery path from validated design to a complete CLI-driven workflow.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
@@ -28,7 +28,7 @@ The roadmap preserves the full canonical scope while ordering it around one usab
 
 ```text
 define
-→ verify upstream surfaces
+→ verify upstream surfaces on Windows native
 → build a small CLI core
 → configure the personal machine
 → initialize a new project
@@ -37,6 +37,8 @@ define
 ```
 
 A phase must produce an observable capability or remove a material uncertainty. Documentation, schemas, templates and scripts are deliverables when they directly enable that path.
+
+The canonical environment is Windows native with PowerShell and Windows Terminal. WSL is not an implementation, testing or recovery dependency.
 
 The Ratatui configuration TUI is parked until the CLI can install, inspect, plan, apply, diagnose and initialize effectively.
 
@@ -50,6 +52,7 @@ The Ratatui configuration TUI is parked until the CLI can install, inspect, plan
 - [x] personal-first `PROJECT.md`, `VISION.md` and `ARCHITECTURE.md`;
 - [x] minimal `CONVENTIONS.md` and `OPERATIONS.md`;
 - [x] accepted decisions and machine-readable project state;
+- [x] Windows native selected as the canonical environment;
 - [x] canonical context index and concise log;
 - [ ] publish the complete canonical specification in GitHub;
 - [ ] revise the specification to a personal-first v0.3 after matrix approval.
@@ -70,36 +73,39 @@ The Ratatui configuration TUI is parked until the CLI can install, inspect, plan
 
 - [ ] define the CLI command contract;
 - [ ] define the exact responsibility of each command;
-- [ ] inventory installation and verification scripts;
-- [ ] define PowerShell and shell wrapper boundaries for the primary environment;
-- [ ] define exit codes, machine-readable output and diagnostic codes.
+- [ ] inventory installation, verification and recovery scripts;
+- [ ] define the PowerShell bootstrap boundary;
+- [ ] define Windows path, quoting, process and exit-code conventions;
+- [ ] define machine-readable output and diagnostic codes.
 
 ### Exit criteria
 
 - every MVP capability has one owner and one configuration surface;
 - upstream-documented behaviour is separated from behaviour requiring a spike;
-- the CLI and scripts can be implemented from explicit contracts;
-- no TUI, team or generic-profile requirement blocks the path.
+- the CLI and PowerShell scripts can be implemented from explicit contracts;
+- no WSL, TUI, team or generic-profile requirement blocks the path.
 
 ## 3. Phase 1 — Technical validation
 
-**Goal:** validate only the upstream behaviours that materially affect architecture.
+**Goal:** validate only the upstream behaviours that materially affect architecture on Windows native.
 
 ### SPIKE-001 — OpenCode configuration lifecycle
 
-Validate:
+Validate on Windows without WSL:
 
+- installation and upgrade path;
 - global and project configuration precedence;
 - chosen project configuration location;
 - discovery of rules, agents, commands and skills;
 - permission merging and command-pattern behaviour;
 - provider options for OpenRouter;
 - plugin lifecycle and stability;
-- session and command metadata available for observability.
+- session and command metadata available for observability;
+- path, quoting and subprocess behaviour under PowerShell.
 
 ### SPIKE-002 — OpenRouter policy
 
-Validate:
+Validate from the Windows-native OpenCode path:
 
 - semantic roles implemented through presets;
 - preset create, update, version and verification workflow;
@@ -111,45 +117,48 @@ Validate:
 
 ### SPIKE-003 — Local observability
 
-Validate:
+Validate on Windows without WSL:
 
 - transparent OpenAI-compatible proxying from OpenCode to OpenRouter;
 - streaming, tool calls, structured output and errors;
 - metadata-only and redaction policy;
 - correlation of project, session, agent and command identifiers;
 - OTLP/OpenInference export to local Phoenix;
-- start, stop, health, retention and bypass behaviour;
-- resource use on the primary machine.
+- native start, stop, health, retention and bypass behaviour;
+- port ownership, process cleanup and resource use on the primary machine.
 
 ### SPIKE-004 — Graphify and RTK lifecycle
 
-Validate:
+Validate on Windows without WSL:
 
-- Graphify and RTK installation on the primary environment;
+- native installation and upgrade paths for Graphify and RTK;
 - documented OpenCode integrations;
-- `.gitignore` and `.graphifyignore` semantics;
+- `.gitignore` and `.graphifyignore` semantics with Windows paths;
 - first graph generation and quality audit;
 - explicit graph update workflow;
 - optional hook behaviour after explicit updates are stable;
-- RTK rewrite exclusions, failure tee output and diagnostics.
+- RTK rewrite exclusions, failure tee output and diagnostics;
+- PowerShell invocation and executable discovery.
 
 ### Exit criteria
 
-- each spike is reproducible;
+- each spike is reproducible from PowerShell on Windows native;
 - each uncertain matrix row is accepted, revised or deferred;
-- implementation language and packaging can be selected with evidence;
-- no production abstraction is created inside a spike.
+- implementation language and packaging can be selected with Windows evidence;
+- no production abstraction is created inside a spike;
+- no successful WSL-only experiment counts as MVP validation.
 
 ## 4. Phase 2 — CLI, configuration and state foundation
 
-**Goal:** build the smallest reliable engine that can explain and apply desired state.
+**Goal:** build the smallest reliable engine that can explain and apply desired state on Windows.
 
 ### Repository implementation shape
 
 - select implementation language, runtime and package manager;
-- create the source, schema, template, script, fixture and test structure;
+- create the source, schema, template, PowerShell script, fixture and test structure;
 - keep external tools behind narrow adapters;
-- keep OpenCode extensions in their native form.
+- keep OpenCode extensions in their native form;
+- define Windows-native process, path and filesystem primitives once.
 
 ### Core contracts
 
@@ -181,20 +190,22 @@ Required behaviour:
 - structured JSON output;
 - actionable failures;
 - safe interruption boundaries;
-- no dependency on a TUI.
+- correct Windows path and quoting behaviour;
+- no dependency on WSL or a TUI.
 
 ### Exit criteria
 
-- fixture environments produce deterministic plans;
+- Windows fixture environments produce deterministic plans;
 - applying a plan updates state and managed resources coherently;
 - a second run produces a no-op or an explained drift result;
-- schemas and core behaviour have automated tests.
+- schemas and core behaviour have automated tests;
+- PowerShell can bootstrap and invoke the CLI from a clean supported Windows environment.
 
 ## 5. Phase 3 — Personal machine installation
 
-**Goal:** reproduce the canonical global environment on the owner's supported machine.
+**Goal:** reproduce the canonical global environment on the owner's Windows machine.
 
-### CLI and scripts
+### CLI and PowerShell bootstrap
 
 Implement:
 
@@ -204,6 +215,8 @@ portable-opencode doctor
 portable-opencode status
 portable-opencode observability start|stop|status
 ```
+
+PowerShell scripts may bootstrap prerequisites or recovery, but the main CLI owns lifecycle logic.
 
 ### Managed global configuration
 
@@ -215,23 +228,24 @@ portable-opencode observability start|stop|status
 - OpenCode TUI preferences;
 - OpenRouter authentication check;
 - semantic preset reconciliation;
-- RTK installation and OpenCode integration;
-- Graphify installation and OpenCode integration;
-- local observability proxy and Phoenix lifecycle;
+- RTK native installation and OpenCode integration;
+- Graphify native installation and OpenCode integration;
+- Windows-native local observability proxy and Phoenix lifecycle;
 - backups and drift reporting.
 
 ### Exit criteria
 
-- a clean supported environment reaches `healthy`;
+- a clean supported Windows environment reaches `healthy` without WSL;
 - secrets remain in documented private stores;
 - `doctor` identifies missing or divergent components;
 - OpenCode can execute a test request through the selected OpenRouter policy;
 - RTK and Graphify integrations are verifiably active;
+- observability starts, stops and recovers through native Windows process management;
 - observability can be disabled only as an explicit degraded mode.
 
 ## 6. Phase 4 — New-project bootstrap
 
-**Goal:** turn an empty directory into an understood, runnable and verifiable agentic project.
+**Goal:** turn an empty Windows directory into an understood, runnable and verifiable agentic project.
 
 ### Deterministic scaffold
 
@@ -273,7 +287,8 @@ Provide `/init-project` to:
 
 ### Exit criteria
 
-- identical inputs create an equivalent scaffold;
+- identical inputs create an equivalent scaffold on Windows;
+- Windows path handling does not leak Unix assumptions into generated configuration;
 - the project distinguishes `scaffolded`, `configuring`, `ready`, `dirty`, `degraded` and `blocked`;
 - the first graph and context are useful rather than merely present;
 - the generated project passes its verification manifest.
@@ -293,18 +308,19 @@ Implement explicit workflows for:
 - configuration drift;
 - component health;
 - safe upgrade and schema migration;
-- restoration from managed backups.
+- restoration from managed backups;
+- recovery after interrupted Windows processes or locked files.
 
 Exit criteria:
 
 - a new session can recover current intent, state and next action;
 - stale graph, invalid context or degraded observability is visible;
 - upgrades preserve explicit personal overrides and private boundaries;
-- no daily workflow depends on undocumented manual steps.
+- no daily workflow depends on WSL or undocumented manual steps.
 
 ## 8. Phase 6 — Hardening and first release
 
-**Goal:** prove the complete personal path and make it maintainable.
+**Goal:** prove the complete Windows-native personal path and make it maintainable.
 
 Deliverables:
 
@@ -312,17 +328,17 @@ Deliverables:
 - unit and integration tests;
 - adapter contract tests;
 - disposable project fixtures;
-- end-to-end test from clean supported machine to ready project;
+- end-to-end test from clean supported Windows machine to ready project;
 - failure and recovery scenarios;
 - secret and trace-redaction checks;
-- supported-version manifest;
+- supported Windows, PowerShell and dependency version manifest;
 - installation and recovery documentation;
 - versioning and release notes;
 - first tagged release.
 
 Exit criteria:
 
-- the canonical path is reproducible without conversation history;
+- the canonical path is reproducible on Windows without conversation history or WSL;
 - reruns, failures and upgrades do not corrupt managed state;
 - upstream version assumptions are explicit;
 - the owner can install and use the system as the default personal workflow.
@@ -342,10 +358,10 @@ Only then should the feature be re-evaluated. It is not part of the implementati
 
 ### Other deferred directions
 
+- WSL, Linux and macOS support;
 - existing-repository adoption;
 - additional personal profiles;
 - team and organization policy;
-- universal operating-system parity;
 - MCP profiles;
 - local-model profiles;
 - alternate observability backends;
