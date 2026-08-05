@@ -10,6 +10,7 @@ sources:
   - ../../README.md
   - DECISIONS.md
   - ../design/CONFIGURATION_MATRIX.md
+  - ../design/AGENT_AND_MODEL_ROLES.md
 verified:
   - by: repository-owner
     status: pending
@@ -23,45 +24,30 @@ verified:
 
 OpenCode is the runtime and interaction surface. OpenRouter controls models, providers, routing, privacy, fallbacks and cost. Local observability, Graphify, RTK and structured context complete the canonical environment.
 
-The project is developed first for the repository owner's real workflow. Public GitHub availability provides versioning, transparency and possible reuse, but third-party adoption is not an MVP requirement.
-
-No executable product exists yet. The project remains in **definition and configuration design**.
+The project is developed first for the repository owner's real workflow. Public reuse is possible but does not drive the MVP. No executable product exists yet; the project remains in **definition and configuration design**.
 
 ## 2. Product posture
 
 > **Personal-first, reusable by others.**
 
-This means:
-
-- the repository owner is the sole required MVP user;
+- one owner is the required MVP user;
 - one real canonical configuration precedes profiles;
-- Windows native is supported before any platform expansion;
-- configurability exists for explicit, demonstrated variation;
+- Windows native precedes platform expansion;
+- configurability requires demonstrated variation;
 - public readability does not justify premature productization.
 
 ## 3. Canonical environment
 
-`DEC-015` defines:
-
-```text
-Windows native
-PowerShell
-Windows Terminal
-no WSL dependency
-```
-
-A WSL-only dependency or successful WSL-only experiment does not satisfy the MVP.
+`DEC-015` defines Windows native, PowerShell and Windows Terminal with no WSL dependency. WSL-only behaviour is not valid MVP evidence.
 
 ## 4. Initial use case
-
-The first supported path is a new project created from an empty or fresh directory:
 
 ```text
 portable-opencode install
 → portable-opencode init-project <path>
 → OpenCode /init-project
 → project reaches ready
-→ normal development with maintained context, graph and verification
+→ development with maintained context, graph and verification
 ```
 
 ## 5. Canonical OpenCode project layout
@@ -84,111 +70,116 @@ portable-opencode install
 └── .graphifyignore
 ```
 
-Root `opencode.jsonc` owns project runtime configuration. `.opencode/` owns native OpenCode assets. Only asset directories with real content are created.
+Root `opencode.jsonc` owns runtime configuration. `.opencode/` owns native assets. Only directories with real content are created.
 
-## 6. Problem
+## 6. Canonical agents and model roles
 
-A personal agentic environment otherwise accumulates uncoordinated local state:
+`DEC-018` preserves OpenCode's native agents:
 
-- instructions and prompts become scattered;
-- permissions remain implicit;
-- model choices become coupled to agents;
-- knowledge disappears between sessions;
-- graph and context maintenance become manual chores;
-- cost, routing and fallback behaviour are opaque;
-- setup cannot be reproduced safely;
-- active overrides and drift become hard to inspect.
+```text
+primary: build, plan
+subagents: general, explore, scout
+```
 
-## 7. Proposed solution
+The personal scaffold adds only:
 
-Provide one canonical workflow that configures and verifies:
+```text
+review
+verify
+```
+
+Both are non-mutating subagents. Model/provider policy uses three semantic roles:
+
+```text
+main   → build
+reason → plan, review, verify
+fast   → general, explore, scout, small_model
+```
+
+Concrete models remain replaceable through OpenRouter presets. Exact OpenCode preset references require `SPIKE-002`.
+
+## 7. Problem
+
+Without coordination, a personal agentic environment accumulates scattered instructions, implicit permissions, coupled model choices, disappearing knowledge, stale graph/context, opaque cost/routing and irreproducible setup.
+
+## 8. Proposed solution
+
+Provide one workflow that configures and verifies:
 
 1. the Windows machine;
 2. OpenCode global behaviour and native assets;
 3. OpenRouter policy and semantic roles;
-4. a local metadata-first observability path;
+4. metadata-first local observability;
 5. RTK and Graphify;
-6. a deterministic new-project scaffold;
+6. deterministic project scaffolding;
 7. semantic project initialization;
-8. context, verification and cross-session continuity.
+8. context, verification and continuity.
 
-## 8. Core scope
+## 9. Core scope
 
 - inspect, plan, apply, verify and diagnose desired state;
-- install and configure OpenCode and OpenRouter coherently;
+- install and configure OpenCode/OpenRouter coherently;
 - install and verify RTK and Graphify;
 - run local observability;
-- generate root `opencode.jsonc`, root `AGENTS.md` and required `.opencode/` assets;
-- scaffold curated context and project state;
-- define only required agents, commands, skills, plugins and tools;
-- encode permissions and privacy boundaries;
-- maintain graph freshness, configuration provenance and continuity;
-- distinguish healthy, ready, dirty, degraded and blocked states;
+- generate canonical OpenCode config/assets and curated context;
+- provide only required agents, commands, skills, plugins and tools;
+- encode permissions and privacy;
+- maintain graph freshness, provenance and continuity;
+- distinguish healthy, ready, dirty, degraded and blocked;
 - support backups, upgrades and recovery.
 
-## 9. Explicit non-goals for the first version
+## 10. Explicit non-goals
 
-- a new agentic coding client or generic multi-agent framework;
+- a new coding client or generic multi-agent framework;
 - WSL, Linux or macOS parity;
-- teams, organizations or shared governance;
-- profile catalogues or marketplaces;
+- teams, organizations, profiles or marketplaces;
 - broad MCP infrastructure;
 - autonomous background agents;
-- arbitrary legacy-repository migration;
+- arbitrary legacy migration;
 - remote-first observability;
-- large community skill catalogues;
+- agent catalogues;
 - a configuration TUI before the CLI is proven.
 
-## 10. Current repository state
+## 11. Current repository state
 
 Completed:
 
 - public repository and canonical context;
-- personal-first scope alignment;
-- Windows-native platform decision;
-- current upstream configuration research;
-- TUI deferral;
-- roadmap simplification;
-- configuration matrix reduced from 177 to 81 contracts;
-- correction of OpenCode project configuration to documented root `opencode.jsonc`;
-- machine-readable state synchronized.
+- personal-first and Windows-native decisions;
+- upstream configuration research and correction;
+- TUI deferral and roadmap simplification;
+- matrix reduction from 177 to 81 contracts;
+- root `opencode.jsonc` plus `.opencode/` asset decision;
+- native agent reuse, `review`/`verify`, and `main`/`reason`/`fast` policy;
+- synchronized machine-readable state.
 
 Not completed:
 
-- full canonical specification v0.3;
+- canonical specification v0.3;
 - matrix owner approval;
-- canonical global/project file-tree design beyond the accepted OpenCode boundary;
-- CLI and schema contracts;
+- remaining file-tree, CLI and schema contracts;
 - technical spikes;
 - implementation, tests or releases.
 
-## 11. Current unresolved defaults
+## 12. Remaining resolution items
 
-1. implementation language and packaging;
-2. initial semantic roles and required agents;
-3. Graphify output versioning;
-4. minimal context metadata;
-5. Phoenix lifecycle and retention;
-6. OpenRouter preset reconciliation behaviour.
+1. implementation language and packaging from spike evidence;
+2. Graphify output versioning;
+3. minimal context metadata;
+4. Phoenix lifecycle and retention;
+5. first-CLI OpenRouter preset reconciliation.
 
-## 12. Constraints
+## 13. Constraints
 
-- solve the owner's real workflow first;
-- use native upstream surfaces before custom code;
-- keep secrets and private state outside Git;
+- solve the owner's workflow first;
+- use native upstream surfaces;
+- keep secrets/private state outside Git;
 - require native Windows evidence;
-- keep defaults safe, inspectable and replaceable;
+- keep defaults safe and inspectable;
 - make operations deterministic, idempotent and recoverable;
-- do not claim support or implementation without evidence;
-- retain only abstractions with current personal value.
+- do not claim unverified support;
+- retain only abstractions with current value.
 
-## 13. Definition-phase completion
+## 14. Definition-phase completion
 
-The definition phase is complete when:
-
-- the six remaining defaults are accepted or delegated to bounded evidence;
-- the reduced matrix is owner-approved;
-- canonical file ownership and CLI contracts are explicit;
-- every technical uncertainty maps to a spike;
-- the specification is synchronized as personal-first v0.3;
-- Codex can execute SPIKE-001 without inventing product behaviour.
+The phase completes when remaining items are accepted or delegated to evidence, the matrix is approved, file ownership and CLI contracts are explicit, the specification is synchronized to v0.3 and SPIKE-001 can be executed without product invention.
