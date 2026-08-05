@@ -83,6 +83,18 @@ Consequences for every matrix row:
 - successful Linux, macOS or WSL behaviour does not validate the MVP path;
 - unsupported Unix-only assumptions block the affected capability until resolved.
 
+### Canonical OpenCode project configuration
+
+`DEC-016` fixes the project-level OpenCode configuration at:
+
+```text
+<project>/.opencode/opencode.jsonc
+```
+
+The canonical workflow does not generate or manage root-level `opencode.json` or `opencode.jsonc` files. Their presence is treated as a conflict or migration finding because portable-opencode must not depend on an accidental merge between two project configuration forms.
+
+The root `AGENTS.md` remains outside `.opencode/` as the repository-level operating entry point.
+
 ## Core configuration and lifecycle
 
 | ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
@@ -104,8 +116,8 @@ Consequences for every matrix row:
 |---|---|---|---|---|---|---|
 | OC-01 | Installation and supported version | OpenCode / external | detect or install one supported Windows-native version | documented native Windows installer/package methods | version and executable smoke check from PowerShell; unsupported or WSL-only path blocks | Phase 1,3 · S |
 | OC-02 | Global runtime configuration | OpenCode / global | manage `~/.config/opencode/opencode.jsonc` using the effective Windows home | native JSONC config + schema | schema and OpenCode load test | Phase 0,3 · D/S |
-| OC-03 | Project runtime configuration | OpenCode / project | use one consistent project form, chosen after SPIKE-001 | native project `opencode.jsonc` or `.opencode/opencode.jsonc` | precedence fixture; mixed forms avoided | Phase 1,4 · S |
-| OC-04 | Configuration precedence | OpenCode / native | reuse documented merge order; portable core only explains provenance | global, project and runtime override surfaces | SPIKE-001 confirms actual behaviour on supported Windows version | Phase 1 · D/S |
+| OC-03 | Project runtime configuration | OpenCode / project | manage only `<project>/.opencode/opencode.jsonc` | native `.opencode/opencode.jsonc` project config | SPIKE-001 validates discovery and merge on Windows; root config presence becomes conflict or migration finding | Phase 1,4 · A/S · DEC-016 |
+| OC-04 | Configuration precedence | OpenCode / native | reuse documented merge order while preventing dual managed project forms | global config, `.opencode/opencode.jsonc` and runtime override surfaces | SPIKE-001 confirms effective behaviour on the supported Windows version | Phase 1 · D/S |
 | OC-05 | Global and project rules | OpenCode / global + project | small global `AGENTS.md`; project-specific root `AGENTS.md` | native rule discovery and precedence | load and contradiction check | Phase 1,3-4 · D/S |
 | OC-06 | OpenRouter provider and credentials | OpenCode / local + global | authenticate through `/connect`; never write key to repo | OpenCode auth store and `provider.openrouter` config | credential-presence and test-request check | Phase 1,3 · D/S |
 | OC-07 | Model and preset references | OpenCode / global | agents reference stable OpenRouter preset/model identifiers | native provider model definitions and model options | all configured references resolve | Phase 1,3 · D/S |
@@ -196,7 +208,7 @@ Consequences for every matrix row:
 | CLI-01 | Implementation language and packaging | repository | choose after spikes; optimize for Windows-native installation, updates and process control | decision + prototype evidence | Windows build, startup, packaging and clean-machine comparison | Phase 1-2 · S |
 | CLI-02 | Core control commands | portable CLI | `status`, `inspect`, `plan`, `apply`, `doctor` | CLI command contracts and structured output | unit/integration command fixtures | Phase 0-2 · A |
 | CLI-03 | Global installation | portable CLI | `install` converges the personal Windows machine to canonical desired state | core plans + OpenCode/OpenRouter/Graphify/RTK/observability adapters | clean and existing-config Windows fixtures | Phase 3 · A |
-| CLI-04 | Project bootstrap | portable CLI | `init-project <path>` creates deterministic scaffold and project state | templates, stack detection and Windows filesystem adapters | empty-project fixture, spaces-in-path fixture and rerun | Phase 4 · A |
+| CLI-04 | Project bootstrap | portable CLI | `init-project <path>` creates `.opencode/opencode.jsonc`, deterministic assets and project state | templates, stack detection and Windows filesystem adapters | empty-project fixture, spaces-in-path fixture, root-config conflict fixture and rerun | Phase 4 · A · DEC-016 |
 | CLI-05 | Component lifecycle | portable CLI | explicit observability and graph lifecycle commands where native tools are insufficient | narrow Windows subprocess adapters | health, interruption and failure tests | Phase 3-5 · P |
 | CLI-06 | Update and migration | portable CLI | compare installed and target versions, plan migration, back up and apply | version manifest + migration functions | upgrade, locked-file and rollback fixtures | Phase 5-6 · P |
 | CLI-07 | Primary-platform scripts | scripts / local | small PowerShell scripts only where bootstrap or recovery cannot be handled by the main CLI; no Bash or WSL requirement | versioned `.ps1` scripts with strict error handling | clean PowerShell session, path-with-spaces and non-zero exit smoke tests | Phase 0-3 · A/S · DEC-015 |
@@ -208,10 +220,10 @@ Consequences for every matrix row:
 | ID | Capability | Owner / scope | Canonical personal default | Native or managed surface | Validation and failure | Delivery / evidence |
 |---|---|---|---|---|---|---|
 | VER-01 | Documentation and schema checks | repository/project | links, frontmatter, JSON/JSONC and state schemas | verification scripts | current docs-only profile must pass | Phase 0-6 · A |
-| VER-02 | OpenCode configuration smoke test | OpenCode | load effective config, discover assets and exercise permission fixtures on Windows | OpenCode CLI/TUI test project | invalid load blocks healthy/ready | Phase 1,3-4 · S |
+| VER-02 | OpenCode configuration smoke test | OpenCode | load global configuration plus `.opencode/opencode.jsonc`, discover assets and exercise permission fixtures on Windows | OpenCode CLI/TUI test project | invalid load or unresolved root-config conflict blocks healthy/ready | Phase 1,3-4 · S · DEC-016 |
 | VER-03 | OpenRouter policy smoke test | OpenRouter | resolve required presets, routing, privacy and usage fields from Windows OpenCode | authenticated test inference | missing required policy blocks global healthy | Phase 1,3 · S |
 | VER-04 | Graphify and RTK smoke test | Graphify/RTK | build useful graph and verify command rewriting without losing failure detail on Windows | fixture project and representative PowerShell-invoked commands | Graphify failure blocks project ready; RTK failure degrades | Phase 1,3-4 · S |
-| VER-05 | Project ready gate | portable project state | context, app baseline, OpenCode, LSP/formatter, graph and verification manifest pass | `project doctor` and canonical checks | critical unresolved decision blocks ready | Phase 4 · A |
+| VER-05 | Project ready gate | portable project state | context, app baseline, canonical OpenCode config, LSP/formatter, graph and verification manifest pass | `project doctor` and canonical checks | critical unresolved decision or conflicting root OpenCode config blocks ready | Phase 4 · A |
 | VER-06 | Canonical end-to-end path | repository | clean supported Windows machine to healthy environment to ready project to recoverable later session, without WSL | disposable Windows environment and fixture repo | must be reproducible without hidden conversation context | Phase 6 · A/S · DEC-015 |
 
 ## 4. Matrix result
@@ -226,19 +238,21 @@ The reduction does not remove canonical scope. It removes duplicate concepts and
 - one validation rule;
 - one roadmap position.
 
-The primary-environment default is now accepted: Windows native, PowerShell and Windows Terminal, without WSL.
+Two personal defaults are now accepted:
+
+- Windows native, PowerShell and Windows Terminal, without WSL;
+- `<project>/.opencode/opencode.jsonc` as the only managed project OpenCode configuration.
 
 ## 5. Decisions required before approval
 
 Owner review should resolve these remaining product defaults:
 
 1. implementation language and packaging approach after the spikes;
-2. exact OpenCode project config form;
-3. initial semantic roles and required agents;
-4. which Graphify outputs are versioned;
-5. minimal metadata schema for context documents;
-6. Phoenix retention and native Windows process/container choice;
-7. whether OpenRouter presets are created automatically or only verified in the first CLI release.
+2. initial semantic roles and required agents;
+3. which Graphify outputs are versioned;
+4. minimal metadata schema for context documents;
+5. Phoenix retention and native Windows process/container choice;
+6. whether OpenRouter presets are created automatically or only verified in the first CLI release.
 
 Everything else is either accepted policy, documented upstream surface or bounded spike work.
 
@@ -246,7 +260,7 @@ Everything else is either accepted policy, documented upstream surface or bounde
 
 Move this document from `draft` to `active` when:
 
-- the seven defaults above are accepted or delegated to a named spike;
+- the six defaults above are accepted or delegated to a named spike;
 - every `S` row is linked to SPIKE-001 through SPIKE-004 or an implementation test;
 - the canonical file tree and CLI contract are documented;
 - the repository owner confirms that the matrix represents the actual personal workflow.
