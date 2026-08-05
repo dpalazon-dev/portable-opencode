@@ -136,16 +136,22 @@
       "resolved_personal_defaults": [
         "primary-environment-windows-native",
         "opencode-project-config-root-jsonc-with-dot-opencode-assets",
-        "native-agents-with-main-reason-fast-roles"
+        "native-agents-with-main-reason-fast-roles",
+        "graphify-minimal-versioned-output-allowlist"
       ],
-      "remaining_personal_defaults": 5,
-      "next_action": "choose_graphify_output_versioning_policy",
+      "remaining_personal_defaults": 4,
+      "next_action": "define_minimal_context_metadata_schema",
       "completion_gate": "owner_verified_and_spike_links_confirmed"
     },
     "agent_model_roles": {
       "id": "DESIGN-002",
       "status": "active_pending_runtime_validation",
       "document": "docs/design/AGENT_AND_MODEL_ROLES.md"
+    },
+    "graphify_output_policy": {
+      "id": "DESIGN-003",
+      "status": "active_pending_spike-004-validation",
+      "document": "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
     }
   },
   "features": {
@@ -160,11 +166,26 @@
     }
   },
   "graphify": {
+    "decision": "DEC-019",
+    "design": "docs/design/GRAPHIFY_OUTPUT_POLICY.md",
     "installed": false,
     "status": "inactive_no_source_implementation",
     "dirty": false,
     "ignore_file": ".graphifyignore",
-    "output_versioning_policy": "pending-owner-decision",
+    "output_versioning_policy": "minimal-allowlist",
+    "versioned_outputs": [
+      "graphify-out/graph.json",
+      "graphify-out/GRAPH_REPORT.md",
+      "graphify-out/manifest.json"
+    ],
+    "ignored_outputs": [
+      "graphify-out/graph.html",
+      "graphify-out/cache/",
+      "graphify-out/cost.json",
+      "graphify query logs",
+      "optional graph exports"
+    ],
+    "manifest_validation": "pending-spike-004",
     "last_update": null,
     "pending_decisions": []
   },
@@ -187,19 +208,19 @@
     "result": "pending"
   },
   "decisions": {
-    "accepted": 12,
+    "accepted": 13,
     "proposed": 3,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
     "milestone": "configuration-design-owner-review",
-    "step": "choose-graphify-output-versioning-policy",
+    "step": "define-minimal-context-metadata-schema",
     "documents": [
       "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
       "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/design/AGENT_AND_MODEL_ROLES.md"
+      "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
     ]
   },
   "updated_at": "2026-08-05T10:24:00+02:00"
