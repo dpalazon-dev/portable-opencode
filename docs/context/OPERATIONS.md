@@ -24,20 +24,22 @@ orient
 
 ## 2. Current operating mode
 
-The repository is in definition and configuration design.
+The repository is in definition and **contract design**.
 
 Binding facts:
 
-- Windows native, PowerShell and Windows Terminal through `DEC-015`;
-- root `opencode.jsonc` plus `.opencode/` assets through `DEC-017`;
-- `DEC-016` is superseded;
-- native agents plus `review`/`verify`, with `main`/`reason`/`fast`, through `DEC-018`;
-- Graphify minimal output allowlist through `DEC-019`;
-- minimal context metadata through `DEC-011` and `DESIGN-004`;
+- Windows native, PowerShell and Windows Terminal;
+- root `opencode.jsonc` plus `.opencode/` assets;
+- native agents plus non-mutating `review`/`verify`;
+- `main`, `reason`, `fast` semantic roles;
+- Graphify minimal output allowlist;
+- minimal context metadata schema;
+- declarative three-preset reconciliation;
+- proposed native Phoenix lifecycle with private SQLite and 30-day retention;
 - the TUI is deferred;
-- the matrix contains 81 contracts and three remaining resolution items;
-- metadata migration is pending, so `docs-only` has not passed;
-- SPIKE-001 through SPIKE-004 follow design closure.
+- all owner-level defaults are resolved;
+- `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
+- metadata migration is pending, so `docs-only` has not passed.
 
 ## 3. Starting a session
 
@@ -47,9 +49,9 @@ Read the smallest authoritative set:
 2. `.portable-opencode/state.json`;
 3. `docs/context/index.md`;
 4. task-specific source documents;
-5. accepted and superseded relevant decisions.
+5. accepted, proposed and superseded relevant decisions.
 
-Identify observable outcome, affected workflow, task class, source of truth, evidence and Windows constraints.
+Identify observable outcome, owning source, required evidence and Windows constraints.
 
 ## 4. Evidence discipline
 
@@ -61,101 +63,81 @@ current repository context
 → implementation fixtures and tests
 ```
 
-Do not infer configuration surfaces from naming symmetry, duplicate native agents without a gap, version every generated output or add metadata without a consumer.
+Do not infer unsupported surfaces, duplicate native capabilities, commit every generated artefact or add metadata without a consumer.
 
 ## 5. Standard workflow
 
 ### Orient
-
 Read state and relevant sources.
 
 ### Define outcome
-
 Describe an observable result rather than an activity.
 
 ### Inspect evidence
-
-Verify official documentation for external behaviour. Use reproducible PowerShell experiments for runtime uncertainty.
+Use official documentation and reproducible PowerShell experiments.
 
 ### Plan
-
-Identify affected files, decisions, risks, validation and rollback/discard boundary.
+Identify files, decisions, risks, validation and rollback/discard boundary.
 
 ### Change
-
-Make the smallest coherent change. Avoid profiles, unsupported paths, duplicate agents, unused abstractions, hidden platform expansion, unnecessary generated artefacts, decorative metadata and false implementation claims.
+Make the smallest coherent change. Avoid profiles, unsupported paths, duplicate agents, unused abstractions, hidden platform expansion, unnecessary generated output and false implementation claims.
 
 ### Verify
-
 Match checks to risk:
 
-- docs: reserved-file structure, frontmatter schema, links and state consistency;
+- docs: metadata schema, reserved files, links and state consistency;
 - config: schema, discovery, precedence and provenance;
-- agents: modes, permissions, invocation and output contracts;
-- presets: identity, compatibility, privacy and fallback;
-- Graphify: source scope, allowlist, determinism and manifest portability;
-- Windows: paths, quoting, exit codes, processes, ports and locked files;
+- agents: modes, permissions and invocation;
+- presets: normalized diff, versioning, tools, privacy and fallback;
+- observability: protocol, redaction, PIDs, ports, retention and storage;
+- Graphify: scope, allowlist, determinism and manifest portability;
+- Windows: paths, quoting, exit codes, processes and locked files;
 - security: denied actions, redaction and backups.
 
 ### Synchronize
-
 Update only sources whose meaning changed.
 
 ### Close
-
 Leave verified state, explicit gaps and one discoverable next action.
 
 ## 6. Metadata migration
 
 The accepted schema applies immediately to new and substantially edited documents.
 
-The repository-wide migration is a bounded docs task:
+Repository-wide migration:
 
 1. remove `created`, `modified` and generic `verified`;
 2. remove frontmatter from `index.md` and `log.md`;
 3. convert only material `sources` to `{resource, title}` objects;
 4. delete non-material source lists;
-5. preserve stable IDs and status;
-6. validate parsed frontmatter with `schemas/context-document.schema.json`;
-7. resolve links without rewriting document bodies.
+5. preserve IDs and status;
+6. validate against `schemas/context-document.schema.json`;
+7. repair links without rewriting bodies.
 
-Do not mark `docs-only` successful until this migration is complete.
+Use an isolated branch and do not mark `docs-only` successful until all checks pass.
 
-## 7. Git model
+## 7. Git and Codex
 
-Use direct `main` for low-risk documentation/state synchronization. Use branches for spikes, executable work, migrations and risky changes. Use PRs when review, CI or Codex work benefits from an explicit merge boundary.
+Use direct `main` for low-risk documentation/state synchronization. Use branches for spikes, executable work, migrations and risky changes. PRs are useful when review, CI or Codex work benefits from an explicit merge boundary.
 
-The metadata migration should use an isolated branch because it touches many canonical files and needs an all-or-nothing validation boundary.
+Delegate only bounded tasks specifying outcome, sources, decisions, scope, forbidden operations, required Windows evidence, expected documentation/state updates and branch boundary.
 
-## 8. Graphify output
+## 8. Spike workflow
 
-Commit `graph.json`, `GRAPH_REPORT.md` and validated portable `manifest.json`. Ignore HTML, cache, cost, query logs and optional exports. Synchronize at meaningful structural boundaries and keep `graphify-out/` outside source extraction.
+Each spike records question, relevance, hypotheses, tested versions, reproducible procedure, evidence, limitations, decision impact, recommendation and discard boundary.
 
-## 9. Spike workflow
-
-Each spike documents question, relevance, hypotheses, tested Windows/PowerShell/dependency versions, reproducible procedure, evidence, limitations, decision impact, recommendation and discard boundary.
+- SPIKE-001: OpenCode lifecycle;
+- SPIKE-002: OpenRouter presets and policy;
+- SPIKE-003: proxy and Phoenix acceptance;
+- SPIKE-004: Graphify and RTK.
 
 A spike validates mechanism; it does not silently redesign policy.
 
-## 10. Working with Codex
-
-Delegate only bounded tasks specifying outcome, sources, binding/superseded decisions, scope, forbidden operations, Windows evidence, spike/production status, state updates and branch/PR boundary.
-
-SPIKE-001 becomes suitable after remaining product defaults and CLI/file-tree contracts close. The metadata migration is also suitable for Codex once the validator command is defined.
-
-## 11. Verification profiles
+## 9. Verification profiles
 
 ### Active: `docs-only`
 
-Pending until:
-
-- reserved files have no frontmatter;
-- non-reserved frontmatter validates;
-- links resolve;
-- decisions, research, matrix, roadmap and state agree;
-- superseded decisions are not active;
-- no unsupported implementation is claimed;
-- no secrets/private traces are committed.
+Pending metadata migration, link checks, schema validation, decision/state consistency and secret scan.
 
 ### Future: `repo`
 
@@ -169,22 +151,23 @@ clean Windows
 → install
 → healthy environment
 → scaffold and initialize
-→ ready project with valid context and graph
+→ ready project
 → rerun without corruption
 → later session recovers state
 ```
 
-## 12. Failure, recovery and secrets
+## 10. Failure, recovery and secrets
 
-Stop broad mutation, preserve the original error, detect partial changes, restore known backups, mark state honestly, provide narrow remediation and avoid blind retries.
+Stop broad mutation, preserve original errors, detect partial changes, restore known backups, mark state honestly, provide narrow remediation and avoid blind retries.
 
-Never version credentials, real `.env`, SSH keys, certificates, private overrides, observability databases, raw traces, Graphify cost/query logs, caches or unsanitized failure output.
+Never version credentials, real `.env`, SSH keys, private overrides, observability databases, raw traces, Graphify cost/query logs, caches or unsanitized failure output.
 
-## 13. Current next sequence
+## 11. Current next sequence
 
-1. decide Phoenix lifecycle and retention;
-2. decide first-CLI OpenRouter preset reconciliation;
-3. leave language and packaging to bounded spike evidence;
-4. define canonical file trees and CLI contracts;
-5. execute metadata migration and validation;
-6. approve the matrix and prepare SPIKE-001 for Codex.
+1. define canonical global and project file trees and ownership;
+2. define CLI commands, diagnostics, outputs and PowerShell scripts;
+3. create missing state and resource schemas;
+4. execute metadata migration and validation;
+5. map matrix evidence gates to spikes/tests;
+6. synchronize specification v0.3;
+7. approve the matrix and delegate SPIKE-001 through SPIKE-004.
