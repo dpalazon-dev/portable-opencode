@@ -1,7 +1,7 @@
 ---
 type: Operations
 title: Portable OpenCode Development Operations
-description: Personal-first Windows-native workflow for understanding, changing, verifying and handing off the repository.
+description: Personal-first workflow for understanding, changing, verifying and handing off the repository.
 status: active
 created: 2026-08-04
 modified: 2026-08-05
@@ -11,6 +11,7 @@ sources:
   - ARCHITECTURE.md
   - CONVENTIONS.md
   - DECISIONS.md
+  - ROADMAP.md
 verified:
   - by: repository-owner
     status: pending
@@ -20,11 +21,7 @@ verified:
 
 ## 1. Operating objective
 
-Repository operations should help the owner move from intent to a verified change with the least process necessary to preserve safety, clarity and continuity.
-
-The workflow is personal-first and Windows-native. It does not assume a team, release train, support organization, permanent pull-request process or WSL execution layer.
-
-The governing sequence is:
+Move from intent to a verified repository change with the least process that preserves safety, evidence and continuity.
 
 ```text
 orient
@@ -33,215 +30,137 @@ orient
 → plan
 → change
 → verify
-→ synchronize state
-→ close with a discoverable next action
+→ synchronize
+→ close
 ```
+
+The workflow is personal-first. It does not assume a team, release train or permanent pull-request ceremony.
 
 ## 2. Current operating mode
 
-The repository remains in definition and configuration design.
+The repository is in definition and configuration design.
 
 Current facts:
 
-- no executable product exists;
-- Windows native, PowerShell and Windows Terminal are accepted under `DEC-015`;
-- WSL is not an MVP dependency or valid substitute for Windows-native evidence;
-- no runtime, package manager or packaging mechanism has been accepted;
+- no executable product, runtime choice or package manager has been accepted;
+- Windows native, PowerShell and Windows Terminal are binding through `DEC-015`;
+- root `opencode.jsonc` plus `.opencode/` assets are binding through `DEC-017`;
+- `DEC-016` is superseded and must not guide implementation;
+- the TUI is deferred;
+- upstream configuration research is complete and corrected;
+- the roadmap is aligned pending owner review;
+- the matrix contains 81 contracts and six unresolved personal defaults;
 - the active verification profile is `docs-only`;
-- the configuration TUI is deferred;
-- `ROADMAP.md` is aligned and pending owner review;
-- `DESIGN-001` contains 81 capabilities and seven unresolved personal defaults;
-- technical spikes begin only after their questions and Windows evidence requirements are bounded.
+- SPIKE-001 through SPIKE-004 are the next technical validation layer after design closure.
 
 ## 3. Starting a session
 
-Read only the smallest authoritative set required by the task.
-
-Minimum orientation:
+Read the smallest authoritative set:
 
 1. `AGENTS.md`;
 2. `.portable-opencode/state.json`;
 3. `docs/context/index.md`;
-4. the specific source-of-truth documents affected by the task;
-5. accepted decisions and relevant proposals in `DECISIONS.md`.
-
-Do not reread the full repository by ritual. Expand the source set only when the task crosses additional boundaries or exposes a contradiction.
+4. task-specific source-of-truth documents;
+5. accepted and superseded decisions relevant to the task.
 
 Before changing anything, identify:
 
-- the concrete outcome;
-- the canonical personal workflow affected;
-- whether the task is documentation, design, spike, implementation or maintenance;
-- which source of truth owns the result;
-- what evidence will count as verification;
-- whether the evidence was produced natively on Windows when the capability belongs to the canonical path.
+- observable outcome;
+- affected canonical workflow;
+- task class: documentation, design, spike, implementation or maintenance;
+- owning source of truth;
+- verification evidence;
+- Windows-native constraints when executable behaviour is involved.
 
-## 4. Task classes
+## 4. Evidence discipline
 
-### Documentation and scope work
+Use evidence in this order where relevant:
 
-Use when clarifying product intent, architecture, conventions, operations, features, roadmap or design.
+```text
+current repository context
+→ accepted decisions
+→ current primary upstream documentation
+→ bounded Windows-native experiment
+→ implementation fixtures and tests
+```
 
-Rules:
+Do not infer an upstream configuration surface from naming symmetry. The correction from `DEC-016` to `DEC-017` is the canonical example: `.opencode/` is an asset directory, not evidence that `.opencode/opencode.jsonc` is a supported runtime config.
 
-- change the narrowest canonical documents;
-- preserve distinctions between fact, decision, proposal and hypothesis;
-- update state and log only when project state or next action changes materially;
-- do not create implementation claims.
-
-### Technical spike
-
-Use when an upstream capability or architectural mechanism is materially uncertain.
-
-A spike is bounded research, not production implementation. It must answer named questions with reproducible evidence and may be discarded afterward.
-
-An active MVP spike must run from PowerShell on Windows without WSL. Cross-platform observations may be recorded, but they do not replace Windows-native evidence.
-
-### Implementation
-
-Use only after the relevant behaviour and acceptance boundary are clear enough that the agent is not forced to invent the product.
-
-Implementation must follow the canonical Windows-native personal path first. Generalization is not part of the task unless explicitly approved.
-
-### Maintenance and repair
-
-Use for dependency updates, schema migrations, configuration drift, security issues or broken generated state.
-
-Prefer restoration of the known desired state over manual one-off repair.
+A documented upstream surface may still require a spike to prove Windows integration. A spike may not replace clear upstream documentation with a private convention unless the divergence is explicit and justified.
 
 ## 5. Standard change workflow
 
-### Step 1 — Orient
+### Orient
 
-Read current state and the relevant context. Identify accepted constraints and unresolved decisions.
+Read current state, binding decisions and the narrowest affected documents.
 
-### Step 2 — Define the outcome
+### Define outcome
 
-State the change as an observable result, for example:
+Describe an observable result, not an activity. Example:
 
-- “SPIKE-001 determines actual OpenCode configuration precedence on Windows.”
-- “The installer produces the same plan on a second Windows run.”
-- “PowerShell bootstrap completes without requiring WSL.”
+> The scaffold generates root `opencode.jsonc`, discovers `.opencode/` assets and reports active override provenance.
 
-Avoid activity-based goals such as “work on the CLI”.
+### Inspect evidence
 
-### Step 3 — Inspect evidence
+For external behaviour, verify current official documentation. For runtime uncertainty, design a reproducible PowerShell experiment.
 
-Use the cheapest reliable evidence source:
+### Plan
 
-```text
-curated context
-→ accepted decisions
-→ Graphify when code exists
-→ LSP
-→ textual search
-→ direct file reading
-→ current primary upstream documentation
-→ controlled Windows-native experiment
-```
+Identify affected files, decisions, risky boundaries, validation and rollback/discard boundary.
 
-External behaviour that can change must be verified against current primary documentation before implementation.
+### Change
 
-### Step 4 — Plan
+Make the smallest coherent change. Do not:
 
-For non-trivial work, identify:
+- introduce profiles for one configuration;
+- abstract unused alternatives;
+- add unsupported config paths;
+- mix spike code with production architecture;
+- broaden platform support;
+- describe planned behaviour as implemented.
 
-- affected files and contracts;
-- intended changes;
-- decisions applied or challenged;
-- risky or destructive boundaries;
-- Windows-specific path, quoting, process or port concerns;
-- verification method;
-- rollback or discard boundary.
+### Verify
 
-The plan should be proportional. A small documentation correction does not need an artificial project plan.
+Match checks to risk:
 
-### Step 5 — Change
+- docs: links, frontmatter, decision/state consistency and unsupported claims;
+- config: schema, discovery, precedence and provenance;
+- planner: determinism and no mutation;
+- installer: first run, rerun, backup and drift;
+- Windows adapter: paths, quoting, exit codes, processes, ports and locked files;
+- security: permissions, secret redaction and destructive boundaries.
 
-Make the smallest coherent change that delivers the outcome.
+### Synchronize
 
-Do not:
+Update only sources whose meaning changed:
 
-- add placeholders without a current contract;
-- introduce a profile system for one configuration;
-- abstract around alternatives that are not used;
-- mix a spike with production architecture silently;
-- broaden platform support as a side effect;
-- introduce Bash or WSL as hidden prerequisites;
-- preserve obsolete text solely to avoid editing several documents.
-
-### Step 6 — Verify
-
-Run the active verification profile and any task-specific checks.
-
-Verification must answer the actual risk of the change. Examples:
-
-- documentation change: links, frontmatter, state consistency and unsupported claims;
-- schema change: parsing, fixtures and migration behaviour;
-- planner change: deterministic output and no unintended mutation;
-- installer change: clean Windows run and repeated-run behaviour;
-- adapter change: contract fixture and real Windows-native spike;
-- PowerShell change: strict error propagation, spaces in paths and non-zero exit codes;
-- local service change: loopback binding, port ownership, process cleanup and locked files;
-- safety change: denied paths, redaction and destructive-command boundaries.
-
-Report skipped checks explicitly. A WSL-only success must be reported as insufficient for the MVP path.
-
-### Step 7 — Synchronize
-
-Update only the sources whose meaning changed.
-
-| Change | Usually update |
+| Meaning changed | Source |
 |---|---|
-| Current scope or factual state | `PROJECT.md` |
-| Desired product outcome | `VISION.md` |
-| Component responsibility or lifecycle | `ARCHITECTURE.md` |
-| Repeated working rule | `CONVENTIONS.md` |
-| Development workflow | `OPERATIONS.md` |
-| Durable choice | `DECISIONS.md` |
-| Feature contract | `docs/features/` |
-| Configuration design | `docs/design/` |
-| Delivery order | `ROADMAP.md` |
-| Machine-readable state or next action | `.portable-opencode/state.json` |
-| Meaningful transition | `log.md` |
+| current scope/state | `PROJECT.md` |
+| desired outcome | `VISION.md` |
+| boundaries/lifecycle | `ARCHITECTURE.md` |
+| repeated rule | `CONVENTIONS.md` |
+| workflow | `OPERATIONS.md` |
+| durable choice | `DECISIONS.md` |
+| delivery order | `ROADMAP.md` |
+| configuration contract | `docs/design/` |
+| evidence | `docs/research/` or `docs/spikes/` |
+| machine state | `.portable-opencode/state.json` |
+| meaningful transition | `log.md` |
 
-Do not update every document automatically. Synchronization means consistency, not widespread churn.
+### Close
 
-### Step 8 — Close
+Leave verified repository state, explicit gaps and one discoverable next action.
 
-A completed change leaves:
+## 6. Git model
 
-- the outcome in the repository;
-- verification evidence or an explicit gap;
-- actual state synchronized;
-- a next action when one materially exists;
-- no dependency on hidden conversational context.
+### Direct `main`
 
-## 6. Git operating model
-
-Use the lightest useful boundary.
-
-### Direct commit to `main`
-
-Appropriate for:
-
-- low-risk documentation changes;
-- state synchronization;
-- small repository maintenance;
-- corrections whose diff is easy to inspect and reverse.
+Use for low-risk documentation, state synchronization and small reversible maintenance.
 
 ### Branch
 
-Use for:
-
-- technical spikes;
-- executable features;
-- dependency or packaging experiments;
-- migrations;
-- risky multi-file changes;
-- work delegated to Codex that benefits from isolation.
-
-Suggested branch forms:
+Use for spikes, executable work, dependency experiments, migrations and risky multi-file changes.
 
 ```text
 spike/001-opencode-lifecycle
@@ -251,193 +170,104 @@ fix/state-recovery
 
 ### Pull request
 
-A PR is optional and useful when:
-
-- a substantial diff needs deliberate review;
-- a spike should preserve discussion and evidence;
-- Codex has implemented a bounded task;
-- CI results form part of acceptance;
-- merging should remain an explicit decision.
-
-Do not create issue, branch and PR ceremony for every documentation edit.
+Use when deliberate review, CI evidence or Codex-produced executable work benefits from an explicit merge boundary. It is not mandatory for every edit.
 
 ## 7. Spike workflow
 
-Each spike should have one bounded document under `docs/spikes/` and, when useful, disposable code under `experiments/`.
+Each spike gets:
 
-Required spike content:
+```text
+docs/spikes/SPIKE-NNN.md
+experiments/spike-NNN-*/   # only when useful
+```
 
-- identifier and status;
-- question and why it matters;
+Required content:
+
+- question and architectural relevance;
 - hypotheses;
 - tested Windows, PowerShell and dependency versions;
-- confirmation that WSL was not used;
-- reproducible PowerShell procedure;
-- evidence and observed behaviour;
+- reproducible procedure;
+- observed evidence;
 - limitations;
-- impact on architecture and decisions;
+- decision and matrix impact;
 - recommendation;
-- artefacts worth retaining;
-- explicit discard boundary for temporary code.
+- retained and discarded artefacts.
 
-A spike completes when it changes uncertainty into evidence. It does not need production quality.
-
-After review:
-
-1. accept, revise, reject or defer the affected decision;
-2. update architecture or design only where evidence warrants it;
-3. retain minimal reproducible evidence;
-4. delete disposable code that no longer serves a purpose;
-5. update state and next action.
+A spike removes uncertainty. It does not need production quality and must not silently create production abstractions.
 
 ## 8. Working with Codex
 
-Pass work to Codex only when the task is bounded enough to avoid silent product invention.
+Delegate only bounded tasks specifying:
 
-A Codex task should specify:
-
-- exact outcome;
+- exact result;
 - repository sources to read;
-- accepted constraints, including Windows native and no WSL;
-- files or directories in scope;
-- operations that are forbidden;
-- required evidence or tests;
-- whether the result is a spike or production code;
-- expected state and documentation updates;
-- branch or PR boundary when used.
+- accepted and superseded decisions;
+- files/directories in scope;
+- forbidden operations;
+- required Windows-native evidence;
+- spike versus production status;
+- documentation/state updates;
+- branch and PR boundary.
 
-Bad task:
-
-> Implement portable-opencode.
-
-Good task:
-
-> On `spike/001-opencode-lifecycle`, determine global versus project configuration precedence in the current OpenCode version from PowerShell on Windows without WSL. Do not create production abstractions. Record commands, fixtures, versions, observed behaviour and implications in `docs/spikes/SPIKE-001.md`.
-
-Review Codex output against the repository sources of truth, not against how convincing the implementation appears.
+The first suitable Codex task remains `SPIKE-001`, after the remaining design defaults and CLI/file-tree contracts are sufficiently explicit.
 
 ## 9. Verification profiles
 
-### Current: `docs-only`
+### `docs-only` — active
 
-Required checks:
-
-- canonical documents exist;
-- internal links resolve;
+- canonical files exist;
+- links resolve;
 - JSON parses;
-- frontmatter contains required fields;
-- accepted decisions and machine state agree;
-- planned behaviour is not described as implemented;
-- no secrets, private traces, databases or generated caches are committed.
+- required frontmatter exists;
+- decisions, research, matrix, roadmap and state agree;
+- superseded decisions are not presented as active;
+- no implementation is falsely claimed;
+- no secrets or private traces are committed.
 
-### Future: `repo`
+### `repo` — future
 
-Activate only when executable repository code exists. It should include the canonical format, lint, type, unit, integration, schema and build commands selected by the implementation.
+Formatting, linting, type checking, unit/integration tests, schema validation and build after executable code exists.
 
-### Future: `canonical-journey`
-
-Activate when installation and project initialization exist. It validates the real owner workflow on a clean supported Windows environment:
+### `canonical-journey` — future
 
 ```text
-inspect environment
-→ create plan
-→ install safely
-→ verify environment
-→ scaffold new project
-→ initialize project
-→ verify ready state
+clean Windows
+→ inspect
+→ plan
+→ install
+→ healthy environment
+→ scaffold project
+→ semantic initialization
+→ ready project
 → rerun without corruption
+→ later session recovers state
 ```
 
-### Additional platform checks
+## 10. Failure and recovery
 
-WSL, Linux and macOS checks are deferred. Add them only after the owner actually supports those environments or sustained external use justifies the cost.
+On failure:
 
-## 10. State management
+1. stop broad mutation;
+2. preserve the original error and operation;
+3. detect partial changes;
+4. restore known backups when available;
+5. mark state honestly;
+6. provide narrow remediation;
+7. avoid blind retries.
 
-Environment state and project state are separate.
+Repair converges toward versioned desired state rather than undocumented manual state.
 
-State updates must be:
+## 11. Secrets and private state
 
-- derived from verification where possible;
-- explicit about `healthy`, `degraded`, `blocked`, `dirty` or `update-required` conditions;
-- independent from CLI or TUI navigation state;
-- honest when evidence is missing;
-- reconstructible from canonical configuration and inspection where practical.
+Never version API keys, real `.env` values, SSH keys, certificates, private overrides, observability databases, raw traces, caches or unsanitized failure output.
 
-Do not mark a project `ready` because files were generated. Readiness requires its defined verification gates.
+## 12. Current next sequence
 
-## 11. Failure and recovery
-
-When an operation fails:
-
-1. stop before broadening the mutation scope;
-2. preserve the original error and affected operation;
-3. determine whether partial changes occurred;
-4. release or report owned processes, ports and file handles;
-5. restore from backup or execute the known rollback when available;
-6. mark state honestly as `degraded` or `blocked`;
-7. provide a narrow PowerShell-compatible remediation action;
-8. avoid repeated blind retries.
-
-Repair should converge toward the versioned desired state. Avoid undocumented manual fixes that cannot be reproduced later.
-
-## 12. Secrets and private state
-
-Never version or expose:
-
-- API keys and tokens;
-- real `.env` values;
-- SSH keys or certificates;
-- raw private prompts and responses without explicit opt-in;
-- observability databases;
-- unrelated project source;
-- unsanitized traces;
-- private local overrides.
-
-If a secret enters Git:
-
-1. rotate or revoke it immediately;
-2. stop propagation;
-3. remove it from accessible history where appropriate;
-4. inspect logs and traces for copies;
-5. record the incident without reproducing the value;
-6. add a preventive control.
-
-## 13. Handoff and continuity
-
-Because this is a personal project, handoff means continuity across sessions and agents, not management reporting.
-
-Add a `log.md` entry only for a meaningful transition. Keep it to:
-
-- outcome;
-- resulting decision or state;
-- verification status;
-- next action.
-
-Do not repeat full file lists, rationale or discussion already captured elsewhere.
-
-The repository is ready for the next session when another agent can identify:
-
-- what is true now;
-- which decisions bind;
-- what remains proposed;
-- what was verified;
-- the next bounded action.
-
-## 14. Releases and broader support
-
-No release process is active.
-
-Do not design release trains, public compatibility guarantees or cross-platform distribution channels until an executable Windows-native personal version exists and the owner needs to install or update it outside the development checkout.
-
-When that need appears, define the smallest release process that supports the selected Windows distribution method.
-
-## 15. Current next sequence
-
-1. choose the canonical OpenCode project configuration form;
-2. resolve the remaining semantic roles, Graphify ownership, context metadata, Phoenix and OpenRouter preset defaults;
-3. define the canonical file tree and CLI contracts;
-4. verify the complete context and reduced matrix;
-5. create bounded Windows-native technical spikes;
-6. pass SPIKE-001 to Codex on an isolated branch.
+1. define initial OpenCode agents and OpenRouter semantic roles together;
+2. decide Graphify output ownership;
+3. define minimal context metadata;
+4. decide Phoenix lifecycle and retention;
+5. decide first-CLI OpenRouter preset reconciliation;
+6. delegate implementation language and packaging to spike evidence;
+7. define canonical file trees and CLI contracts;
+8. approve the matrix and prepare SPIKE-001 for Codex.
