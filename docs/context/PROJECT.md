@@ -11,6 +11,7 @@ sources:
   - DECISIONS.md
   - ../design/CONFIGURATION_MATRIX.md
   - ../design/AGENT_AND_MODEL_ROLES.md
+  - ../design/GRAPHIFY_OUTPUT_POLICY.md
 verified:
   - by: repository-owner
     status: pending
@@ -70,7 +71,7 @@ portable-opencode install
 └── .graphifyignore
 ```
 
-Root `opencode.jsonc` owns runtime configuration. `.opencode/` owns native assets. Only directories with real content are created.
+Root `opencode.jsonc` owns runtime configuration. `.opencode/` owns native OpenCode assets. Only directories with real content are created.
 
 ## 6. Canonical agents and model roles
 
@@ -81,14 +82,9 @@ primary: build, plan
 subagents: general, explore, scout
 ```
 
-The personal scaffold adds only:
+The scaffold adds only non-mutating `review` and `verify` subagents.
 
-```text
-review
-verify
-```
-
-Both are non-mutating subagents. Model/provider policy uses three semantic roles:
+Model/provider policy uses:
 
 ```text
 main   → build
@@ -98,11 +94,31 @@ fast   → general, explore, scout, small_model
 
 Concrete models remain replaceable through OpenRouter presets. Exact OpenCode preset references require `SPIKE-002`.
 
-## 7. Problem
+## 7. Graphify output ownership
+
+`DEC-019` preserves structural continuity with a minimal Git allowlist:
+
+```text
+versioned:
+  graphify-out/graph.json
+  graphify-out/GRAPH_REPORT.md
+  graphify-out/manifest.json
+
+ignored:
+  graph.html
+  cache/
+  cost.json
+  query logs
+  optional exports
+```
+
+The manifest is versioned only after `SPIKE-004` verifies portability and absence of private paths. Stale graph state marks the project `dirty`; missing or corrupt `graph.json` blocks readiness.
+
+## 8. Problem
 
 Without coordination, a personal agentic environment accumulates scattered instructions, implicit permissions, coupled model choices, disappearing knowledge, stale graph/context, opaque cost/routing and irreproducible setup.
 
-## 8. Proposed solution
+## 9. Proposed solution
 
 Provide one workflow that configures and verifies:
 
@@ -115,7 +131,7 @@ Provide one workflow that configures and verifies:
 7. semantic project initialization;
 8. context, verification and continuity.
 
-## 9. Core scope
+## 10. Core scope
 
 - inspect, plan, apply, verify and diagnose desired state;
 - install and configure OpenCode/OpenRouter coherently;
@@ -123,12 +139,13 @@ Provide one workflow that configures and verifies:
 - run local observability;
 - generate canonical OpenCode config/assets and curated context;
 - provide only required agents, commands, skills, plugins and tools;
+- generate and maintain the Graphify output allowlist;
 - encode permissions and privacy;
 - maintain graph freshness, provenance and continuity;
 - distinguish healthy, ready, dirty, degraded and blocked;
 - support backups, upgrades and recovery.
 
-## 10. Explicit non-goals
+## 11. Explicit non-goals
 
 - a new coding client or generic multi-agent framework;
 - WSL, Linux or macOS parity;
@@ -137,10 +154,10 @@ Provide one workflow that configures and verifies:
 - autonomous background agents;
 - arbitrary legacy migration;
 - remote-first observability;
-- agent catalogues;
+- agent catalogues or Graphify export catalogues;
 - a configuration TUI before the CLI is proven.
 
-## 11. Current repository state
+## 12. Current repository state
 
 Completed:
 
@@ -151,6 +168,7 @@ Completed:
 - matrix reduction from 177 to 81 contracts;
 - root `opencode.jsonc` plus `.opencode/` asset decision;
 - native agent reuse, `review`/`verify`, and `main`/`reason`/`fast` policy;
+- Graphify minimal versioned-output policy;
 - synchronized machine-readable state.
 
 Not completed:
@@ -161,15 +179,14 @@ Not completed:
 - technical spikes;
 - implementation, tests or releases.
 
-## 12. Remaining resolution items
+## 13. Remaining resolution items
 
 1. implementation language and packaging from spike evidence;
-2. Graphify output versioning;
-3. minimal context metadata;
-4. Phoenix lifecycle and retention;
-5. first-CLI OpenRouter preset reconciliation.
+2. minimal context metadata;
+3. Phoenix lifecycle and retention;
+4. first-CLI OpenRouter preset reconciliation.
 
-## 13. Constraints
+## 14. Constraints
 
 - solve the owner's workflow first;
 - use native upstream surfaces;
@@ -178,8 +195,8 @@ Not completed:
 - keep defaults safe and inspectable;
 - make operations deterministic, idempotent and recoverable;
 - do not claim unverified support;
-- retain only abstractions with current value.
+- retain only abstractions and generated artefacts with current value.
 
-## 14. Definition-phase completion
+## 15. Definition-phase completion
 
 The phase completes when remaining items are accepted or delegated to evidence, the matrix is approved, file ownership and CLI contracts are explicit, the specification is synchronized to v0.3 and SPIKE-001 can be executed without product invention.
