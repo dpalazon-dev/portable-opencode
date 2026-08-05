@@ -53,6 +53,7 @@ The Ratatui configuration TUI is parked until the CLI can install, inspect, plan
 - [x] minimal `CONVENTIONS.md` and `OPERATIONS.md`;
 - [x] accepted decisions and machine-readable project state;
 - [x] Windows native selected as the canonical environment;
+- [x] `.opencode/opencode.jsonc` selected as the canonical project OpenCode config;
 - [x] canonical context index and concise log;
 - [ ] publish the complete canonical specification in GitHub;
 - [ ] revise the specification to a personal-first v0.3 after matrix approval.
@@ -62,7 +63,7 @@ The Ratatui configuration TUI is parked until the CLI can install, inspect, plan
 - [x] initial broad configuration matrix;
 - [x] research current official configuration surfaces;
 - [ ] approve the reduced personal-first configuration matrix;
-- [ ] define the canonical configuration file tree;
+- [ ] define the canonical configuration file tree around root `AGENTS.md`, `.opencode/`, `docs/context/`, `.portable-opencode/` and Graphify assets;
 - [ ] define generated, copied, linked and private file ownership;
 - [ ] define the local override mechanism;
 - [ ] define JSON Schemas for portable configuration and state;
@@ -94,14 +95,17 @@ The Ratatui configuration TUI is parked until the CLI can install, inspect, plan
 Validate on Windows without WSL:
 
 - installation and upgrade path;
-- global and project configuration precedence;
-- chosen project configuration location;
+- global configuration plus project `.opencode/opencode.jsonc` precedence;
+- discovery and merging of `.opencode/opencode.jsonc`;
+- behaviour when an unmanaged root `opencode.json` or `opencode.jsonc` also exists;
 - discovery of rules, agents, commands and skills;
 - permission merging and command-pattern behaviour;
 - provider options for OpenRouter;
 - plugin lifecycle and stability;
 - session and command metadata available for observability;
 - path, quoting and subprocess behaviour under PowerShell.
+
+`SPIKE-001` validates `DEC-016`; it does not reopen the project configuration path as a product choice.
 
 ### SPIKE-002 — OpenRouter policy
 
@@ -260,14 +264,17 @@ portable-opencode project doctor
 Generate or configure:
 
 - Git repository when absent;
-- project `AGENTS.md`;
+- project root `AGENTS.md`;
 - `docs/context/`;
-- local OpenCode config and assets;
+- `.opencode/opencode.jsonc`;
+- project agents, commands, skills, plugins and tools under `.opencode/` where applicable;
 - project state;
 - stack-detection result;
 - provisional `.gitignore` and `.graphifyignore`;
 - verification command manifest;
 - initial application baseline when selected.
+
+Detect root `opencode.json` or `opencode.jsonc` as an unmanaged conflict or migration case. Do not silently depend on both project configuration forms.
 
 ### Semantic initialization in OpenCode
 
@@ -289,6 +296,7 @@ Provide `/init-project` to:
 
 - identical inputs create an equivalent scaffold on Windows;
 - Windows path handling does not leak Unix assumptions into generated configuration;
+- `.opencode/opencode.jsonc` is the only managed project OpenCode config;
 - the project distinguishes `scaffolded`, `configuring`, `ready`, `dirty`, `degraded` and `blocked`;
 - the first graph and context are useful rather than merely present;
 - the generated project passes its verification manifest.
