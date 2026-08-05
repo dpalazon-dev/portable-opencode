@@ -106,10 +106,26 @@ portable-opencode owns inspect, plan, apply, verify, state and coordination
 
 A dependency or workflow that only works through WSL does not satisfy the canonical path. It must provide a native Windows route, receive a narrow Windows adapter or be replaced.
 
+## 2026-08-05 — Canonical OpenCode project configuration selected
+
+**Outcome**
+
+- accepted `DEC-016 — Use .opencode/opencode.jsonc as the canonical project configuration`;
+- selected `<project>/.opencode/opencode.jsonc` as the only project-level OpenCode config generated and managed by portable-opencode;
+- retained `<project>/AGENTS.md` at the repository root as the native operating entry point;
+- grouped project agents, commands, skills, plugins and tools under `.opencode/` where supported;
+- converted root `opencode.json` or `opencode.jsonc` into an explicit conflict or migration finding;
+- updated roadmap, matrix and machine-readable state;
+- reduced unresolved personal defaults from seven to six.
+
+**Resulting constraint**
+
+`SPIKE-001` must validate discovery, merge behaviour and root-config conflict handling on Windows. It must not reopen the selected path as a product decision.
+
 **Current status**
 
-The reduced matrix remains pending owner review. The primary environment default is resolved.
+The reduced matrix remains pending owner review. Two personal defaults are resolved.
 
 **Recommended next action**
 
-Choose one canonical OpenCode project configuration form: root `opencode.jsonc` or `.opencode/opencode.jsonc`.
+Choose the initial semantic roles and required OpenCode agents for the canonical personal workflow.
