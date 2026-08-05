@@ -41,6 +41,7 @@ verified:
 | DEC-017 | accepted | Use root `opencode.jsonc` plus `.opencode/` native assets |
 | DEC-018 | accepted | Reuse native OpenCode agents and use three semantic model roles |
 | DEC-019 | accepted | Version a minimal allowlist of Graphify output |
+| DEC-020 | accepted | Reconcile managed OpenRouter presets declaratively |
 
 ---
 
@@ -123,14 +124,30 @@ MCPs, GitHub automation, remote servers, community catalogues, local-model profi
 
 TypeScript is the leading option because it aligns with OpenCode extensions, schemas and generators. Acceptance requires native Windows packaging, process, filesystem, update and migration evidence.
 
+This is no longer an owner-preference question. SPIKE-001 through SPIKE-004 and the first CLI prototype must provide the evidence.
+
 ---
 
 ## DEC-010 — Use Arize Phoenix as the MVP observability backend
 
 **Status:** proposed  
-**Date:** 2026-08-04
+**Date:** 2026-08-04  
+**Design:** [DESIGN-005](../design/OBSERVABILITY_LIFECYCLE.md)
 
-Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI. Native Windows lifecycle, resource usage, retention, redaction and ingestion require SPIKE-003. Phoenix is not the proxy itself.
+The intended default is:
+
+```text
+native terminal process
+isolated managed Python environment
+loopback only
+SQLite under %LOCALAPPDATA%
+30-day retention
+telemetry and external resources disabled
+on-demand lifecycle
+no Docker, WSL, PostgreSQL or Windows service
+```
+
+Acceptance remains conditional on SPIKE-003 proving transparent proxy ingestion, safe Windows lifecycle and acceptable resource use.
 
 ---
 
@@ -140,56 +157,11 @@ Use Phoenix locally as the reference OTLP/OpenInference collector and trace UI. 
 **Date:** 2026-08-05  
 **Design:** [DESIGN-004](../design/CONTEXT_METADATA_SCHEMA.md)
 
-### Decision
+Non-reserved curated documents require only `type`, `title`, `description` and `status`. Conditional fields are limited to `id`, structured `sources`, `resource`, `tags`, `generated` and `decision`.
 
-Every non-reserved curated Markdown document requires only:
+`created`, `modified` and generic `verified` are removed. `index.md` and `log.md` are frontmatter-free. Parsed metadata is validated against `schemas/context-document.schema.json`.
 
-```yaml
-type: <document type>
-title: <display title>
-description: <one-line responsibility>
-status: <document lifecycle>
-```
-
-Conditional fields are limited to:
-
-```text
-id
-sources
-resource
-tags
-generated
-decision
-```
-
-`index.md` and `log.md` are reserved navigation/history files and have no frontmatter.
-
-### Removed fields
-
-- `created` and `modified` are removed because Git already owns history and manual timestamps create churn;
-- generic `verified` is removed because permanent `pending` values are not evidence;
-- verification belongs to decisions, spikes, tests and `.portable-opencode/state.json`;
-- string-only source lists are replaced by optional source objects containing at least `resource`.
-
-### Compatibility position
-
-The schema preserves the useful OKF model—Markdown, YAML frontmatter, typed concepts, optional provenance and reserved index/log files—but remains repository-owned. Full trust, attestation and computation families are not MVP requirements.
-
-Parsed frontmatter is validated against:
-
-```text
-schemas/context-document.schema.json
-```
-
-### Migration consequence
-
-Existing documents still contain inherited fields. The decision is accepted, but `docs-only` verification remains pending until a controlled migration:
-
-1. removes deprecated fields;
-2. removes frontmatter from `index.md` and `log.md`;
-3. converts only material sources to structured objects;
-4. validates all non-reserved frontmatter;
-5. preserves document bodies except necessary link corrections.
+Existing documents require a controlled migration before `docs-only` can pass.
 
 ---
 
@@ -208,7 +180,7 @@ Packaging follows language, Windows-native installation evidence and the upgrade
 **Date:** 2026-08-05  
 **Feature:** [FEAT-001](../features/CONFIGURATION_TUI.md)
 
-Park Ratatui until `status`, `inspect`, `plan`, `apply`, `doctor`, `install` and `init-project` work end to end. A future TUI may only be a thin adapter over those operations.
+Park Ratatui until the complete CLI path works. A future TUI may only be a thin adapter over stable operations.
 
 ---
 
@@ -246,7 +218,7 @@ This decision confused OpenCode's asset directory with its documented project ru
 
 Root `opencode.jsonc` is canonical runtime configuration. `.opencode/` stores native agents, commands, skills, plugins, tools and themes. Root `AGENTS.md` remains the repository operating entry point.
 
-Root `opencode.json` is a migration candidate; dual root configs are blocking; `.opencode/opencode.json(c)` is misplaced; environment and managed config sources are reported as provenance.
+Root `opencode.json` is a migration candidate; dual root configs are blocking; `.opencode/opencode.json(c)` is misplaced; environment and managed sources are reported as provenance.
 
 ---
 
@@ -256,7 +228,7 @@ Root `opencode.json` is a migration candidate; dual root configs are blocking; `
 **Date:** 2026-08-05  
 **Design:** [DESIGN-002](../design/AGENT_AND_MODEL_ROLES.md)
 
-Preserve native `build`, `plan`, `general`, `explore` and `scout`. Add only non-mutating `review` and `verify` subagents.
+Preserve native `build`, `plan`, `general`, `explore` and `scout`. Add only non-mutating `review` and `verify`.
 
 ```text
 build                 → main
@@ -275,18 +247,49 @@ Expected preset slugs are `portable-main`, `portable-reason` and `portable-fast`
 **Date:** 2026-08-05  
 **Design:** [DESIGN-003](../design/GRAPHIFY_OUTPUT_POLICY.md)
 
-Version only:
+Version `graph.json`, `GRAPH_REPORT.md` and a validated portable `manifest.json`. Ignore HTML, cache, cost, query logs and optional exports. Stale graph marks `dirty`; corrupt graph blocks readiness.
+
+---
+
+## DEC-020 — Reconcile managed OpenRouter presets declaratively
+
+**Status:** accepted  
+**Date:** 2026-08-05  
+**Design:** [DESIGN-006](../design/OPENROUTER_PRESET_RECONCILIATION.md)
+
+The versioned local manifest at `config/openrouter/presets.jsonc` is the desired state for exactly:
 
 ```text
-graphify-out/graph.json
-graphify-out/GRAPH_REPORT.md
-graphify-out/manifest.json
+portable-main
+portable-reason
+portable-fast
 ```
 
-Ignore HTML, cache, cost, query logs and optional exports. The manifest remains conditional on SPIKE-004 portability and private-path validation. Stale output marks `dirty`; corrupt graph blocks readiness.
+The CLI performs:
 
-## Open questions
+```text
+inspect remote state
+→ normalize and diff
+→ plan create/new-version operations
+→ explicit approval
+→ apply one slug at a time
+→ verify designated version
+→ run synthetic smoke tests
+```
 
-- Which implementation language and packaging approach survive the technical spikes?
-- How are OpenRouter presets reconciled in the first CLI?
-- What Phoenix lifecycle and retention policy is acceptable on Windows native?
+Rules:
+
+- missing managed presets are created after approval;
+- drift creates a new active version and preserves history;
+- remote changes never occur during inspect or plan;
+- no preset is deleted, archived or renamed automatically;
+- presets outside the three managed slugs are ignored;
+- partial outcomes are recorded and verified individually;
+- inability to reconcile reproducibly leaves policy blocked or explicitly degraded rather than falling back silently to manual setup;
+- API keys remain private;
+- exact OpenCode preset representation remains SPIKE-002 evidence.
+
+## Evidence-gated decisions remaining
+
+- `DEC-009`: language and packaging after Windows-native prototypes;
+- `DEC-010`: Phoenix acceptance after SPIKE-003.
