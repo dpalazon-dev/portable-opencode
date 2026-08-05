@@ -40,6 +40,44 @@
     ],
     "runtime_validation": "pending-spike-001"
   },
+  "agent_model_policy": {
+    "decision": "DEC-018",
+    "design": "docs/design/AGENT_AND_MODEL_ROLES.md",
+    "native_primary_agents": [
+      "build",
+      "plan"
+    ],
+    "native_subagents": [
+      "general",
+      "explore",
+      "scout"
+    ],
+    "custom_subagents": [
+      "review",
+      "verify"
+    ],
+    "semantic_roles": [
+      "main",
+      "reason",
+      "fast"
+    ],
+    "preset_slugs": {
+      "main": "portable-main",
+      "reason": "portable-reason",
+      "fast": "portable-fast"
+    },
+    "mapping": {
+      "build": "main",
+      "plan": "reason",
+      "review": "reason",
+      "verify": "reason",
+      "general": "fast",
+      "explore": "fast",
+      "scout": "fast",
+      "small_model": "fast"
+    },
+    "preset_reference_validation": "pending-spike-002"
+  },
   "initialization": {
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
@@ -97,11 +135,17 @@
       "reduction_required": false,
       "resolved_personal_defaults": [
         "primary-environment-windows-native",
-        "opencode-project-config-root-jsonc-with-dot-opencode-assets"
+        "opencode-project-config-root-jsonc-with-dot-opencode-assets",
+        "native-agents-with-main-reason-fast-roles"
       ],
-      "remaining_personal_defaults": 6,
-      "next_action": "choose_initial_semantic_roles_and_required_agents",
+      "remaining_personal_defaults": 5,
+      "next_action": "choose_graphify_output_versioning_policy",
       "completion_gate": "owner_verified_and_spike_links_confirmed"
+    },
+    "agent_model_roles": {
+      "id": "DESIGN-002",
+      "status": "active_pending_runtime_validation",
+      "document": "docs/design/AGENT_AND_MODEL_ROLES.md"
     }
   },
   "features": {
@@ -120,6 +164,7 @@
     "status": "inactive_no_source_implementation",
     "dirty": false,
     "ignore_file": ".graphifyignore",
+    "output_versioning_policy": "pending-owner-decision",
     "last_update": null,
     "pending_decisions": []
   },
@@ -142,18 +187,19 @@
     "result": "pending"
   },
   "decisions": {
-    "accepted": 11,
+    "accepted": 12,
     "proposed": 3,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
     "milestone": "configuration-design-owner-review",
-    "step": "choose-initial-semantic-roles-and-required-agents",
+    "step": "choose-graphify-output-versioning-policy",
     "documents": [
       "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
-      "docs/design/CONFIGURATION_MATRIX.md"
+      "docs/design/CONFIGURATION_MATRIX.md",
+      "docs/design/AGENT_AND_MODEL_ROLES.md"
     ]
   },
   "updated_at": "2026-08-05T10:24:00+02:00"
