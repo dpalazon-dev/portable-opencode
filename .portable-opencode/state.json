@@ -40,6 +40,18 @@
     ],
     "runtime_validation": "pending-spike-001"
   },
+  "openrouter": {
+    "decision": "DEC-020",
+    "design": "docs/design/OPENROUTER_PRESET_RECONCILIATION.md",
+    "manifest_path": "config/openrouter/presets.jsonc",
+    "schema": "schemas/openrouter-presets.schema.json",
+    "managed_slugs": ["portable-main", "portable-reason", "portable-fast"],
+    "reconciliation": "inspect-plan-explicit-apply-verify",
+    "missing_policy": "create-after-approval",
+    "drift_policy": "create-new-active-version-after-approval",
+    "delete_policy": "never-automatic",
+    "preset_reference_validation": "pending-spike-002"
+  },
   "agent_model_policy": {
     "decision": "DEC-018",
     "design": "docs/design/AGENT_AND_MODEL_ROLES.md",
@@ -47,11 +59,6 @@
     "native_subagents": ["general", "explore", "scout"],
     "custom_subagents": ["review", "verify"],
     "semantic_roles": ["main", "reason", "fast"],
-    "preset_slugs": {
-      "main": "portable-main",
-      "reason": "portable-reason",
-      "fast": "portable-fast"
-    },
     "mapping": {
       "build": "main",
       "plan": "reason",
@@ -61,8 +68,7 @@
       "explore": "fast",
       "scout": "fast",
       "small_model": "fast"
-    },
-    "preset_reference_validation": "pending-spike-002"
+    }
   },
   "initialization": {
     "environment": "not_applicable",
@@ -84,14 +90,14 @@
     "owner_verification": "pending"
   },
   "scope_alignment": {
-    "project": "aligned",
+    "project": "pending-final-sync",
     "vision": "aligned",
     "architecture": "aligned",
-    "conventions": "pending-metadata-policy-update",
-    "operations": "pending-metadata-policy-update",
+    "conventions": "aligned",
+    "operations": "aligned",
     "configuration_tui": "deferred",
-    "roadmap": "pending-metadata-policy-update",
-    "configuration_matrix": "reduced_pending_owner_review"
+    "roadmap": "pending-final-sync",
+    "configuration_matrix": "owner-defaults-resolved-pending-contracts-and-evidence"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
@@ -102,43 +108,35 @@
     "project_lifecycle": "separate",
     "implementation_shape": "small-core-with-native-tool-surfaces"
   },
-  "research": {
-    "configuration_surfaces": {
-      "id": "RESEARCH-001",
-      "status": "corrected_complete_pending_owner_review",
-      "document": "docs/research/CONFIGURATION_SURFACE_RESEARCH.md",
-      "reviewed_at": "2026-08-05",
-      "systems": ["opencode", "openrouter", "graphify", "rtk", "phoenix"],
-      "correction": "project-runtime-config-is-root-opencode-jsonc"
-    }
-  },
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
-      "status": "reduced_pending_owner_review",
+      "status": "owner-defaults-resolved-pending-contracts-and-evidence",
       "document": "docs/design/CONFIGURATION_MATRIX.md",
       "capability_count": 81,
       "previous_capability_count": 177,
-      "reduction_required": false,
       "resolved_personal_defaults": [
         "primary-environment-windows-native",
         "opencode-project-config-root-jsonc-with-dot-opencode-assets",
         "native-agents-with-main-reason-fast-roles",
         "graphify-minimal-versioned-output-allowlist",
-        "minimal-repository-owned-context-metadata"
+        "minimal-repository-owned-context-metadata",
+        "phoenix-native-on-demand-sqlite-30-day-intent",
+        "declarative-openrouter-preset-reconciliation"
       ],
-      "remaining_personal_defaults": 3,
-      "next_action": "decide_phoenix_windows_lifecycle_and_retention",
-      "completion_gate": "owner_verified_and_spike_links_confirmed"
+      "remaining_personal_defaults": 0,
+      "evidence_gated_decisions": ["DEC-009", "DEC-010", "DEC-012"],
+      "next_action": "define_canonical_file_trees_and_cli_contracts",
+      "completion_gate": "metadata_migrated_contracts_defined_spikes_mapped_owner_verified"
     },
     "agent_model_roles": {
       "id": "DESIGN-002",
-      "status": "active_pending_runtime_validation",
+      "status": "active_pending-runtime-validation",
       "document": "docs/design/AGENT_AND_MODEL_ROLES.md"
     },
     "graphify_output_policy": {
       "id": "DESIGN-003",
-      "status": "active_pending_spike-004-validation",
+      "status": "active_pending-spike-004-validation",
       "document": "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
     },
     "context_metadata_schema": {
@@ -146,6 +144,17 @@
       "status": "active_pending-repository-migration",
       "document": "docs/design/CONTEXT_METADATA_SCHEMA.md",
       "schema": "schemas/context-document.schema.json"
+    },
+    "observability_lifecycle": {
+      "id": "DESIGN-005",
+      "status": "proposed_pending-spike-003",
+      "document": "docs/design/OBSERVABILITY_LIFECYCLE.md"
+    },
+    "openrouter_preset_reconciliation": {
+      "id": "DESIGN-006",
+      "status": "active_pending-spike-002-validation",
+      "document": "docs/design/OPENROUTER_PRESET_RECONCILIATION.md",
+      "schema": "schemas/openrouter-presets.schema.json"
     }
   },
   "features": {
@@ -172,23 +181,24 @@
       "graphify-out/GRAPH_REPORT.md",
       "graphify-out/manifest.json"
     ],
-    "ignored_outputs": [
-      "graphify-out/graph.html",
-      "graphify-out/cache/",
-      "graphify-out/cost.json",
-      "graphify query logs",
-      "optional graph exports"
-    ],
     "manifest_validation": "pending-spike-004",
-    "last_update": null,
-    "pending_decisions": []
+    "last_update": null
   },
   "observability": {
-    "status": "proposed",
+    "decision": "DEC-010",
+    "design": "docs/design/OBSERVABILITY_LIFECYCLE.md",
+    "status": "proposed-pending-spike-003",
     "backend": "phoenix",
-    "validated": false,
+    "deployment": "native-terminal-process",
+    "storage": "private-sqlite",
+    "working_dir": "%LOCALAPPDATA%\\portable-opencode\\phoenix",
+    "retention_days": 30,
+    "lifecycle": "on-demand",
+    "loopback_only": true,
     "content_capture_default": false,
-    "windows_native_validation_required": true
+    "telemetry_enabled": false,
+    "external_resources_enabled": false,
+    "validated": false
   },
   "operations": {
     "model": "lightweight-personal-workflow",
@@ -202,19 +212,19 @@
     "result": "pending-metadata-migration"
   },
   "decisions": {
-    "accepted": 14,
+    "accepted": 15,
     "proposed": 2,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
-    "milestone": "configuration-design-owner-review",
-    "step": "decide-phoenix-windows-lifecycle-and-retention",
+    "milestone": "configuration-contract-definition",
+    "step": "define-canonical-file-trees-and-cli-contracts",
     "documents": [
-      "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
       "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/design/CONTEXT_METADATA_SCHEMA.md"
+      "docs/design/OBSERVABILITY_LIFECYCLE.md",
+      "docs/design/OPENROUTER_PRESET_RECONCILIATION.md"
     ]
   },
   "updated_at": "2026-08-05T10:24:00+02:00"
