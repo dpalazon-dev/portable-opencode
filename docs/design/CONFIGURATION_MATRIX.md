@@ -17,6 +17,7 @@ sources:
   - ../SPECIFICATION.es.md
   - ../research/CONFIGURATION_SURFACE_RESEARCH.md
   - AGENT_AND_MODEL_ROLES.md
+  - GRAPHIFY_OUTPUT_POLICY.md
 verified:
   - by: repository-owner
     status: pending
@@ -66,8 +67,6 @@ Windows native
     └── themes/
 ```
 
-`DEC-017` supersedes the unsupported `.opencode/opencode.jsonc` convention.
-
 ### Agent and model policy
 
 ```text
@@ -77,7 +76,21 @@ custom subagents: review, verify
 semantic roles: main, reason, fast
 ```
 
-`DEC-018` and `DESIGN-002` govern mappings and permissions. Exact OpenCode preset references remain spike evidence.
+### Graphify versioning policy
+
+```text
+versioned:
+  graphify-out/graph.json
+  graphify-out/GRAPH_REPORT.md
+  graphify-out/manifest.json
+
+ignored:
+  graph.html
+  cache/
+  cost.json
+  query logs
+  optional exports
+```
 
 ### Effective OpenCode provenance
 
@@ -91,7 +104,7 @@ remote config
 → managed settings
 ```
 
-`portable-opencode` manages selected canonical files and reports other active sources. It does not flatten all upstream options into a second configuration language.
+`portable-opencode` manages selected canonical files and reports other active sources rather than creating a parallel configuration language.
 
 ---
 
@@ -175,7 +188,7 @@ remote config
 | GR-02 | Generate first graph during semantic initialization after a useful source baseline | Graphify extraction/update | source coverage and useful graph · A/S |
 | GR-03 | Generate `.graphifyignore` from stack, tree and owner decisions; never copy blindly | template fragments + project file | graph quality comparison · A/S |
 | GR-04 | Respect `.gitignore` merge semantics; use `--no-gitignore` only explicitly | native ignore engine | Windows path and negation fixture · D/S |
-| GR-05 | Version only graph artefacts that improve continuity; keep cost/cache private | explicit output inventory | clone/rebuild and repo-noise review · P/S |
+| GR-05 | Version only `graph.json`, `GRAPH_REPORT.md` and validated portable `manifest.json`; ignore HTML, cache, cost, logs and optional exports | generated `.gitignore` allowlist + DESIGN-003 | clone/update, private-path and deterministic-output tests · A/D/S · DEC-019 |
 | GR-06 | Use explicit graph updates before automatic hooks | native update exposed through command/CLI | dirty-to-fresh fixture · A/S |
 | GR-07 | Defer hooks until explicit updates are reliable and observable | native hook installer | loop, latency and recovery test · P/S |
 | GR-08 | Record freshness and quality findings in project state | portable state + diagnostics | stale/noisy graph visible at ready gate · A/S |
@@ -220,7 +233,7 @@ remote config
 | CLI-01 | Choose language and packaging after spikes; optimize native Windows install, updates and process control | decision + prototypes | clean-machine comparison · S |
 | CLI-02 | Core commands are `status`, `inspect`, `plan`, `apply`, `doctor` | CLI contracts | unit/integration fixtures · A |
 | CLI-03 | `install` converges the Windows machine to desired global state | adapters + plans | clean and existing-config fixtures · A |
-| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets including `review` and `verify`, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017/018 |
+| CLI-04 | `init-project <path>` generates root `opencode.jsonc`, root `AGENTS.md`, required `.opencode/` assets, Graphify allowlist, context and state | templates + Windows filesystem | paths-with-spaces and rerun fixtures · A · DEC-017/018/019 |
 | CLI-05 | Add explicit observability and graph lifecycle commands only where native commands are insufficient | narrow subprocess adapters | interruption and failure tests · P |
 | CLI-06 | Updates compare versions, plan migrations, back up and apply | version manifest + migrations | upgrade and rollback fixtures · P |
 | CLI-07 | Use small `.ps1` scripts only for bootstrap/recovery that cannot belong to the CLI | PowerShell scripts | clean session, quoting and exit tests · A/S |
@@ -234,8 +247,8 @@ remote config
 | VER-01 | Validate links, frontmatter, JSON/JSONC and schemas | verification scripts | active docs-only profile · A |
 | VER-02 | Load root `opencode.jsonc`, discover `.opencode/` assets and exercise permissions on Windows | OpenCode fixture | invalid config blocks healthy/ready · S |
 | VER-03 | Resolve `main`, `reason` and `fast` presets and returned policy metadata through OpenCode | authenticated inference | missing required role blocks healthy · S |
-| VER-04 | Build a useful Graphify graph and verify RTK rewriting without losing failure detail | fixture project | Graphify blocks ready; RTK degrades · S |
-| VER-05 | Ready requires context, application baseline, valid root OpenCode config, no blocking conflict, agent/role resolution, LSP/formatter, graph and verification manifest | `project doctor` | critical unresolved decision blocks · A |
+| VER-04 | Build and persist useful Graphify allowlist output; verify RTK rewriting without losing failure detail | fixture project | graph failure blocks ready; RTK failure degrades · A/S |
+| VER-05 | Ready requires context, valid OpenCode config, agent/role resolution, LSP/formatter, versioned `graph.json` and report, and verification manifest | `project doctor` | critical unresolved decision blocks · A |
 | VER-06 | E2E: clean Windows → healthy environment → ready project → recoverable later session | disposable Windows environment | no WSL or hidden chat context · A/S |
 
 ## 14. Matrix result
@@ -249,21 +262,21 @@ Windows native
 root opencode.jsonc + .opencode assets
 native OpenCode agents + review/verify
 main/reason/fast semantic roles
+minimal Graphify output allowlist
 ```
 
-## 15. Remaining personal defaults
+## 15. Remaining resolution items
 
 1. implementation language and packaging after spikes;
-2. Graphify output versioning policy;
-3. minimal context metadata schema;
-4. Phoenix lifecycle and retention on Windows;
-5. OpenRouter preset reconciliation behaviour in the first CLI.
+2. minimal context metadata schema;
+3. Phoenix lifecycle and retention on Windows;
+4. OpenRouter preset reconciliation behaviour in the first CLI.
 
 ## 16. Approval gate
 
 Move this document to `active` when:
 
-- the five defaults are accepted or delegated to named evidence;
+- the four remaining items are accepted or delegated to named evidence;
 - every `S` contract maps to SPIKE-001 through SPIKE-004 or an implementation test;
 - canonical global/project file trees and CLI contracts are documented;
 - the repository owner confirms this is the actual personal workflow.
