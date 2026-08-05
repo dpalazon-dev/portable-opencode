@@ -90,10 +90,26 @@ portable-opencode owns inspect, plan, apply, verify, state and coordination
 - removed duplicated rows, team assumptions, profile catalogues and TUI-driven concepts;
 - linked remaining uncertainty to four active technical spikes.
 
+## 2026-08-05 — Windows-native environment selected
+
+**Outcome**
+
+- accepted `DEC-015 — Support Windows natively without WSL in the MVP`;
+- selected PowerShell as the bootstrap and recovery shell;
+- selected Windows Terminal as the primary terminal surface;
+- removed Bash, POSIX shell and WSL from MVP requirements;
+- required all active spikes and the canonical end-to-end path to run natively on Windows;
+- updated project scope, roadmap, matrix and machine-readable state;
+- reduced the unresolved personal defaults from eight to seven.
+
+**Resulting constraint**
+
+A dependency or workflow that only works through WSL does not satisfy the canonical path. It must provide a native Windows route, receive a narrow Windows adapter or be replaced.
+
 **Current status**
 
-The roadmap, research and reduced matrix await owner review.
+The reduced matrix remains pending owner review. The primary environment default is resolved.
 
 **Recommended next action**
 
-Resolve the eight personal defaults listed in `DESIGN-001`, beginning with the primary supported environment and the canonical OpenCode project configuration form.
+Choose one canonical OpenCode project configuration form: root `opencode.jsonc` or `.opencode/opencode.jsonc`.
