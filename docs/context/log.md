@@ -113,6 +113,17 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - the matrix remains draft pending contracts, metadata migration, spike mapping and owner approval;
 - project state advances from owner-default review to configuration-contract definition.
 
+## 2026-08-06 — Managed configuration concepts accepted
+
+- accepted `DEC-021` and created `DESIGN-007`;
+- defined `rendered`, `copied`, `linked`, `queried` and `private` materialization modes;
+- selected copied/rendered defaults and made links Windows evidence-gated;
+- prohibited replacement, detachment or deletion without proven ownership;
+- moved the supported-component version manifest into contract definition;
+- constrained PowerShell bootstrap to establishing and invoking the CLI;
+- added generated-file, bug-reproduction, context-pressure and parallel-session validation rules;
+- explicitly excluded general dotfiles, desktop personalization and terminal multiplexing from the MVP.
+
 **Recommended next action**
 
-Define canonical global and project file trees, ownership and exact CLI command contracts before delegating the four spikes.
+Instantiate DESIGN-007 as canonical global and project resource manifests, ownership schemas and exact CLI contracts before delegating the four spikes.
