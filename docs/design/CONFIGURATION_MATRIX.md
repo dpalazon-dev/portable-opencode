@@ -4,26 +4,6 @@ id: DESIGN-001
 title: Portable OpenCode Configuration Matrix
 description: Reduced personal-first Windows-native configuration contracts grounded in the canonical specification and current upstream documentation.
 status: draft
-created: 2026-08-04
-modified: 2026-08-05
-sources:
-  - ../context/PROJECT.md
-  - ../context/VISION.md
-  - ../context/ARCHITECTURE.md
-  - ../context/CONVENTIONS.md
-  - ../context/OPERATIONS.md
-  - ../context/DECISIONS.md
-  - ../context/ROADMAP.md
-  - ../SPECIFICATION.es.md
-  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
-  - AGENT_AND_MODEL_ROLES.md
-  - GRAPHIFY_OUTPUT_POLICY.md
-  - CONTEXT_METADATA_SCHEMA.md
-  - OBSERVABILITY_LIFECYCLE.md
-  - OPENROUTER_PRESET_RECONCILIATION.md
-verified:
-  - by: repository-owner
-    status: pending
 ---
 
 # Configuration matrix
@@ -113,6 +93,16 @@ local manifest
 
 No automatic remote deletion, rename or archival.
 
+### Managed configuration materialization
+
+```text
+rendered or copied by default
+linked only after Windows-native evidence
+queried state remains externally owned
+private values and state stay outside Git
+mutate or remove only proven-owned resources
+```
+
 ### Effective OpenCode provenance
 
 ```text
@@ -135,12 +125,12 @@ remote config
 | CORE-02 | One optional private local override for demonstrated machine needs | private file outside Git | unsupported keys block · A |
 | CORE-03 | Inspect installed versions, Windows paths, active overrides and health before mutation | filesystem, env and CLI adapters | missing required evidence blocks · A |
 | CORE-04 | Produce deterministic inspectable plans before every mutation | typed plan | equivalent input produces equivalent plan · A |
-| CORE-05 | Apply approved operations and back up managed files before replacement | managed-resource inventory | partial outcome recorded; ambiguity asks or blocks · A |
-| CORE-06 | Second run is no-op or explained drift | current vs desired state | unexplained divergence blocks apply · A |
+| CORE-05 | Apply approved operations only to proven-owned resources and back up managed files before replacement | managed-resource inventory + DESIGN-007 | partial outcome recorded; unknown ownership blocks mutation · A |
+| CORE-06 | Second run is no-op or explained drift; absence from desired state never authorizes deletion of unmanaged resources | current vs desired state | unexplained divergence or ownership ambiguity blocks apply · A |
 | CORE-07 | Environment states: absent, inspected, planned, installed, healthy, degraded, update-required, blocked | private environment state | predicates verified by doctor · A |
 | CORE-08 | Project states: uninitialized, scaffolded, configuring, ready, dirty, degraded, blocked | `.portable-opencode/state.json` | ready requires gates · A |
 | CORE-09 | Diagnostics expose stable code, severity, evidence, impact and remediation | diagnostic registry | JSON and human-output fixtures · A |
-| CORE-10 | Version all managed config/state; migrate only known versions | JSON Schema + explicit migrations | backup first; unknown version blocks · A |
+| CORE-10 | Version all managed config/state and supported component identities; migrate only known versions | schemas + supported-version manifest + explicit migrations | backup first; unknown version blocks · A |
 
 ## 5. OpenCode — 15
 
@@ -159,7 +149,7 @@ remote config
 | OC-11 | Use plugins/tools only for RTK or verified gaps | `.opencode/plugins/`, `.opencode/tools/` | load, hook and failure tests · S |
 | OC-12 | Risky operations ask/deny; `review` and `verify` deny edits | native permissions + per-agent overrides | adversarial and last-match fixtures · A/D/S |
 | OC-13 | Enable only stack-relevant Windows-compatible LSP/formatter | native `lsp` and `formatter` config | availability and project smoke test · D/S |
-| OC-14 | Use native compaction and watcher ignores | native config | long-session and self-loop fixtures · D/S |
+| OC-14 | Use native compaction and watcher ignores; expose reliable context pressure and compaction events when available | native config + session metadata | long-session, parallel-session and self-loop fixtures · D/S |
 | OC-15 | Sharing disabled; optional project TUI settings at root `tui.jsonc` | native config | load and no-share check · D |
 
 ### OpenCode conflicts
@@ -193,7 +183,7 @@ remote config
 |---|---|---|---|
 | OBS-01 | OpenCode uses a Windows localhost proxy for OpenRouter-compatible traffic | provider `baseURL` + native process | transparent inference test · S |
 | OBS-02 | Preserve SSE, tools, structured output, headers and errors | proxy contract | protocol fixture suite · S |
-| OBS-03 | Record project/session/agent/command/model/provider/usage/cost/latency/cache/fallback/error where available | OTel/OpenInference spans | field coverage · A/S |
+| OBS-03 | Record project/session/agent/command/model/provider/usage/cost/latency/cache/fallback/error plus reliable context-limit, utilization and compaction metadata where available | OTel/OpenInference spans | field coverage; unavailable values remain explicit · A/S |
 | OBS-04 | Content capture off; redact keys, auth headers and secret-like values | proxy redaction | secret persistence fixtures · A/S |
 | OBS-05 | Attempt Phoenix as native isolated process with private SQLite, loopback and 30-day retention; no Docker/WSL/Postgres/service | DESIGN-005 + Phoenix env | SPIKE-003 acceptance gate · P/D/S · DEC-010 |
 | OBS-06 | Correlate inference with OpenCode context where runtime metadata permits | plugin/events + attributes | session fixture · S |
@@ -254,8 +244,8 @@ remote config
 | CLI-03 | `install` converges global OpenCode, OpenRouter presets, RTK, Graphify and observability | adapters + plans | clean/existing machine fixtures · A/S |
 | CLI-04 | `init-project` generates canonical config/assets/context/graph policy/state | templates + Windows filesystem | spaces/rerun fixtures · A |
 | CLI-05 | Add component lifecycle commands only where native commands are insufficient | narrow adapters | interruption/failure · A/S |
-| CLI-06 | Updates compare, plan, back up and migrate | version manifest + functions | upgrade/rollback · A/S |
-| CLI-07 | Small `.ps1` bootstrap/recovery wrappers only | PowerShell | clean session/quoting/exit · A/S |
+| CLI-06 | Updates compare supported and installed versions, plan, back up and migrate | early supported-version manifest + functions | upgrade/rollback · A/S |
+| CLI-07 | Small `.ps1` bootstrap/recovery wrappers only; bootstrap establishes and invokes the CLI without duplicating lifecycle logic | PowerShell | clean session/quoting/exit/idempotence · A/S |
 | CLI-08 | JSON output and stable failure classes | serialization | schema/exit-code tests · A |
 | CLI-09 | Uninstall/detach later after ownership is proven | resource inventory | preserve-user-data tests · L |
 
@@ -285,7 +275,7 @@ DEC-012  final packaging after language evidence
 ## 15. Work remaining before activation
 
 - execute metadata migration and validation;
-- define complete global/project file trees and ownership;
+- instantiate DESIGN-007 as complete global/project resource manifests and ownership schemas;
 - define CLI command contracts, diagnostics and scripts;
 - map every `S` contract to SPIKE-001 through SPIKE-004 or an implementation test;
 - execute the spikes and resolve DEC-009/010/012;
