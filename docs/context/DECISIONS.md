@@ -3,17 +3,6 @@ type: Decision Log
 title: Portable OpenCode Decisions
 description: Accepted, proposed, superseded and deferred product and architecture decisions.
 status: active
-created: 2026-08-04
-modified: 2026-08-05
-sources:
-  - ../SPECIFICATION.es.md
-  - PROJECT.md
-  - VISION.md
-  - ARCHITECTURE.md
-  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
-verified:
-  - by: repository-owner
-    status: pending
 ---
 
 # Decisions
@@ -42,6 +31,7 @@ verified:
 | DEC-018 | accepted | Reuse native OpenCode agents and use three semantic model roles |
 | DEC-019 | accepted | Version a minimal allowlist of Graphify output |
 | DEC-020 | accepted | Reconcile managed OpenRouter presets declaratively |
+| DEC-021 | accepted | Materialize configuration explicitly and mutate only proven-owned resources |
 
 ---
 
@@ -288,6 +278,30 @@ Rules:
 - inability to reconcile reproducibly leaves policy blocked or explicitly degraded rather than falling back silently to manual setup;
 - API keys remain private;
 - exact OpenCode preset representation remains SPIKE-002 evidence.
+
+---
+
+## DEC-021 — Materialize configuration explicitly and mutate only proven-owned resources
+
+**Status:** accepted  
+**Date:** 2026-08-06  
+**Design:** [DESIGN-007](../design/MANAGED_CONFIGURATION_MATERIALIZATION.md)
+
+Every managed resource declares a canonical source, managed target, owner, materialization mode, mutability, content identity, backup policy, drift policy and verification.
+
+```text
+rendered  → generated from canonical inputs
+copied    → byte-equivalent native file
+linked    → exceptional, evidence-gated on Windows
+queried   → externally owned state inspected without adoption
+private   → local value or state outside Git
+```
+
+`rendered` and `copied` are the normal modes. Links are not a convenience default because an upstream application may rewrite the canonical repository through the target.
+
+The CLI may replace, detach or remove only resources whose ownership it can prove from recorded state and current evidence. Unmanaged or ambiguous resources are preserved and reported. Removing a resource from desired state produces a retirement plan; it never authorizes blind deletion.
+
+The same design fixes an early supported-component version manifest and a deliberately small PowerShell bootstrap that establishes the CLI but does not duplicate application logic.
 
 ## Evidence-gated decisions remaining
 
