@@ -22,6 +22,7 @@ The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.
 - [DESIGN-004 — Minimal Context Metadata Schema](../design/CONTEXT_METADATA_SCHEMA.md) defines curated document metadata and migration.
 - [DESIGN-005 — Windows-Native Observability Lifecycle](../design/OBSERVABILITY_LIFECYCLE.md) defines the Phoenix/proxy intent pending SPIKE-003.
 - [DESIGN-006 — OpenRouter Preset Reconciliation](../design/OPENROUTER_PRESET_RECONCILIATION.md) defines declarative three-preset management.
+- [DESIGN-007 — Managed Configuration Materialization](../design/MANAGED_CONFIGURATION_MATERIALIZATION.md) defines resource ownership, materialization, drift, versions and bootstrap boundaries.
 - [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) is deferred until the CLI is effective.
 
 ## Source responsibilities
@@ -46,7 +47,7 @@ The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.
 - all owner-level configuration defaults are resolved;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
 - metadata migration is in progress;
-- canonical file-tree and CLI contracts are the next work;
+- the materialization policy is accepted; concrete resource manifests and CLI contracts are the next work;
 - no executable implementation exists yet.
 
 ## Maintenance rule
