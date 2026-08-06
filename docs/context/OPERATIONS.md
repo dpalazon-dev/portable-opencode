@@ -35,6 +35,7 @@ Binding facts:
 - Graphify minimal output allowlist;
 - minimal context metadata schema;
 - declarative three-preset reconciliation;
+- explicit managed-resource materialization and proven-ownership mutation;
 - proposed native Phoenix lifecycle with private SQLite and 30-day retention;
 - the TUI is deferred;
 - all owner-level defaults are resolved;
@@ -74,22 +75,22 @@ Read state and relevant sources.
 Describe an observable result rather than an activity.
 
 ### Inspect evidence
-Use official documentation and reproducible PowerShell experiments.
+Use official documentation and reproducible PowerShell experiments. For a reported defect, first reproduce it through the closest feasible end-user or end-to-end path; otherwise record why reproduction is unavailable and what evidence substitutes for it.
 
 ### Plan
 Identify files, decisions, risks, validation and rollback/discard boundary.
 
 ### Change
-Make the smallest coherent change. Avoid profiles, unsupported paths, duplicate agents, unused abstractions, hidden platform expansion, unnecessary generated output and false implementation claims.
+Make the smallest coherent change. Avoid profiles, unsupported paths, duplicate agents, unused abstractions, hidden platform expansion, unnecessary generated output and false implementation claims. Never hand-edit generated artefacts: change their canonical source, generator or inputs and regenerate them. Preserve unrelated findings for a separate change unless they block the current outcome.
 
 ### Verify
 Match checks to risk:
 
 - docs: metadata schema, reserved files, links and state consistency;
-- config: schema, discovery, precedence and provenance;
+- config: schema, discovery, precedence, provenance, materialization, ownership and drift;
 - agents: modes, permissions and invocation;
 - presets: normalized diff, versioning, tools, privacy and fallback;
-- observability: protocol, redaction, PIDs, ports, retention and storage;
+- observability: protocol, redaction, PIDs, ports, retention, storage, context pressure and compaction correlation where available;
 - Graphify: scope, allowlist, determinism and manifest portability;
 - Windows: paths, quoting, exit codes, processes and locked files;
 - security: denied actions, redaction and backups.
@@ -164,8 +165,8 @@ Never version credentials, real `.env`, SSH keys, private overrides, observabili
 
 ## 11. Current next sequence
 
-1. define canonical global and project file trees and ownership;
-2. define CLI commands, diagnostics, outputs and PowerShell scripts;
+1. translate DESIGN-007 into concrete global/project resource manifests and schemas;
+2. define CLI commands, diagnostics, outputs and the minimal PowerShell bootstrap/recovery scripts;
 3. create missing state and resource schemas;
 4. execute metadata migration and validation;
 5. map matrix evidence gates to spikes/tests;
