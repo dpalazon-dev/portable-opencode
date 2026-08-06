@@ -36,6 +36,7 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [x] minimal context metadata schema;
 - [x] Phoenix intended Windows lifecycle and 30-day retention;
 - [x] declarative OpenRouter preset reconciliation;
+- [x] explicit managed-resource materialization and proven-ownership mutation;
 - [x] configuration matrix reduced to 81 contracts.
 
 ### Contract work remaining
@@ -43,8 +44,10 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [ ] migrate inherited context frontmatter and validate `schemas/context-document.schema.json`;
 - [ ] publish and synchronize the full personal-first specification v0.3;
 - [ ] define canonical global and project file trees;
-- [ ] define generated, copied, linked, queried and private ownership;
+- [x] define generated, copied, linked, queried and private ownership;
+- [ ] instantiate those rules as concrete managed-resource manifests;
 - [ ] define the private local override file and precedence;
+- [ ] create the supported-component version manifest before implementation;
 - [ ] create `.portable-opencode/state.schema.json`;
 - [ ] define environment state and managed-resource schemas;
 - [ ] create the concrete OpenRouter preset manifest after SPIKE-002 model-policy evidence;
@@ -73,8 +76,10 @@ Validate on Windows:
 - `.opencode/` assets;
 - built-in/custom agents, commands and permissions;
 - environment and managed override provenance;
+- copied, rendered and linked materialization behaviour on Windows;
 - `pwsh`, LSP, formatter, compaction and watcher behaviour;
-- plugin stability and session metadata.
+- plugin stability, parallel-session usability and session/context metadata;
+- context-pressure and compaction visibility without fabricated estimates.
 
 ### SPIKE-002 — OpenRouter policy
 
@@ -94,6 +99,7 @@ Validate `DESIGN-005`:
 - proxy transparency and OTLP HTTP ingestion;
 - loopback, SQLite and 30-day retention;
 - telemetry/external-resource disabling;
+- correlation of inference usage with reliable context-pressure and compaction metadata when OpenCode exposes it;
 - start, stop, PIDs, ports, locked files and recovery;
 - acceptable resource use.
 
@@ -133,7 +139,8 @@ Required properties:
 
 - deterministic plans and provenance;
 - no mutation during inspect/plan;
-- backups and managed-resource inventory;
+- backups and managed-resource inventory with proven ownership;
+- no replacement, detachment or removal of unmanaged or ambiguous resources;
 - idempotent reruns and drift reporting;
 - structured JSON and stable exit codes;
 - safe interruption and partial outcomes;
@@ -172,7 +179,7 @@ Support provenance, drift, graph freshness, context review, compaction/handoff, 
 
 ## 8. Phase 6 — Hardening and first release
 
-Deliver documentation/schema validation, unit/integration/contract tests, disposable fixtures, clean-Windows E2E, security/redaction/recovery scenarios, supported-version manifest, installation/recovery docs and the first tagged release.
+Deliver documentation/schema validation, unit/integration/contract tests, disposable fixtures, clean-Windows E2E, security/redaction/recovery scenarios, supported-version compatibility verification, installation/recovery docs and the first tagged release.
 
 ## 9. Parked work
 
@@ -183,4 +190,6 @@ Deliver documentation/schema validation, unit/integration/contract tests, dispos
 - profiles, teams and organizations;
 - MCP/local-model profiles;
 - alternate observability backends unless Phoenix fails its gate;
-- GitHub automation, marketplaces, background agents and hosted control planes.
+- GitHub automation, marketplaces, background agents and hosted control planes;
+- general dotfiles, editor, shell, font or desktop personalization;
+- a terminal multiplexer or multi-harness session manager unless repeated use proves a gap.
