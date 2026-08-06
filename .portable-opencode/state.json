@@ -21,6 +21,19 @@
     "exact_windows_version": "pending-supported-version-manifest",
     "exact_powershell_version": "pending-supported-version-manifest"
   },
+  "managed_configuration": {
+    "decision": "DEC-021",
+    "design": "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
+    "default_modes": ["rendered", "copied"],
+    "evidence_gated_mode": "linked",
+    "external_state_mode": "queried",
+    "local_only_mode": "private",
+    "mutation_policy": "proven-ownership-only",
+    "unknown_resource_policy": "preserve-and-report",
+    "retirement_policy": "explicit-plan-no-broad-cleanup",
+    "supported_version_manifest": "pending-contract-definition",
+    "bootstrap_policy": "minimal-powershell-establish-and-invoke-cli"
+  },
   "opencode": {
     "project_config_decision": "DEC-017",
     "superseded_project_config_decision": "DEC-016",
@@ -89,11 +102,15 @@
     "migration_status": "in-progress",
     "migrated_files": [
       "docs/context/PROJECT.md",
+      "docs/context/ARCHITECTURE.md",
       "docs/context/CONVENTIONS.md",
       "docs/context/OPERATIONS.md",
+      "docs/context/DECISIONS.md",
       "docs/context/ROADMAP.md",
       "docs/context/index.md",
-      "docs/context/log.md"
+      "docs/context/log.md",
+      "docs/design/CONFIGURATION_MATRIX.md",
+      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md"
     ],
     "owner_verification": "pending"
   },
@@ -105,7 +122,8 @@
     "operations": "aligned",
     "configuration_tui": "deferred",
     "roadmap": "aligned_pending_owner_review",
-    "configuration_matrix": "owner-defaults-resolved-pending-contracts-and-evidence"
+    "configuration_matrix": "owner-defaults-resolved-pending-contracts-and-evidence",
+    "managed_configuration_materialization": "aligned_pending-resource-manifests"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
@@ -114,7 +132,8 @@
     "profile_strategy": "single-canonical-configuration",
     "environment_lifecycle": "separate",
     "project_lifecycle": "separate",
-    "implementation_shape": "small-core-with-native-tool-surfaces"
+    "implementation_shape": "small-core-with-native-tool-surfaces",
+    "resource_mutation_boundary": "proven-ownership-only"
   },
   "design": {
     "configuration_matrix": {
@@ -130,11 +149,12 @@
         "graphify-minimal-versioned-output-allowlist",
         "minimal-repository-owned-context-metadata",
         "phoenix-native-on-demand-sqlite-30-day-intent",
-        "declarative-openrouter-preset-reconciliation"
+        "declarative-openrouter-preset-reconciliation",
+        "explicit-managed-resource-materialization"
       ],
       "remaining_personal_defaults": 0,
       "evidence_gated_decisions": ["DEC-009", "DEC-010", "DEC-012"],
-      "next_action": "define_canonical_file_trees_and_cli_contracts",
+      "next_action": "instantiate-resource-manifests-and-cli-contracts",
       "completion_gate": "metadata_migrated_contracts_defined_spikes_mapped_owner_verified"
     },
     "agent_model_roles": {
@@ -163,6 +183,12 @@
       "status": "active_pending-spike-002-validation",
       "document": "docs/design/OPENROUTER_PRESET_RECONCILIATION.md",
       "schema": "schemas/openrouter-presets.schema.json"
+    },
+    "managed_configuration_materialization": {
+      "id": "DESIGN-007",
+      "status": "active_pending-resource-manifests-and-windows-validation",
+      "document": "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
+      "decision": "DEC-021"
     }
   },
   "features": {
@@ -206,13 +232,17 @@
     "content_capture_default": false,
     "telemetry_enabled": false,
     "external_resources_enabled": false,
-    "validated": false
+    "validated": false,
+    "context_pressure_metadata": "pending-spike-001-and-spike-003",
+    "compaction_correlation": "pending-spike-001-and-spike-003"
   },
   "operations": {
     "model": "lightweight-personal-workflow",
     "codex_policy": "bounded-tasks-only",
     "active_verification_profile": "docs-only",
-    "bootstrap_shell": "powershell"
+    "bootstrap_shell": "powershell",
+    "defect_policy": "reproduce-user-facing-path-before-fix",
+    "generated_file_policy": "change-source-or-generator-and-regenerate"
   },
   "verification": {
     "profile": "docs-only",
@@ -220,20 +250,21 @@
     "result": "pending-metadata-migration"
   },
   "decisions": {
-    "accepted": 15,
+    "accepted": 16,
     "proposed": 2,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
     "milestone": "configuration-contract-definition",
-    "step": "define-canonical-file-trees-and-cli-contracts",
+    "step": "instantiate-managed-resource-manifests-and-cli-contracts",
     "documents": [
       "docs/context/ROADMAP.md",
       "docs/design/CONFIGURATION_MATRIX.md",
+      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
       "docs/design/OBSERVABILITY_LIFECYCLE.md",
       "docs/design/OPENROUTER_PRESET_RECONCILIATION.md"
     ]
   },
-  "updated_at": "2026-08-05T10:24:00+02:00"
+  "updated_at": "2026-08-06T18:44:00+02:00"
 }
