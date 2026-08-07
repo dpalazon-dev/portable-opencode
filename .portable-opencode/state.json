@@ -135,13 +135,14 @@
     "conventions": "aligned",
     "operations": "aligned",
     "configuration_tui": "deferred",
-    "roadmap": "operational-contracts-complete-pending-owner-review",
+    "roadmap": "codex-preflight-then-repository-gate-then-runtime-spikes",
     "configuration_matrix": "contracts-defined-pending-evidence-and-owner-approval",
     "managed_configuration_materialization": "aligned",
     "canonical_resource_catalog": "aligned",
     "cli_operation_contracts": "aligned",
     "evidence_mapping": "aligned",
-    "spike_briefs": "defined",
+    "codex_development_orchestration": "defined-pending-spike-000-validation",
+    "spike_briefs": "spike-000-through-spike-004-defined",
     "repository_validation_ci": "implemented-pending-first-green-run"
   },
   "architecture": {
@@ -218,6 +219,13 @@
       "id": "DESIGN-011",
       "status": "repository-validator-implemented-packaging-evidence-pending",
       "document": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md"
+    },
+    "codex_development_orchestration": {
+      "id": "DESIGN-012",
+      "status": "active-pending-spike-000-validation",
+      "document": "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
+      "work_package_schema": "schemas/codex-work-package.schema.json",
+      "task_receipt_schema": "schemas/codex-task-receipt.schema.json"
     }
   },
   "features": {
@@ -232,11 +240,18 @@
     }
   },
   "spikes": {
+    "codex_orchestration": {
+      "id": "SPIKE-000",
+      "status": "defined",
+      "document": "docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md",
+      "execution_order": 0
+    },
     "opencode_lifecycle": {
       "id": "SPIKE-001",
       "status": "defined",
       "document": "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md",
-      "execution_order": 1
+      "execution_order": 1,
+      "depends_on": ["SPIKE-000", "repository-validation-green"]
     },
     "openrouter_policy": {
       "id": "SPIKE-002",
@@ -296,7 +311,14 @@
   },
   "operations": {
     "model": "lightweight-personal-workflow",
-    "codex_policy": "bounded-spikes-then-implementation",
+    "codex_policy": "single-master-bounded-specialists-then-implementation",
+    "codex_config": ".codex/config.toml",
+    "codex_master_agent": "development-orchestrator",
+    "codex_max_delegation_depth": 1,
+    "codex_orchestration_design": "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
+    "codex_work_package_schema": "schemas/codex-work-package.schema.json",
+    "codex_task_receipt_schema": "schemas/codex-task-receipt.schema.json",
+    "codex_orchestration_validation": "pending-spike-000",
     "cli_contract": "docs/design/CLI_OPERATION_CONTRACTS.md",
     "evidence_map": "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
     "script_inventory": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
@@ -324,13 +346,14 @@
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "complete-metadata-migration-and-reach-green-ci-before-spike-001",
+    "step": "execute-spike-000-then-complete-metadata-migration-and-green-ci-before-spike-001",
     "documents": [
+      "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
+      "docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md",
       "docs/design/CONTEXT_METADATA_SCHEMA.md",
-      "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
       "docs/context/ROADMAP.md",
       "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
     ]
   },
-  "updated_at": "2026-08-07T10:34:00+02:00"
+  "updated_at": "2026-08-07T11:09:00+02:00"
 }
