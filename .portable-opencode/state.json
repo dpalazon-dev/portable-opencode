@@ -141,7 +141,8 @@
     "canonical_resource_catalog": "aligned",
     "cli_operation_contracts": "aligned",
     "evidence_mapping": "aligned",
-    "spike_briefs": "defined"
+    "spike_briefs": "defined",
+    "repository_validation_ci": "implemented-pending-first-green-run"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
@@ -215,7 +216,7 @@
     },
     "powershell_script_inventory": {
       "id": "DESIGN-011",
-      "status": "active-pending-packaging-evidence",
+      "status": "repository-validator-implemented-packaging-evidence-pending",
       "document": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md"
     }
   },
@@ -301,6 +302,11 @@
     "script_inventory": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
     "result_schema": "schemas/operation-result.schema.json",
     "active_verification_profile": "docs-only",
+    "repository_validator": "scripts/verify-docs.ps1",
+    "repository_validation_dependencies": "scripts/requirements-docs.txt",
+    "ci_workflow": ".github/workflows/ci.yml",
+    "ci_platform": "windows-latest",
+    "ci_policy": "thin-adapter-invokes-local-validator",
     "bootstrap_shell": "powershell",
     "defect_policy": "reproduce-user-facing-path-before-fix",
     "generated_file_policy": "change-source-or-generator-and-regenerate"
@@ -308,7 +314,7 @@
   "verification": {
     "profile": "docs-only",
     "last_run": null,
-    "result": "pending-metadata-migration"
+    "result": "pending-metadata-migration-ci-enforced"
   },
   "decisions": {
     "accepted": 16,
@@ -318,14 +324,13 @@
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "review-merge-operational-contracts-then-execute-spike-001",
+    "step": "complete-metadata-migration-and-reach-green-ci-before-spike-001",
     "documents": [
+      "docs/design/CONTEXT_METADATA_SCHEMA.md",
+      "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
       "docs/context/ROADMAP.md",
-      "docs/design/CANONICAL_RESOURCE_CATALOG.md",
-      "docs/design/CLI_OPERATION_CONTRACTS.md",
-      "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
       "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
     ]
   },
-  "updated_at": "2026-08-07T09:53:00+02:00"
+  "updated_at": "2026-08-07T10:34:00+02:00"
 }
