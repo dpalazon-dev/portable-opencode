@@ -76,13 +76,28 @@
       "allOf": [
         {
           "if": {
-            "properties": {"evidence_state": {"const": "validated"}},
-            "required": ["evidence_state"]
+            "properties": {
+              "evidence_state": {"const": "validated"},
+              "kind": {"not": {"const": "remote-service"}}
+            },
+            "required": ["evidence_state", "kind"]
           },
           "then": {
             "properties": {
               "supported_version": {"type": "string", "minLength": 1},
               "installation_mechanism": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"kind": {"const": "remote-service"}},
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "upgrade_policy": {"const": "remote-contract"},
+              "installation_mechanism": {"type": "null"}
             }
           }
         }
