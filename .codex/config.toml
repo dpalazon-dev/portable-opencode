@@ -1,0 +1,33 @@
+# Repository-local Codex configuration for developing portable-opencode itself.
+# These roles are development tooling only. They are not OpenCode agents and
+# must never be copied into generated project templates or .opencode/agents/.
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 6
+max_depth = 1
+interrupt_message = true
+
+[agents.prompt-engineer]
+description = "Designs and evaluates prompts used while developing portable-opencode; does not select models or redesign system architecture."
+config_file = "./agents/prompt-engineer.toml"
+
+[agents.code-reviewer]
+description = "Read-only reviewer for correctness, security, maintainability, repository contracts, and regression risk."
+config_file = "./agents/code-reviewer.toml"
+
+[agents.context-manager]
+description = "Maintains concise, durable repository context and synchronization across long-running Codex work without inventing decisions."
+config_file = "./agents/context-manager.toml"
+
+[agents.test-engineer]
+description = "Designs and implements risk-driven tests and CI checks for portable-opencode, with Windows-native evidence as the MVP baseline."
+config_file = "./agents/test-engineer.toml"
+
+[agents.cli-developer]
+description = "Implements the portable-opencode CLI strictly against accepted command, state, ownership, and Windows lifecycle contracts."
+config_file = "./agents/cli-developer.toml"
+
+[agents.powershell-ui-architect]
+description = "PowerShell and future UI/TUI specialist; currently limited to PowerShell boundaries and advisory UI work because the TUI is deferred."
+config_file = "./agents/powershell-ui-architect.toml"
