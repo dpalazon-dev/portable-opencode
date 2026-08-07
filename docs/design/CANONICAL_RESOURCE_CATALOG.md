@@ -43,6 +43,9 @@ The implementation-facing source tree is:
 portable-opencode/
 ├── config/
 │   ├── components.jsonc
+│   ├── resources/
+│   │   ├── environment.jsonc
+│   │   └── project.jsonc
 │   ├── global/
 │   │   ├── opencode.jsonc
 │   │   └── AGENTS.md
@@ -78,14 +81,20 @@ portable-opencode/
 │           └── verification.json
 ├── schemas/
 │   ├── context-document.schema.json
+│   ├── environment-state.schema.json
 │   ├── managed-resource.schema.json
+│   ├── managed-resource-inventory.schema.json
+│   ├── resource-catalog.schema.json
 │   ├── openrouter-presets.schema.json
 │   ├── operation-result.schema.json
-│   └── supported-components.schema.json
+│   ├── supported-components.schema.json
+│   └── verification-manifest.schema.json
 ├── scripts/
 │   └── bootstrap.ps1
 └── docs/
 ```
+
+`DESIGN-011` owns the complete script inventory. `bootstrap.ps1` is the only mandatory product bootstrap wrapper; repository verification and break-glass recovery remain separate concerns.
 
 Rules:
 
@@ -93,6 +102,7 @@ Rules:
 - native filenames are retained inside `templates/` so generation does not introduce a second project configuration format;
 - concrete template contents are added only after their upstream representation is validated;
 - `config/components.jsonc` exists during contract definition even while supported versions remain evidence-gated;
+- `config/resources/environment.jsonc` and `config/resources/project.jsonc` are canonical desired-resource catalogs, not observed machine state;
 - the project template contains only repeated canonical assets; stack-specific LSP, formatter and verification content is completed by `/init-project`.
 
 ## 4. Managed personal environment tree
@@ -129,13 +139,13 @@ Canonical private root:
 
 Responsibilities:
 
-- `environment-state.json`: current personal-environment lifecycle and last verified component state;
-- `managed-resources.json`: ownership evidence and observed identities for resources managed on this machine;
-- `override.jsonc`: optional private desired-state inputs accepted by an explicit schema; no arbitrary passthrough configuration;
+- `environment-state.json`: current personal-environment lifecycle and last verified component state, validated by `schemas/environment-state.schema.json`;
+- `managed-resources.json`: ownership evidence and observed identities, validated by `schemas/managed-resource-inventory.schema.json`;
+- `override.jsonc`: optional private desired-state inputs accepted only when an explicit key contract exists; no arbitrary passthrough configuration;
 - `backups\`: pre-mutation backups keyed by resource and operation;
 - `logs\`: private operational diagnostics and failure evidence;
 - `bin\`: managed portable executables when the accepted packaging mechanism needs it;
-- `phoenix\`: Phoenix SQLite and private backend state;
+- `phoenix\`: Phoenix SQLite and private backend state if `DEC-010` is accepted;
 - `runtime\`: PIDs, ports and ephemeral process evidence.
 
 Nothing under this root is committed to a project repository.
@@ -185,6 +195,12 @@ Only native asset directories with actual files are created. Additional `.openco
 
 ## 6. Environment resource catalog
 
+Machine-readable source:
+
+```text
+config/resources/environment.jsonc
+```
+
 | Resource ID | Canonical source | Managed target | Mode | Primary owner | Mutation rule |
 |---|---|---|---|---|---|
 | `env.opencode.config` | `config/global/opencode.jsonc` + resolved inputs | effective global `opencode.jsonc` | `rendered` | portable-opencode | replace only with proven ownership/backup |
@@ -195,13 +211,19 @@ Only native asset directories with actual files are created. Additional `.openco
 | `env.graphify.installation` | supported component manifest | native Graphify installation | `queried` | Graphify/package mechanism | install/verify supported version only |
 | `env.observability.proxy` | portable implementation + component manifest | managed local executable/process | `private` | portable-opencode | managed process and private runtime state |
 | `env.observability.phoenix` | component manifest | isolated Python environment + private SQLite | `private` | Phoenix/portable-opencode lifecycle | native lifecycle only if SPIKE-003 accepts Phoenix |
-| `env.portable.state` | state schema | `%LOCALAPPDATA%\portable-opencode\environment-state.json` | `private` | portable-opencode | machine-edited; schema validated |
-| `env.portable.resources` | managed-resource schema | `%LOCALAPPDATA%\portable-opencode\managed-resources.json` | `private` | portable-opencode | mutation evidence only; never source of desired state |
+| `env.portable.state` | environment-state schema | `%LOCALAPPDATA%\portable-opencode\environment-state.json` | `private` | portable-opencode | machine-edited; schema validated |
+| `env.portable.resources` | managed-resource inventory schema | `%LOCALAPPDATA%\portable-opencode\managed-resources.json` | `private` | portable-opencode | mutation evidence only; never source of desired state |
 | `env.portable.override` | optional user input | `%LOCALAPPDATA%\portable-opencode\override.jsonc` | `private` | user | read-only to CLI except explicit initialization/repair |
 
 Installed binaries are not treated as owned merely because their versions match. Ownership of an installation requires the selected package mechanism and recorded managed-resource evidence.
 
 ## 7. Project resource catalog
+
+Machine-readable source:
+
+```text
+config/resources/project.jsonc
+```
 
 | Resource ID | Canonical source | Project target | Mode | Primary owner | Mutation rule |
 |---|---|---|---|---|---|
@@ -214,8 +236,8 @@ Installed binaries are not treated as owned merely because their versions match.
 | `project.command.verify` | canonical template | `.opencode/commands/verify.md` | `copied` | portable-opencode | explicit repeated command |
 | `project.command.graph-update` | canonical template | `.opencode/commands/graph-update.md` | `copied` | portable-opencode | invokes explicit Graphify workflow |
 | `project.context` | project templates + semantic session | `docs/context/` | `rendered` then curated | project | project owns meaning after initialization |
-| `project.state` | state schema | `.portable-opencode/state.json` | `rendered`/machine-edited | portable-opencode | portable facts only; no credentials or absolute private paths |
-| `project.verification` | stack-derived initialization | `.portable-opencode/verification.json` | `rendered` | project/portable-opencode | canonical commands and readiness checks only |
+| `project.state` | project state schema | `.portable-opencode/state.json` | `rendered`/machine-edited | portable-opencode | portable facts only; no credentials or absolute private paths |
+| `project.verification` | verification-manifest schema + stack-derived initialization | `.portable-opencode/verification.json` | `rendered` | project/portable-opencode | canonical commands and readiness checks only |
 | `project.graphifyignore` | base + stack + repository decisions | `.graphifyignore` | `rendered` then curated | project | explicit ambiguous-path decisions preserved |
 | `project.gitignore` | base + stack | `.gitignore` | `rendered` then curated | project | never erase unrelated user rules |
 | `project.graph.outputs` | Graphify | `graphify-out/` allowlist | `queried` | Graphify/project | update through Graphify; verify before commit |
@@ -236,6 +258,8 @@ canonical repository defaults
 This does not replace OpenCode's native configuration precedence. After materialization, `inspect` must still report active remote, environment, inline or managed OpenCode layers that alter the effective runtime result.
 
 Unknown keys in `override.jsonc` block desired-state resolution. The file is absent by default and is never a general escape hatch for arbitrary upstream configuration.
+
+No override keys are canonical merely because the file exists. The first actual machine-specific override requires an explicit accepted key/schema change.
 
 ## 9. State split
 
@@ -271,12 +295,27 @@ It is validated by `schemas/supported-components.schema.json` and records the ev
 
 A pending entry is honest contract state, not permission for an implementation agent to choose a version.
 
-## 11. Validation gates
+## 11. Schema ownership
 
-Before implementation begins:
+| Artifact | Schema |
+|---|---|
+| project state | `.portable-opencode/state.schema.json` |
+| private environment state | `schemas/environment-state.schema.json` |
+| one resource contract | `schemas/managed-resource.schema.json` |
+| private observed resource inventory | `schemas/managed-resource-inventory.schema.json` |
+| canonical desired resource catalogs | `schemas/resource-catalog.schema.json` |
+| supported components | `schemas/supported-components.schema.json` |
+| CLI result envelope | `schemas/operation-result.schema.json` |
+| project verification manifest | `schemas/verification-manifest.schema.json` |
+| OpenRouter preset intent | `schemas/openrouter-presets.schema.json` |
+
+## 12. Validation gates
+
+Before production implementation begins:
 
 - every canonical path in this design has one owner;
 - machine-private and project-versioned state are disjoint;
+- environment/project desired catalogs parse and validate;
 - all destructive mutation requires proven ownership;
 - global OpenCode paths are validated by `SPIKE-001`;
 - OpenRouter remote resources are validated by `SPIKE-002`;
