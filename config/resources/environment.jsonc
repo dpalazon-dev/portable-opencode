@@ -1,0 +1,209 @@
+{
+  "$schema": "../../schemas/resource-catalog.schema.json",
+  "schema_version": "0.1.0",
+  "scope": "environment",
+  "resources": [
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.opencode.config",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "config/global/opencode.jsonc", "reference": null},
+      "managed_target": {"kind": "filesystem", "path": "%USERPROFILE%\\.config\\opencode\\opencode.jsonc", "locator": "evidence-gated-by-SPIKE-001"},
+      "owner": "portable-opencode",
+      "materialization_mode": "rendered",
+      "mutability": "portable-managed",
+      "content_identity": {"strategy": "normalized-jsonc", "desired": null, "observed": null},
+      "backup_policy": "required-before-replace",
+      "drift_policy": "block-on-ambiguity",
+      "verification": [
+        {"id": "schema", "kind": "schema", "blocking": true, "description": "Generated JSONC is valid."},
+        {"id": "upstream-load", "kind": "upstream-load", "blocking": true, "description": "OpenCode loads the intended global config."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "opencode", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.opencode.rules",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "config/global/AGENTS.md", "reference": null},
+      "managed_target": {"kind": "filesystem", "path": "%USERPROFILE%\\.config\\opencode\\AGENTS.md", "locator": "evidence-gated-by-SPIKE-001"},
+      "owner": "portable-opencode",
+      "materialization_mode": "copied",
+      "mutability": "portable-managed",
+      "content_identity": {"strategy": "sha256", "desired": null, "observed": null},
+      "backup_policy": "required-before-replace",
+      "drift_policy": "block-on-ambiguity",
+      "verification": [
+        {"id": "content", "kind": "content-match", "blocking": true, "description": "Target matches canonical rules."},
+        {"id": "upstream-load", "kind": "upstream-load", "blocking": true, "description": "OpenCode discovers global rules."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "opencode", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.opencode.auth",
+      "scope": "environment",
+      "canonical_source": {"kind": "none", "path": null, "reference": null},
+      "managed_target": {"kind": "private-store", "path": null, "locator": "opencode-auth-store"},
+      "owner": "opencode",
+      "materialization_mode": "private",
+      "mutability": "upstream-managed",
+      "content_identity": {"strategy": "none", "desired": null, "observed": null},
+      "backup_policy": "not-applicable",
+      "drift_policy": "report-only",
+      "verification": [
+        {"id": "auth-present", "kind": "custom", "blocking": true, "description": "Authentication availability is checked without exposing credentials."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.openrouter.presets",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "config/openrouter/presets.jsonc", "reference": "DEC-020"},
+      "managed_target": {"kind": "remote-api", "path": null, "locator": "portable-main,portable-reason,portable-fast"},
+      "owner": "openrouter",
+      "materialization_mode": "queried",
+      "mutability": "upstream-managed",
+      "content_identity": {"strategy": "external-id", "desired": null, "observed": null},
+      "backup_policy": "not-applicable",
+      "drift_policy": "upstream-reconcile",
+      "verification": [
+        {"id": "preset-smoke", "kind": "synthetic-request", "blocking": true, "description": "Each required role passes an authenticated synthetic request."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "openrouter", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.rtk.integration",
+      "scope": "environment",
+      "canonical_source": {"kind": "upstream-tool", "path": null, "reference": "rtk-native-opencode-integration"},
+      "managed_target": {"kind": "upstream-integration", "path": null, "locator": "opencode-global-integration"},
+      "owner": "rtk",
+      "materialization_mode": "queried",
+      "mutability": "upstream-managed",
+      "content_identity": {"strategy": "path-and-version", "desired": null, "observed": null},
+      "backup_policy": "required-before-adopt",
+      "drift_policy": "upstream-reconcile",
+      "verification": [
+        {"id": "rewrite", "kind": "custom", "blocking": false, "description": "Representative OpenCode command is rewritten as expected."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "rtk", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.graphify.installation",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "config/components.jsonc", "reference": "graphify"},
+      "managed_target": {"kind": "upstream-integration", "path": null, "locator": "native-graphify-installation"},
+      "owner": "graphify",
+      "materialization_mode": "queried",
+      "mutability": "upstream-managed",
+      "content_identity": {"strategy": "version", "desired": null, "observed": null},
+      "backup_policy": "not-applicable",
+      "drift_policy": "plan-reconcile",
+      "verification": [
+        {"id": "version", "kind": "version", "blocking": true, "description": "Installed Graphify version is supported."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "graphify", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.observability.proxy",
+      "scope": "environment",
+      "canonical_source": {"kind": "generated-inputs", "path": null, "reference": "portable-proxy-implementation"},
+      "managed_target": {"kind": "process", "path": "%LOCALAPPDATA%\\portable-opencode\\bin", "locator": "loopback-proxy"},
+      "owner": "portable-opencode",
+      "materialization_mode": "private",
+      "mutability": "runtime-ephemeral",
+      "content_identity": {"strategy": "path-and-version", "desired": null, "observed": null},
+      "backup_policy": "not-required-reconstructible",
+      "drift_policy": "plan-reconcile",
+      "verification": [
+        {"id": "health", "kind": "health", "blocking": true, "description": "Proxy health and transparent forwarding pass."},
+        {"id": "socket", "kind": "socket", "blocking": true, "description": "Proxy binds loopback only."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.observability.phoenix",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "config/components.jsonc", "reference": "phoenix"},
+      "managed_target": {"kind": "private-store", "path": "%LOCALAPPDATA%\\portable-opencode\\phoenix", "locator": "isolated-python-and-sqlite"},
+      "owner": "phoenix",
+      "materialization_mode": "private",
+      "mutability": "upstream-managed",
+      "content_identity": {"strategy": "version", "desired": null, "observed": null},
+      "backup_policy": "not-required-reconstructible",
+      "drift_policy": "plan-reconcile",
+      "verification": [
+        {"id": "health", "kind": "health", "blocking": true, "description": "Phoenix health passes."},
+        {"id": "socket", "kind": "socket", "blocking": true, "description": "Phoenix binds loopback only."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": {"component_id": "phoenix", "required_state": "evidence-pending"}
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.portable.state",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "schemas/environment-state.schema.json", "reference": null},
+      "managed_target": {"kind": "private-store", "path": "%LOCALAPPDATA%\\portable-opencode\\environment-state.json", "locator": null},
+      "owner": "portable-opencode",
+      "materialization_mode": "private",
+      "mutability": "portable-managed",
+      "content_identity": {"strategy": "normalized-json", "desired": null, "observed": null},
+      "backup_policy": "not-required-reconstructible",
+      "drift_policy": "plan-reconcile",
+      "verification": [
+        {"id": "schema", "kind": "schema", "blocking": true, "description": "Private environment state validates."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.portable.resources",
+      "scope": "environment",
+      "canonical_source": {"kind": "repository-path", "path": "schemas/managed-resource-inventory.schema.json", "reference": null},
+      "managed_target": {"kind": "private-store", "path": "%LOCALAPPDATA%\\portable-opencode\\managed-resources.json", "locator": null},
+      "owner": "portable-opencode",
+      "materialization_mode": "private",
+      "mutability": "portable-managed",
+      "content_identity": {"strategy": "normalized-json", "desired": null, "observed": null},
+      "backup_policy": "not-required-reconstructible",
+      "drift_policy": "plan-reconcile",
+      "verification": [
+        {"id": "schema", "kind": "schema", "blocking": true, "description": "Managed-resource inventory validates."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "resource_id": "env.portable.override",
+      "scope": "environment",
+      "canonical_source": {"kind": "none", "path": null, "reference": "optional-private-input"},
+      "managed_target": {"kind": "private-store", "path": "%LOCALAPPDATA%\\portable-opencode\\override.jsonc", "locator": null},
+      "owner": "user",
+      "materialization_mode": "private",
+      "mutability": "user-managed",
+      "content_identity": {"strategy": "normalized-jsonc", "desired": null, "observed": null},
+      "backup_policy": "not-applicable",
+      "drift_policy": "report-only",
+      "verification": [
+        {"id": "approved-keys", "kind": "custom", "blocking": true, "description": "Only explicitly supported override keys are accepted; file is absent by default."}
+      ],
+      "ownership_state": "unmanaged",
+      "version_policy": null
+    }
+  ]
+}

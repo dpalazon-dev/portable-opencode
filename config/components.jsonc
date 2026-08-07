@@ -1,0 +1,83 @@
+{
+  "$schema": "../schemas/supported-components.schema.json",
+  "schema_version": "0.1.0",
+  "platform": {
+    "os": "windows-native",
+    "shell": "powershell",
+    "windows_version": null,
+    "powershell_version": null,
+    "evidence_state": "pending"
+  },
+  "components": [
+    {
+      "id": "opencode",
+      "kind": "cli",
+      "required": true,
+      "supported_version": null,
+      "version_constraint": null,
+      "installation_source": null,
+      "installation_mechanism": null,
+      "platform_constraints": ["windows-native"],
+      "evidence_state": "pending",
+      "evidence_source": "SPIKE-001",
+      "upgrade_policy": "pending",
+      "notes": "Exact supported version and installation mechanism require Windows-native lifecycle evidence."
+    },
+    {
+      "id": "openrouter",
+      "kind": "remote-service",
+      "required": true,
+      "supported_version": null,
+      "version_constraint": null,
+      "installation_source": "https://openrouter.ai",
+      "installation_mechanism": null,
+      "platform_constraints": [],
+      "evidence_state": "pending",
+      "evidence_source": "SPIKE-002",
+      "upgrade_policy": "remote-contract",
+      "notes": "Tracked as an API contract rather than an installed binary; preset and OpenCode integration semantics require SPIKE-002."
+    },
+    {
+      "id": "phoenix",
+      "kind": "backend",
+      "required": true,
+      "supported_version": null,
+      "version_constraint": null,
+      "installation_source": null,
+      "installation_mechanism": null,
+      "platform_constraints": ["windows-native", "loopback-only", "isolated-python-environment"],
+      "evidence_state": "pending",
+      "evidence_source": "SPIKE-003",
+      "upgrade_policy": "pending",
+      "notes": "Required only if DEC-010 is accepted after SPIKE-003; otherwise this entry is revised to the selected local backend."
+    },
+    {
+      "id": "graphify",
+      "kind": "cli",
+      "required": true,
+      "supported_version": null,
+      "version_constraint": null,
+      "installation_source": null,
+      "installation_mechanism": null,
+      "platform_constraints": ["windows-native"],
+      "evidence_state": "pending",
+      "evidence_source": "SPIKE-004",
+      "upgrade_policy": "pending",
+      "notes": "Version, output contract and native integration require SPIKE-004."
+    },
+    {
+      "id": "rtk",
+      "kind": "integration",
+      "required": true,
+      "supported_version": null,
+      "version_constraint": null,
+      "installation_source": null,
+      "installation_mechanism": null,
+      "platform_constraints": ["windows-native", "opencode-integration"],
+      "evidence_state": "pending",
+      "evidence_source": "SPIKE-004",
+      "upgrade_policy": "pending",
+      "notes": "Native binary and OpenCode rewrite integration require SPIKE-004."
+    }
+  ]
+}

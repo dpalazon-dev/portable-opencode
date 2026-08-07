@@ -36,23 +36,50 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [x] minimal context metadata schema;
 - [x] Phoenix intended Windows lifecycle and 30-day retention;
 - [x] declarative OpenRouter preset reconciliation;
+- [x] explicit managed-resource materialization and proven-ownership mutation;
 - [x] configuration matrix reduced to 81 contracts.
 
 ### Contract work remaining
 
 - [ ] migrate inherited context frontmatter and validate `schemas/context-document.schema.json`;
 - [ ] publish and synchronize the full personal-first specification v0.3;
-- [ ] define canonical global and project file trees;
-- [ ] define generated, copied, linked, queried and private ownership;
-- [ ] define the private local override file and precedence;
-- [ ] create `.portable-opencode/state.schema.json`;
-- [ ] define environment state and managed-resource schemas;
+- [x] define canonical global and project file trees;
+- [x] define generated, copied, linked, queried and private ownership;
+- [x] instantiate those rules as concrete environment/project resource catalogs;
+- [x] define the private local override file and precedence;
+- [x] create the evidence-gated supported-component manifest before implementation;
+- [x] create `.portable-opencode/state.schema.json`;
+- [x] define private environment state, managed-resource, inventory and verification schemas;
 - [ ] create the concrete OpenRouter preset manifest after SPIKE-002 model-policy evidence;
-- [ ] define diagnostic codes, operation outcomes and exit classes;
-- [ ] define exact CLI commands, arguments and non-interactive behaviour;
-- [ ] inventory PowerShell bootstrap, verification and recovery scripts;
-- [ ] map every `S` contract to a spike or implementation test;
+- [x] define diagnostic codes, operation outcomes and exit classes;
+- [x] define exact CLI commands, arguments and non-interactive behaviour;
+- [x] inventory PowerShell bootstrap, repository verification and break-glass recovery boundaries;
+- [x] map every `S` contract to a spike or implementation test;
+- [x] write executable briefs for SPIKE-001 through SPIKE-004;
 - [ ] approve `DESIGN-001` after these contracts are reviewable.
+
+### New contract artefacts
+
+```text
+DESIGN-007  Managed Configuration Materialization
+DESIGN-008  Canonical Resource Catalog and File Trees
+DESIGN-009  CLI Operation Contracts
+DESIGN-010  Evidence and Spike Mapping
+DESIGN-011  PowerShell Script Inventory
+
+config/components.jsonc
+config/resources/environment.jsonc
+config/resources/project.jsonc
+
+.portable-opencode/state.schema.json
+schemas/environment-state.schema.json
+schemas/managed-resource.schema.json
+schemas/managed-resource-inventory.schema.json
+schemas/resource-catalog.schema.json
+schemas/operation-result.schema.json
+schemas/supported-components.schema.json
+schemas/verification-manifest.schema.json
+```
 
 ### Exit criteria
 
@@ -62,9 +89,13 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - no product default is left for an implementation agent to guess;
 - SPIKE-001 through SPIKE-004 can be assigned as bounded experiments.
 
+The operational-contract and spike-definition portions of Phase 0 are complete. Metadata migration, specification v0.3 synchronization and owner approval of the resulting matrix remain before Phase 0 is formally closed.
+
 ## 3. Phase 1 — Technical validation
 
 ### SPIKE-001 — OpenCode lifecycle
+
+Canonical brief: [`docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md`](../spikes/SPIKE-001_OPENCODE_LIFECYCLE.md)
 
 Validate on Windows:
 
@@ -73,10 +104,15 @@ Validate on Windows:
 - `.opencode/` assets;
 - built-in/custom agents, commands and permissions;
 - environment and managed override provenance;
+- copied, rendered and linked materialization behaviour on Windows;
 - `pwsh`, LSP, formatter, compaction and watcher behaviour;
-- plugin stability and session metadata.
+- plugin stability, parallel-session usability and session/context metadata;
+- context-pressure and compaction visibility without fabricated estimates;
+- minimum bootstrap constraints for the future CLI.
 
 ### SPIKE-002 — OpenRouter policy
+
+Canonical brief: [`docs/spikes/SPIKE-002_OPENROUTER_POLICY.md`](../spikes/SPIKE-002_OPENROUTER_POLICY.md)
 
 Validate:
 
@@ -88,12 +124,16 @@ Validate:
 
 ### SPIKE-003 — Observability
 
+Canonical brief: [`docs/spikes/SPIKE-003_OBSERVABILITY.md`](../spikes/SPIKE-003_OBSERVABILITY.md)
+
 Validate `DESIGN-005`:
 
 - isolated native Phoenix installation;
 - proxy transparency and OTLP HTTP ingestion;
 - loopback, SQLite and 30-day retention;
 - telemetry/external-resource disabling;
+- correlation of inference usage with reliable context-pressure and compaction metadata when OpenCode exposes it;
+- metadata-only persistence and redaction;
 - start, stop, PIDs, ports, locked files and recovery;
 - acceptable resource use.
 
@@ -101,19 +141,34 @@ Accept or reject `DEC-010` from evidence.
 
 ### SPIKE-004 — Graphify and RTK
 
+Canonical brief: [`docs/spikes/SPIKE-004_GRAPHIFY_RTK.md`](../spikes/SPIKE-004_GRAPHIFY_RTK.md)
+
 Validate:
 
 - native installation and integrations;
 - ignore semantics and explicit updates;
 - Graphify output determinism and manifest portability;
 - clone/incremental update behaviour;
+- graph quality and private-output boundaries;
 - RTK rewriting, exclusions, tee output and recovery;
 - optional hooks only after explicit workflows are reliable.
+
+### Recommended execution order
+
+```text
+SPIKE-001
+→ SPIKE-002
+→ SPIKE-004
+→ SPIKE-003
+```
+
+SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if branch and global-configuration isolation are preserved. `DESIGN-010` owns the complete contract-to-evidence map.
 
 ### Exit criteria
 
 - all spikes reproduce from PowerShell without WSL;
 - uncertain matrix contracts become accepted, revised or deferred;
+- exact tested versions/mechanisms replace `pending` entries in `config/components.jsonc` only from evidence;
 - `DEC-009`, `DEC-010` and `DEC-012` are resolved from evidence;
 - no spike code is mistaken for production architecture.
 
@@ -133,13 +188,16 @@ Required properties:
 
 - deterministic plans and provenance;
 - no mutation during inspect/plan;
-- backups and managed-resource inventory;
+- backups and managed-resource inventory with proven ownership;
+- no replacement, detachment or removal of unmanaged or ambiguous resources;
 - idempotent reruns and drift reporting;
 - structured JSON and stable exit codes;
 - safe interruption and partial outcomes;
 - native Windows path/process primitives;
 - schema validation and automated tests;
 - no TUI or WSL dependency.
+
+`DESIGN-009` is the command contract; implementation must not silently expand the initial CLI surface.
 
 ## 5. Phase 3 — Personal machine installation
 
@@ -172,7 +230,7 @@ Support provenance, drift, graph freshness, context review, compaction/handoff, 
 
 ## 8. Phase 6 — Hardening and first release
 
-Deliver documentation/schema validation, unit/integration/contract tests, disposable fixtures, clean-Windows E2E, security/redaction/recovery scenarios, supported-version manifest, installation/recovery docs and the first tagged release.
+Deliver documentation/schema validation, unit/integration/contract tests, disposable fixtures, clean-Windows E2E, security/redaction/recovery scenarios, supported-version compatibility verification, installation/recovery docs and the first tagged release.
 
 ## 9. Parked work
 
@@ -183,4 +241,6 @@ Deliver documentation/schema validation, unit/integration/contract tests, dispos
 - profiles, teams and organizations;
 - MCP/local-model profiles;
 - alternate observability backends unless Phoenix fails its gate;
-- GitHub automation, marketplaces, background agents and hosted control planes.
+- GitHub automation, marketplaces, background agents and hosted control planes;
+- general dotfiles, editor, shell, font or desktop personalization;
+- a terminal multiplexer or multi-harness session manager unless repeated use proves a gap.

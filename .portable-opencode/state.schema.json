@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/project-state.schema.json",
+  "title": "Portable OpenCode Project State",
+  "description": "Portable, versioned project lifecycle state. Machine-private paths, credentials, PIDs and trace identifiers are forbidden by design and belong to environment state outside Git.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "project",
+    "environment",
+    "managed_configuration",
+    "initialization",
+    "context",
+    "scope_alignment",
+    "architecture",
+    "design",
+    "features",
+    "graphify",
+    "observability",
+    "operations",
+    "verification",
+    "decisions",
+    "next"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "project": {"$ref": "#/$defs/project"},
+    "environment": {"$ref": "#/$defs/openSection"},
+    "managed_configuration": {"$ref": "#/$defs/openSection"},
+    "opencode": {"$ref": "#/$defs/openSection"},
+    "openrouter": {"$ref": "#/$defs/openSection"},
+    "agent_model_policy": {"$ref": "#/$defs/openSection"},
+    "initialization": {"$ref": "#/$defs/openSection"},
+    "context": {"$ref": "#/$defs/openSection"},
+    "scope_alignment": {"$ref": "#/$defs/openSection"},
+    "architecture": {"$ref": "#/$defs/openSection"},
+    "design": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/designRecord"}
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/openSection"}
+    },
+    "spikes": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/spikeRecord"}
+    },
+    "graphify": {"$ref": "#/$defs/openSection"},
+    "observability": {"$ref": "#/$defs/openSection"},
+    "operations": {"$ref": "#/$defs/openSection"},
+    "verification": {"$ref": "#/$defs/verification"},
+    "decisions": {"$ref": "#/$defs/decisionCounts"},
+    "next": {"$ref": "#/$defs/next"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "openSection": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "phase", "status", "scope"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "repository": {"type": "string"},
+        "phase": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["uninitialized", "scaffolded", "configuring", "ready", "dirty", "degraded", "blocked"]
+        },
+        "scope": {"type": "string"}
+      }
+    },
+    "designRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "status", "document"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DESIGN-[0-9]{3}$"},
+        "status": {"type": "string"},
+        "document": {"type": "string", "minLength": 1}
+      }
+    },
+    "spikeRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "status", "document"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^SPIKE-[0-9]{3}$"},
+        "status": {"type": "string", "enum": ["defined", "running", "passed", "failed", "inconclusive", "deferred"]},
+        "document": {"type": "string", "minLength": 1}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["profile", "result"],
+      "properties": {
+        "profile": {"type": "string"},
+        "result": {"type": "string"},
+        "last_run": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "decisionCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accepted", "proposed", "deferred", "superseded"],
+      "properties": {
+        "accepted": {"type": "integer", "minimum": 0},
+        "proposed": {"type": "integer", "minimum": 0},
+        "deferred": {"type": "integer", "minimum": 0},
+        "superseded": {"type": "integer", "minimum": 0},
+        "rejected": {"type": "integer", "minimum": 0}
+      }
+    },
+    "next": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["milestone", "step"],
+      "properties": {
+        "milestone": {"type": "string", "minLength": 1},
+        "step": {"type": "string", "minLength": 1},
+        "documents": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/managed-resource.schema.json",
+  "title": "Portable OpenCode Managed Resource",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_id",
+    "scope",
+    "canonical_source",
+    "managed_target",
+    "owner",
+    "materialization_mode",
+    "mutability",
+    "content_identity",
+    "backup_policy",
+    "drift_policy",
+    "verification"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "resource_id": {
+      "type": "string",
+      "pattern": "^(env|project)\\.[a-z0-9][a-z0-9.-]*$"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["environment", "project"]
+    },
+    "canonical_source": {"$ref": "#/$defs/source"},
+    "managed_target": {"$ref": "#/$defs/target"},
+    "owner": {
+      "type": "string",
+      "enum": ["portable-opencode", "project", "user", "opencode", "openrouter", "graphify", "rtk", "phoenix", "external-package-manager"]
+    },
+    "materialization_mode": {
+      "type": "string",
+      "enum": ["rendered", "copied", "linked", "queried", "private"]
+    },
+    "mutability": {
+      "type": "string",
+      "enum": ["portable-managed", "project-curated", "user-managed", "upstream-managed", "runtime-ephemeral"]
+    },
+    "content_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy"],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["sha256", "normalized-json", "normalized-jsonc", "version", "external-id", "path-and-version", "none"]
+        },
+        "desired": {"type": ["string", "null"]},
+        "observed": {"type": ["string", "null"]}
+      }
+    },
+    "backup_policy": {
+      "type": "string",
+      "enum": ["required-before-replace", "required-before-adopt", "not-required-reconstructible", "not-applicable"]
+    },
+    "drift_policy": {
+      "type": "string",
+      "enum": ["plan-reconcile", "block-on-ambiguity", "report-only", "upstream-reconcile", "not-applicable"]
+    },
+    "verification": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/verification"}
+    },
+    "ownership_state": {
+      "type": "string",
+      "enum": ["unmanaged", "managed-created", "managed-adopted", "managed-modified", "retirement-planned", "detached"]
+    },
+    "version_policy": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {"type": "string"},
+        "required_state": {"type": "string", "enum": ["supported", "evidence-pending", "not-applicable"]}
+      }
+    },
+    "observed_evidence": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"},
+        "absolute_path": {"type": ["string", "null"]},
+        "backup_reference": {"type": ["string", "null"]},
+        "managed_by_operation": {"type": ["string", "null"]},
+        "notes": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["repository-path", "generated-inputs", "upstream-tool", "remote-service", "none"]
+        },
+        "path": {"type": ["string", "null"]},
+        "reference": {"type": ["string", "null"]}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["filesystem", "remote-api", "upstream-integration", "process", "private-store"]
+        },
+        "path": {"type": ["string", "null"]},
+        "locator": {"type": ["string", "null"]}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {
+          "type": "string",
+          "enum": ["exists", "content-match", "schema", "upstream-load", "version", "health", "socket", "synthetic-request", "custom"]
+        },
+        "blocking": {"type": "boolean", "default": true},
+        "description": {"type": "string"}
+      }
+    }
+  }
+}

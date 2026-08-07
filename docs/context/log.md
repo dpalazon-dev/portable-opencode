@@ -113,6 +113,29 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - the matrix remains draft pending contracts, metadata migration, spike mapping and owner approval;
 - project state advances from owner-default review to configuration-contract definition.
 
+## 2026-08-06 — Managed configuration concepts accepted
+
+- accepted `DEC-021` and created `DESIGN-007`;
+- defined `rendered`, `copied`, `linked`, `queried` and `private` materialization modes;
+- selected copied/rendered defaults and made links Windows evidence-gated;
+- prohibited replacement, detachment or deletion without proven ownership;
+- moved the supported-component version manifest into contract definition;
+- constrained PowerShell bootstrap to establishing and invoking the CLI;
+- added generated-file, bug-reproduction, context-pressure and parallel-session validation rules;
+- explicitly excluded general dotfiles, desktop personalization and terminal multiplexing from the MVP.
+
+## 2026-08-07 — Operational contracts and spike briefs completed
+
+- created `DESIGN-008` with exact canonical repository, personal-environment and new-project trees;
+- instantiated machine-readable environment and project resource catalogs with stable resource IDs and ownership;
+- created an evidence-gated `config/components.jsonc` rather than guessing supported versions;
+- created project state, private environment state, managed-resource, inventory, resource-catalog, operation-result and verification-manifest schemas;
+- created `DESIGN-009` with exact CLI command semantics, deterministic plan/apply behaviour, outcomes, diagnostics and exit classes;
+- created `DESIGN-010` mapping every runtime-evidence contract to a bounded spike or post-spike implementation test;
+- created `DESIGN-011` limiting PowerShell to bootstrap, repository validation and evidence-gated break-glass recovery;
+- wrote executable Codex briefs for SPIKE-001 through SPIKE-004 with scope, safety, procedure, evidence, acceptance criteria, decision impact and discard boundaries;
+- selected `SPIKE-001 → SPIKE-002 → SPIKE-004 → SPIKE-003` as the recommended technical validation order.
+
 **Recommended next action**
 
-Define canonical global and project file trees, ownership and exact CLI command contracts before delegating the four spikes.
+Review and merge the operational-contract PR, then delegate `SPIKE-001` to Codex as the first bounded Windows-native experiment. Metadata migration and specification v0.3 synchronization remain definition-phase housekeeping before formal Phase 0 closure, but no longer require Codex to invent spike behaviour.

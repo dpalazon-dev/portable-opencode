@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/environment-state.schema.json",
+  "title": "Portable OpenCode Private Environment State",
+  "description": "Machine-private lifecycle and health state stored outside Git under LOCALAPPDATA.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lifecycle", "components", "managed_resources", "observability", "verification"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "lifecycle": {
+      "type": "string",
+      "enum": ["absent", "inspected", "planned", "installed", "healthy", "degraded", "update-required", "blocked"]
+    },
+    "desired_state_hash": {"type": ["string", "null"]},
+    "last_plan_hash": {"type": ["string", "null"]},
+    "components": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/componentState"}
+    },
+    "managed_resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inventory_path"],
+      "properties": {
+        "inventory_path": {"type": "string", "minLength": 1},
+        "inventory_hash": {"type": ["string", "null"]},
+        "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "status": {"type": "string", "enum": ["not-installed", "stopped", "starting", "healthy", "degraded", "blocked"]},
+        "proxy_pid": {"type": ["integer", "null"], "minimum": 1},
+        "backend_pid": {"type": ["integer", "null"], "minimum": 1},
+        "proxy_port": {"type": ["integer", "null"], "minimum": 1, "maximum": 65535},
+        "backend_port": {"type": ["integer", "null"], "minimum": 1, "maximum": 65535},
+        "storage_path": {"type": ["string", "null"]},
+        "last_ingestion_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["last_result"],
+      "properties": {
+        "last_run_at": {"type": ["string", "null"], "format": "date-time"},
+        "last_result": {"type": "string", "enum": ["never", "healthy", "degraded", "blocked", "failed"]},
+        "diagnostic_codes": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^POC-[A-Z]+-[0-9]{3}$"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "componentState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"type": "string", "enum": ["missing", "installed", "healthy", "degraded", "unsupported", "update-required", "blocked"]},
+        "version": {"type": ["string", "null"]},
+        "executable_path": {"type": ["string", "null"]},
+        "installation_mechanism": {"type": ["string", "null"]},
+        "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  }
+}

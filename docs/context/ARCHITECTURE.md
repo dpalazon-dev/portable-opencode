@@ -3,17 +3,6 @@ type: Architecture
 title: Portable OpenCode Architecture
 description: Personal-first Windows-native architecture, responsibility boundaries and lifecycle for the canonical portable-opencode workflow.
 status: active
-created: 2026-08-04
-modified: 2026-08-05
-sources:
-  - PROJECT.md
-  - VISION.md
-  - DECISIONS.md
-  - ../SPECIFICATION.es.md
-  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
-verified:
-  - by: repository-owner
-    status: pending
 ---
 
 # Architecture
@@ -146,6 +135,12 @@ Versioned context preserves project definition, vision, architecture, convention
 
 State records lifecycle, readiness, degradation, graph freshness, verification results, managed versions and pending decisions. It remains small, inspectable and schema-validated.
 
+### 4.11. Managed configuration materialization
+
+The portable layer converts canonical intent into native files and installed resources through explicit contracts. Each resource records its source, target, owner, materialization mode, mutability, content identity, backup policy, drift policy and verification.
+
+`rendered` and `copied` are the normal modes. `linked` is allowed only when the consumer treats the target as effectively immutable and Windows-native tests prove reliable behaviour. `queried` records externally owned state without taking ownership. `private` identifies local values or state that never enters Git.
+
 ## 5. Configuration ownership
 
 ### A. Canonical versioned source
@@ -213,6 +208,24 @@ Never committed:
 - secret-bearing overrides;
 - observability databases and raw traces;
 - caches, temporary files and private logs.
+
+### E. Materialization and ownership contract
+
+For every managed resource, the system must be able to answer:
+
+```text
+canonical source
+managed target
+owner
+materialization mode
+mutability
+content hash or comparable identity
+backup policy
+drift policy
+verification
+```
+
+A resource may be created, adopted, updated, detached or removed only through an explicit plan. Absence from desired state is not evidence that an existing resource may be deleted. Unknown or user-owned resources are preserved and reported.
 
 ## 6. OpenCode configuration provenance
 
@@ -282,7 +295,7 @@ inspect
 → plan
 → show consequences
 → approve when required
-→ apply narrow reversible changes
+→ apply narrow reversible changes only to proven-owned resources
 → verify
 → record outcome and state
 ```
@@ -306,7 +319,7 @@ Each asset must correspond to an actual repeated behaviour.
 
 ## 11. Deferred architecture
 
-The MVP does not require WSL/Linux/macOS parity, teams, shared workspace policies, generic profiles, marketplaces, hosted control planes, multiple observability backends, coding clients other than OpenCode, a public SDK, autonomous background agents, arbitrary legacy-repository migration or a configuration TUI before the CLI is proven.
+The MVP does not require WSL/Linux/macOS parity, teams, shared workspace policies, generic profiles, marketplaces, hosted control planes, multiple observability backends, coding clients other than OpenCode, a public SDK, autonomous background agents, arbitrary legacy-repository migration, a general dotfiles or desktop-personalization manager, a terminal multiplexer, or a configuration TUI before the CLI is proven.
 
 ## 12. Initial implementation shape
 
@@ -316,7 +329,8 @@ The smallest credible implementation contains:
 - one mandatory Windows-native CLI;
 - narrow filesystem, process and external-tool adapters;
 - versioned native configuration and templates;
-- PowerShell bootstrap and recovery only where needed;
+- an early supported-component version manifest;
+- a minimal PowerShell bootstrap that only establishes and invokes the CLI;
 - schemas, fixtures and tests;
 - one observability integration validated by a spike.
 
@@ -329,7 +343,8 @@ Bounded spikes still need to validate:
 - root project config discovery and effective precedence on the supported OpenCode version;
 - `.opencode/` asset discovery;
 - environment and managed-config provenance on Windows;
-- OpenCode plugin stability and available session metadata;
+- copied, rendered and linked materialization behaviour on Windows;
+- OpenCode plugin stability, parallel-session behaviour and available session/context metadata;
 - OpenRouter preset integration through OpenCode;
 - proxy transparency and Phoenix viability;
 - Graphify and RTK lifecycle on Windows;
