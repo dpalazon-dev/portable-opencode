@@ -77,6 +77,26 @@ Manage exactly `portable-main`, `portable-reason` and `portable-fast` from a ver
 
 Every managed resource declares its canonical source, target, owner, materialization mode, mutability, drift policy, backup policy and verification. `rendered` and `copied` are the defaults; `linked` is exceptional and requires Windows-native evidence. The tool never removes or replaces a resource whose ownership it cannot prove.
 
+Concrete environment/project resource catalogs now define the intended IDs, sources and targets. Upstream-dependent paths and versions remain evidence-gated rather than guessed.
+
+### CLI contract
+
+The initial mandatory control surface is fixed around:
+
+```text
+status
+inspect
+plan
+apply
+doctor
+install
+init-project
+project status|doctor
+observability start|stop|status|open|purge
+```
+
+Mutation requires a current plan, explicit approval and proven resource ownership. Structured outcomes, diagnostics and exit classes are defined before implementation.
+
 ## 4. Problem
 
 A personal agentic environment otherwise accumulates scattered instructions, implicit permissions, coupled model choices, disappearing knowledge, stale graph/context, opaque cost/routing and irreproducible setup.
@@ -123,19 +143,28 @@ Completed:
 - minimal context metadata policy and schema;
 - intended Phoenix lifecycle policy;
 - declarative preset reconciliation policy;
-- managed configuration materialization and ownership policy.
+- managed configuration materialization and ownership policy;
+- canonical environment/project file trees and machine-readable resource catalogs;
+- supported-component manifest with evidence-gated versions;
+- project/private environment/resource/result/verification schemas;
+- exact CLI command, outcome, diagnostic and exit-class contracts;
+- PowerShell bootstrap/verification/recovery boundaries;
+- complete `S`-contract evidence mapping;
+- executable briefs for SPIKE-001 through SPIKE-004.
 
-Pending:
+Pending before formal definition-phase closure:
 
-- metadata migration and docs validation;
-- complete canonical global/project file trees and concrete resource manifests;
-- supported-component version manifest;
-- state, environment and managed-resource schemas;
-- exact CLI, diagnostics and PowerShell script contracts;
-- specification v0.3 synchronization;
-- SPIKE-001 through SPIKE-004;
-- evidence-based decisions for language, Phoenix and packaging;
-- implementation, tests and release.
+- complete inherited metadata migration and docs validation;
+- synchronize the full specification as personal-first v0.3;
+- create the concrete OpenRouter preset manifest after SPIKE-002 supplies model-policy evidence;
+- owner review/approval of the resulting configuration matrix and operational contracts.
+
+Pending technical evidence/implementation:
+
+- execute SPIKE-001 through SPIKE-004;
+- resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence;
+- implement the CLI, templates, adapters and tests;
+- execute the clean-Windows canonical journey and release.
 
 ## 8. Evidence-gated decisions
 
@@ -159,4 +188,4 @@ These are not owner defaults to decide in prose. They require Windows-native evi
 
 ## 10. Definition-phase completion
 
-The phase completes when metadata migration, file ownership, CLI contracts, schemas and spike mappings are explicit; the specification is synchronized; and Codex can execute the four spikes without inventing product behaviour.
+The definition phase is now operationally specified enough for Codex to execute the four bounded spikes without inventing product behaviour. Formal Phase 0 closure still requires metadata migration, specification v0.3 synchronization and owner approval of the resulting contracts.
