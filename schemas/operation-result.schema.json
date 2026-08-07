@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/operation-result.schema.json",
+  "title": "Portable OpenCode Operation Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "command", "outcome", "exit_class", "changed", "diagnostics", "summary"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "command": {"type": "string", "minLength": 1},
+    "outcome": {
+      "type": "string",
+      "enum": ["no-op", "planned", "applied", "healthy", "update-required", "degraded", "blocked", "partial", "failed", "cancelled"]
+    },
+    "exit_class": {
+      "type": "integer",
+      "enum": [0, 2, 10, 20, 30, 40, 50, 60]
+    },
+    "changed": {"type": "boolean"},
+    "plan": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/diagnostic"}
+    },
+    "state": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "operations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/operation"}
+    },
+    "summary": {"type": "string"}
+  },
+  "$defs": {
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "summary", "evidence", "impact", "remediation"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^POC-[A-Z]+-[0-9]{3}$"},
+        "severity": {"type": "string", "enum": ["info", "warning", "error", "blocker"]},
+        "summary": {"type": "string"},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "impact": {"type": "string"},
+        "remediation": {"type": "string"},
+        "resource_id": {"type": ["string", "null"]}
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_id", "resource_id", "action", "status", "changed"],
+      "properties": {
+        "operation_id": {"type": "string", "minLength": 1},
+        "resource_id": {"type": "string", "minLength": 1},
+        "action": {
+          "type": "string",
+          "enum": ["create", "render", "copy", "adopt", "install", "invoke-upstream", "create-remote-version", "start", "stop", "retire"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["planned", "skipped", "applied", "verified", "failed", "rolled-back", "partial"]
+        },
+        "changed": {"type": "boolean"},
+        "message": {"type": "string"}
+      }
+    }
+  }
+}
