@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/resource-catalog.schema.json",
+  "title": "Portable OpenCode Desired Resource Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scope", "resources"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "scope": {"type": "string", "enum": ["environment", "project"]},
+    "resources": {
+      "type": "array",
+      "items": {"$ref": "managed-resource.schema.json"}
+    }
+  }
+}
