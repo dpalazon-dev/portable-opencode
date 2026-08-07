@@ -26,7 +26,7 @@ The canonical product remains the CLI. Scripts exist only where the CLI cannot y
 | Path | Status | Responsibility | Product behaviour? |
 |---|---|---|---|
 | `scripts/bootstrap.ps1` | required | make the pinned CLI runnable after clone | bootstrap only |
-| `scripts/verify-docs.ps1` | planned repository helper | validate this repository's Markdown metadata, links and JSON/JSONC schemas before the production CLI exists | no |
+| `scripts/verify-docs.ps1` | implemented repository helper | validate this repository's Markdown metadata, links and JSON/JSONC schemas before the production CLI exists | no |
 | `scripts/recover-cli.ps1` | deferred | break-glass repair of a missing/corrupt CLI installation only if final packaging proves it necessary | only if DEC-012 evidence requires it |
 
 No other PowerShell wrapper is part of the initial contract.
@@ -41,26 +41,46 @@ It may establish the CLI and verify that it starts. It must not install/configur
 
 This is a development helper for the `portable-opencode` repository while the CLI does not yet implement repository verification.
 
-Target checks:
+Implemented checks:
 
 ```text
 required/minimal frontmatter
 reserved index.md/log.md without frontmatter
 JSON and JSONC parsing
-JSON Schema validation
+repository-owned JSON Schema validation
 internal Markdown link resolution
+source-resource resolution
 forbidden deprecated metadata
-obvious secret/private-file boundary checks where deterministic
+document ID uniqueness/directory conventions
+machine-readable state path references
+deterministic private-file boundary checks
 ```
 
 Rules:
 
-- it must be deterministic and non-mutating;
+- it is deterministic and non-mutating;
 - it does not become a generated-project dependency;
+- schema definitions remain in repository schema files rather than being duplicated in PowerShell;
+- repository-validation dependencies are isolated in `scripts/requirements-docs.txt` and are development tooling, not product runtime dependencies;
 - when the CLI later owns equivalent validation, keep the script only as a thin invocation wrapper or remove it;
 - do not duplicate schema definitions inside PowerShell.
 
-Exact implementation belongs to post-contract repository work, not a runtime spike.
+### CI execution
+
+`.github/workflows/ci.yml` is intentionally a thin adapter:
+
+```text
+pull request or push to main
+→ windows-latest
+→ checkout
+→ provision Python used only by the repository validator
+→ install pinned scripts/requirements-docs.txt
+→ run scripts/verify-docs.ps1
+```
+
+The workflow contains no parallel validation rules. Local and CI validation therefore use the same repository helper.
+
+The temporary Python validation dependencies do not resolve `DEC-009`; they are pre-implementation repository tooling only. Product language/runtime remains evidence-gated.
 
 ## 5. `recover-cli.ps1`
 
@@ -105,5 +125,5 @@ This inventory is complete for pre-spike delegation when:
 
 - SPIKE-001 knows it must determine the minimum bootstrap primitives;
 - no spike is allowed to add convenience scripts as canonical product surface;
-- repository validation can be implemented independently without affecting product architecture;
+- repository validation runs through the same `verify-docs.ps1` locally and in CI;
 - break-glass recovery remains evidence-gated rather than speculative.
