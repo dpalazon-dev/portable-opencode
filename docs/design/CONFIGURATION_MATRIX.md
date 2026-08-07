@@ -103,6 +103,17 @@ private values and state stay outside Git
 mutate or remove only proven-owned resources
 ```
 
+### Operational contracts
+
+```text
+DESIGN-008  canonical paths + resource catalogs
+DESIGN-009  CLI semantics + diagnostics + exit classes
+DESIGN-010  S-contract → spike/implementation-test mapping
+DESIGN-011  PowerShell script boundary
+```
+
+Machine-readable desired state is represented by `config/components.jsonc` and `config/resources/{environment,project}.jsonc`. Pending component versions are evidence gaps, not values for implementation agents to choose.
+
 ### Effective OpenCode provenance
 
 ```text
@@ -240,13 +251,13 @@ remote config
 | ID | Contract and personal default | Surface | Validation / evidence |
 |---|---|---|---|
 | CLI-01 | Select language/packaging from Windows-native evidence | DEC-009/012 + prototypes | clean-machine comparison · P/S |
-| CLI-02 | Core commands: status, inspect, plan, apply, doctor | CLI contracts | unit/integration fixtures · A |
+| CLI-02 | Core commands: status, inspect, plan, apply, doctor | DESIGN-009 + schemas | unit/integration fixtures · A |
 | CLI-03 | `install` converges global OpenCode, OpenRouter presets, RTK, Graphify and observability | adapters + plans | clean/existing machine fixtures · A/S |
-| CLI-04 | `init-project` generates canonical config/assets/context/graph policy/state | templates + Windows filesystem | spaces/rerun fixtures · A |
+| CLI-04 | `init-project` generates canonical config/assets/context/graph policy/state | DESIGN-008 + templates + Windows filesystem | spaces/rerun fixtures · A |
 | CLI-05 | Add component lifecycle commands only where native commands are insufficient | narrow adapters | interruption/failure · A/S |
-| CLI-06 | Updates compare supported and installed versions, plan, back up and migrate | early supported-version manifest + functions | upgrade/rollback · A/S |
-| CLI-07 | Small `.ps1` bootstrap/recovery wrappers only; bootstrap establishes and invokes the CLI without duplicating lifecycle logic | PowerShell | clean session/quoting/exit/idempotence · A/S |
-| CLI-08 | JSON output and stable failure classes | serialization | schema/exit-code tests · A |
+| CLI-06 | Updates compare supported and installed versions, plan, back up and migrate | `config/components.jsonc` + functions | upgrade/rollback · A/S |
+| CLI-07 | Small `.ps1` wrappers only within DESIGN-011 boundaries; bootstrap establishes the CLI without duplicating lifecycle logic | PowerShell | SPIKE-001 + clean bootstrap fixture · A/S |
+| CLI-08 | JSON output and stable failure classes | `schemas/operation-result.schema.json` + DESIGN-009 | schema/exit-code tests · A |
 | CLI-09 | Uninstall/detach later after ownership is proven | resource inventory | preserve-user-data tests · L |
 
 ## 13. Verification and readiness — 6
@@ -257,14 +268,14 @@ remote config
 | VER-02 | Load OpenCode config/assets/permissions on Windows | fixture | invalid config blocks · S |
 | VER-03 | Resolve/reconcile three presets and capture policy metadata through OpenCode | authenticated inference | missing role blocks · A/S |
 | VER-04 | Persist useful Graphify allowlist and verify RTK | fixture | graph blocks; RTK degrades · A/S |
-| VER-05 | Ready requires valid context/config/roles/LSP/graph/verification | `project doctor` | critical gaps block · A |
+| VER-05 | Ready requires valid context/config/roles/LSP/graph/verification | `project doctor` + verification manifest | critical gaps block · A |
 | VER-06 | E2E clean Windows to recoverable ready project | disposable environment | no WSL/chat context · A/S |
 
 ## 14. Matrix result
 
 The matrix contains **81 capabilities**, reduced from 177 without reducing canonical scope.
 
-All owner-level defaults are resolved. Remaining decisions are evidence-gated:
+All owner-level defaults and pre-spike operational contracts are resolved. Remaining decisions are evidence-gated:
 
 ```text
 DEC-009  implementation language
@@ -272,12 +283,18 @@ DEC-010  Phoenix backend acceptance
 DEC-012  final packaging after language evidence
 ```
 
+`DESIGN-010` owns the complete mapping from every `S` contract to SPIKE-001 through SPIKE-004 or an explicit post-spike implementation test.
+
 ## 15. Work remaining before activation
 
-- execute metadata migration and validation;
-- instantiate DESIGN-007 as complete global/project resource manifests and ownership schemas;
-- define CLI command contracts, diagnostics and scripts;
-- map every `S` contract to SPIKE-001 through SPIKE-004 or an implementation test;
-- execute the spikes and resolve DEC-009/010/012;
+Pre-spike operational definition is complete. Remaining work is:
+
+- execute metadata migration and docs validation;
+- execute SPIKE-001 through SPIKE-004 and apply evidence-backed corrections;
+- populate exact supported versions/mechanisms in `config/components.jsonc` from spike results;
+- create the concrete OpenRouter preset manifest after SPIKE-002 model-policy evidence;
+- resolve DEC-009/010/012;
 - synchronize specification v0.3;
 - obtain owner approval of the resulting active matrix.
+
+No implementation agent may fill a `pending` evidence field by preference or convenience.
