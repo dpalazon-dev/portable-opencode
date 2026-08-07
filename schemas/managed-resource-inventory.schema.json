@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/managed-resource-inventory.schema.json",
+  "title": "Portable OpenCode Managed Resource Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "resources"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "resources": {
+      "type": "array",
+      "items": {"$ref": "managed-resource.schema.json"}
+    },
+    "last_operation_id": {"type": ["string", "null"]},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}
