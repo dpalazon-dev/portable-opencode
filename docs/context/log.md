@@ -146,6 +146,17 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - kept Python validation dependencies strictly as development tooling, without resolving the product implementation-language decision;
 - confirmed inherited metadata still exists, so the first expected CI failure should expose migration debt rather than be treated as product failure.
 
+## 2026-08-07 — Codex development hierarchy defined
+
+- added rich repository-local Codex specialist roles under `.codex/agents/` while keeping them separate from OpenCode product agents;
+- added `development-orchestrator` as the single master role and kept configured delegation depth at `1`;
+- created `DESIGN-012` with parent-mediated specialist routing, advisor/worker/quality role classes, fresh review and explicit retry/block rules;
+- created `schemas/codex-work-package.schema.json` so delegated implementation has explicit goal, scope, invariants, verification, stop conditions and deliverables;
+- created `schemas/codex-task-receipt.schema.json` so workers return changed files, real checks, deviations, blockers and residual risks;
+- made the orchestration protocol binding in `AGENTS.md` and corrected its stale reference to deprecated `modified` frontmatter;
+- created `SPIKE-000` to test actual Codex role discovery, named-role routing, depth-1 behavior, Work Package/Receipt flow, fresh review and negative routing control before trusting the hierarchy;
+- changed the technical-validation order to `SPIKE-000 → metadata migration + green CI → SPIKE-001 → SPIKE-002 → SPIKE-004 → SPIKE-003`.
+
 **Recommended next action**
 
-Use Codex to complete the controlled metadata migration and make the repository-validation CI green without changing document bodies except broken-link corrections. Once CI is green and state/specification housekeeping is synchronized, execute `SPIKE-001` as the first bounded Windows-native experiment.
+Run `SPIKE-000` from Codex on Windows. If the hierarchy passes or its exact semantic-vs-structural limitations are documented, use the validated `development-orchestrator` workflow to complete the controlled metadata migration and obtain the first green repository CI before starting `SPIKE-001`.
