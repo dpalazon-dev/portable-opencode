@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/verification-manifest.schema.json",
+  "title": "Portable OpenCode Project Verification Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile", "commands", "readiness"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "profile": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "commands": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/command"},
+      "uniqueItems": true
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_command_ids", "require_graph", "require_context", "require_opencode"],
+      "properties": {
+        "required_command_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "require_graph": {"type": "boolean"},
+        "require_context": {"type": "boolean"},
+        "require_opencode": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "purpose", "command", "working_directory", "required", "permission"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "purpose": {"type": "string", "minLength": 1},
+        "command": {"type": "string", "minLength": 1},
+        "working_directory": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"},
+        "timeout_seconds": {"type": ["integer", "null"], "minimum": 1},
+        "permission": {
+          "type": "string",
+          "enum": ["allow-for-verify", "ask-for-verify"]
+        },
+        "failure_impact": {
+          "type": "string",
+          "enum": ["blocks-ready", "degrades-ready", "informational"]
+        }
+      }
+    }
+  }
+}
