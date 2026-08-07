@@ -8,6 +8,12 @@ max_concurrent_threads_per_session = 6
 max_depth = 1
 interrupt_message = true
 
+# Single master role. All specialists report directly back to this parent.
+# DESIGN-012 and SPIKE-000 define and validate the orchestration contract.
+[agents.development-orchestrator]
+description = "Master coordinator for non-trivial portable-opencode development: grounds context, creates bounded Work Packages, delegates to specialists, requires verification/fresh review, and accepts/retries/blocks results."
+config_file = "./agents/development-orchestrator.toml"
+
 [agents.prompt-engineer]
 description = "Designs and evaluates prompts used while developing portable-opencode; does not select models or redesign system architecture."
 config_file = "./agents/prompt-engineer.toml"
