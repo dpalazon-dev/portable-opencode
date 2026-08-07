@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/codex-task-receipt.schema.json",
+  "title": "Portable OpenCode Codex Task Receipt",
+  "description": "Structured evidence returned by a delegated Codex development specialist to development-orchestrator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "agent",
+    "status",
+    "files_changed",
+    "commands_run",
+    "verification",
+    "assumptions",
+    "deviations",
+    "blockers",
+    "residual_risks",
+    "needs_parent_decision"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "task_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9._-]{2,79}$"},
+    "agent": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["completed", "partial", "blocked", "failed"]},
+    "summary": {"type": "string"},
+    "files_changed": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    },
+    "commands_run": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "outcome"],
+        "properties": {
+          "command": {"type": "string", "minLength": 1},
+          "outcome": {"type": "string", "enum": ["passed", "failed", "unavailable", "skipped"]},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "outcome"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "outcome": {"type": "string", "enum": ["passed", "failed", "unavailable", "not-applicable"]},
+          "evidence": {"type": "string"}
+        }
+      }
+    },
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "deviations": {"type": "array", "items": {"type": "string"}},
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "residual_risks": {"type": "array", "items": {"type": "string"}},
+    "needs_parent_decision": {"type": "array", "items": {"type": "string"}},
+    "review_recommended": {"type": "boolean"}
+  }
+}
