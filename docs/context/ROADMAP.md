@@ -11,6 +11,8 @@ status: active
 
 ```text
 define contracts
+→ validate the Codex development factory
+→ close repository-validation housekeeping
 → verify upstream behaviour on Windows
 → build a small CLI core
 → configure the personal machine
@@ -56,6 +58,8 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [x] inventory PowerShell bootstrap, repository verification and break-glass recovery boundaries;
 - [x] map every `S` contract to a spike or implementation test;
 - [x] write executable briefs for SPIKE-001 through SPIKE-004;
+- [x] define repository-local Codex master/specialist orchestration, Work Packages and Receipts;
+- [x] write executable `SPIKE-000` to validate the Codex development hierarchy before relying on it;
 - [ ] approve `DESIGN-001` after these contracts are reviewable.
 
 ### New contract artefacts
@@ -66,6 +70,7 @@ DESIGN-008  Canonical Resource Catalog and File Trees
 DESIGN-009  CLI Operation Contracts
 DESIGN-010  Evidence and Spike Mapping
 DESIGN-011  PowerShell Script Inventory
+DESIGN-012  Codex Development Orchestration
 
 config/components.jsonc
 config/resources/environment.jsonc
@@ -79,6 +84,8 @@ schemas/resource-catalog.schema.json
 schemas/operation-result.schema.json
 schemas/supported-components.schema.json
 schemas/verification-manifest.schema.json
+schemas/codex-work-package.schema.json
+schemas/codex-task-receipt.schema.json
 ```
 
 ### Exit criteria
@@ -87,11 +94,41 @@ schemas/verification-manifest.schema.json
 - every CLI command has an explicit input, plan, mutation and output contract;
 - schemas exist for machine-edited state and manifests;
 - no product default is left for an implementation agent to guess;
-- SPIKE-001 through SPIKE-004 can be assigned as bounded experiments.
+- SPIKE-001 through SPIKE-004 can be assigned as bounded runtime experiments;
+- Codex development work has one explicit master, bounded specialist roles and machine-checkable delegation/receipt contracts.
 
 The operational-contract and spike-definition portions of Phase 0 are complete. Metadata migration, specification v0.3 synchronization and owner approval of the resulting matrix remain before Phase 0 is formally closed.
 
 ## 3. Phase 1 — Technical validation
+
+### Development preflight — SPIKE-000
+
+Canonical brief: [`docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md`](../spikes/SPIKE-000_CODEX_ORCHESTRATION.md)
+
+Before assigning runtime spikes to Codex, validate the development factory itself:
+
+- repository-local `.codex/config.toml` discovery;
+- `development-orchestrator` discovery/invocation;
+- named specialist discovery/invocation;
+- parent-mediated depth-1 behavior;
+- Work Package validation;
+- worker Receipt round trip;
+- fresh independent `code-reviewer`;
+- observable failure rather than silent role substitution when routing is unavailable.
+
+This is a development-process gate, not a product runtime contract. If partially supported, record exactly which guarantees are structural versus prompt/policy enforced. If it fails, do not autonomously build a custom dispatcher.
+
+### Repository-validation gate
+
+After `SPIKE-000` establishes how Codex orchestration actually behaves:
+
+```text
+migrate inherited metadata
+→ run scripts/verify-docs.ps1
+→ obtain the first green repository CI
+```
+
+The metadata migration remains bounded housekeeping and must not redesign context policy.
 
 ### SPIKE-001 — OpenCode lifecycle
 
@@ -156,17 +193,21 @@ Validate:
 ### Recommended execution order
 
 ```text
-SPIKE-001
+SPIKE-000
+→ metadata migration + green CI
+→ SPIKE-001
 → SPIKE-002
 → SPIKE-004
 → SPIKE-003
 ```
 
-SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if branch and global-configuration isolation are preserved. `DESIGN-010` owns the complete contract-to-evidence map.
+SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if branch and global-configuration isolation are preserved. `DESIGN-010` owns the complete product contract-to-evidence map; `DESIGN-012` owns the Codex development-orchestration preflight.
 
 ### Exit criteria
 
-- all spikes reproduce from PowerShell without WSL;
+- Codex development orchestration is either validated or its exact routing limitations are recorded before runtime delegation;
+- repository validation reaches green after the controlled metadata migration;
+- all runtime spikes reproduce from PowerShell without WSL;
 - uncertain matrix contracts become accepted, revised or deferred;
 - exact tested versions/mechanisms replace `pending` entries in `config/components.jsonc` only from evidence;
 - `DEC-009`, `DEC-010` and `DEC-012` are resolved from evidence;
@@ -237,10 +278,10 @@ Deliver documentation/schema validation, unit/integration/contract tests, dispos
 - Ratatui configuration TUI;
 - WSL, Linux and macOS support;
 - broad legacy-repository adoption;
-- extra agents, roles or Graphify exports without repeated evidence;
+- extra product agents, roles or Graphify exports without repeated evidence;
 - profiles, teams and organizations;
 - MCP/local-model profiles;
 - alternate observability backends unless Phoenix fails its gate;
-- GitHub automation, marketplaces, background agents and hosted control planes;
+- GitHub product automation, marketplaces, background agents and hosted control planes;
 - general dotfiles, editor, shell, font or desktop personalization;
 - a terminal multiplexer or multi-harness session manager unless repeated use proves a gap.
