@@ -22,15 +22,17 @@ orient
 → close
 ```
 
+For non-trivial Codex work, `DESIGN-012` refines that into a master-mediated delegation lifecycle rather than replacing the repository workflow.
+
 ## 2. Current operating mode
 
-The repository is in definition and **contract design**, with the operational contract surface complete enough to delegate bounded technical spikes.
+The repository is in definition and **technical-validation readiness**, with the operational contract surface complete enough to delegate bounded technical spikes after validating the Codex development factory.
 
 Binding facts:
 
 - Windows native, PowerShell and Windows Terminal;
 - root `opencode.jsonc` plus `.opencode/` assets;
-- native agents plus non-mutating `review`/`verify`;
+- native OpenCode agents plus non-mutating `review`/`verify`;
 - `main`, `reason`, `fast` semantic roles;
 - Graphify minimal output allowlist;
 - minimal context metadata schema;
@@ -39,7 +41,10 @@ Binding facts:
 - canonical environment/project resource catalogs and state/result schemas;
 - exact headless CLI operation contracts;
 - proposed native Phoenix lifecycle with private SQLite and 30-day retention;
-- four executable spike briefs with evidence and discard boundaries;
+- repository-local Codex specialists plus one `development-orchestrator` master;
+- Work Package and Task Receipt schemas for bounded Codex delegation;
+- `SPIKE-000` defined to validate actual Codex role routing before relying on the hierarchy;
+- four product runtime spike briefs with evidence and discard boundaries;
 - the TUI is deferred;
 - all owner-level defaults are resolved;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
@@ -55,7 +60,7 @@ Read the smallest authoritative set:
 4. task-specific source documents;
 5. accepted, proposed and superseded relevant decisions.
 
-For spike execution also read the owning spike brief and `DESIGN-010` before touching the environment.
+For Codex-orchestrated work also read `DESIGN-012`. For spike execution read the owning spike brief and the relevant evidence-mapping design before touching the environment.
 
 Identify observable outcome, owning source, required evidence and Windows constraints.
 
@@ -71,7 +76,7 @@ current repository context
 
 Do not infer unsupported surfaces, duplicate native capabilities, commit every generated artefact or add metadata without a consumer.
 
-A `pending` component version, path or remote representation is an evidence gap. It is never permission for an agent to select a convenient value silently.
+A `pending` component version, path, Codex routing guarantee or remote representation is an evidence gap. It is never permission for an agent to select a convenient value silently.
 
 ## 5. Standard workflow
 
@@ -87,6 +92,8 @@ Use official documentation and reproducible PowerShell experiments. For a report
 ### Plan
 Identify files, decisions, risks, validation and rollback/discard boundary.
 
+For non-trivial Codex delegation, the plan is converted into one or more bounded Work Packages under `DESIGN-012`.
+
 ### Change
 Make the smallest coherent change. Avoid profiles, unsupported paths, duplicate agents, unused abstractions, hidden platform expansion, unnecessary generated output and false implementation claims. Never hand-edit generated artefacts: change their canonical source, generator or inputs and regenerate them. Preserve unrelated findings for a separate change unless they block the current outcome.
 
@@ -95,12 +102,14 @@ Match checks to risk:
 
 - docs: metadata schema, reserved files, links and state consistency;
 - config: schema, discovery, precedence, provenance, materialization, ownership and drift;
-- agents: modes, permissions and invocation;
+- agents: modes, permissions, invocation and parent/child identity where relevant;
 - presets: normalized diff, versioning, tools, privacy and fallback;
 - observability: protocol, redaction, PIDs, ports, retention, storage, context pressure and compaction correlation where available;
 - Graphify: scope, allowlist, determinism and manifest portability;
 - Windows: paths, quoting, exit codes, processes and locked files;
 - security: denied actions, redaction and backups.
+
+For delegated implementation, deterministic verification precedes independent review. The implementation worker's self-assessment is not the final acceptance signal.
 
 ### Synchronize
 Update only sources whose meaning changed.
@@ -128,9 +137,52 @@ Use an isolated branch and do not mark `docs-only` successful until all checks p
 
 Use direct `main` for low-risk documentation/state synchronization. Use branches for spikes, executable work, migrations and risky changes. PRs are useful when review, CI or Codex work benefits from an explicit merge boundary.
 
-Delegate only bounded tasks specifying outcome, sources, decisions, scope, forbidden operations, required Windows evidence, expected documentation/state updates and branch boundary.
+### Codex hierarchy
 
-For SPIKE-001 through SPIKE-004 the corresponding canonical brief is the delegation contract. Codex may correct an assumption from evidence in its result, but may not silently redesign product policy or promote experiment code to production architecture.
+For non-trivial Codex development, use:
+
+```text
+user
+→ development-orchestrator
+  → bounded specialists
+  → verification
+  → fresh review
+  → parent acceptance
+```
+
+`development-orchestrator` is the only master role. Specialists report to it directly; they do not recursively spawn or command other specialists. Configured delegation depth remains `1`.
+
+`context-manager` and `prompt-engineer` are advisory to the master. They help recover context and shape difficult execution briefs, but they do not own implementation or create a hidden command chain.
+
+### Work Packages
+
+Delegated implementation must be bounded by the intent of:
+
+```text
+schemas/codex-work-package.schema.json
+```
+
+A package identifies outcome, authoritative sources, assigned agent, include/exclude scope, invariants, required verification, stop conditions and deliverables.
+
+### Task Receipts
+
+Workers return observable evidence matching the intent of:
+
+```text
+schemas/codex-task-receipt.schema.json
+```
+
+Receipts report real changed files/checks/outcomes, assumptions, deviations, blockers and residual risks. They do not replace independent verification.
+
+### Fresh review
+
+Meaningful code, safety-sensitive lifecycle/configuration work and ambiguous deterministic results require a fresh `code-reviewer`. The reviewer receives the original task/Work Package, diff and verification evidence rather than relying on the implementation worker's private reasoning.
+
+### Orchestration limitation policy
+
+If Codex cannot demonstrably invoke the intended named role, do not silently substitute another role and claim success. `SPIKE-000` classifies which guarantees are structural, semantic/prompt-enforced or unavailable in the installed build.
+
+Do not build a custom dispatcher/hook workaround unless a later explicit design accepts that work.
 
 ## 8. Spike workflow
 
@@ -138,6 +190,7 @@ Each spike records question, relevance, hypotheses, tested versions, reproducibl
 
 Canonical briefs:
 
+- `docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md` — development-process preflight;
 - `docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md`;
 - `docs/spikes/SPIKE-002_OPENROUTER_POLICY.md`;
 - `docs/spikes/SPIKE-003_OBSERVABILITY.md`;
@@ -146,15 +199,19 @@ Canonical briefs:
 Recommended execution order:
 
 ```text
-SPIKE-001
+SPIKE-000
+→ metadata migration + green CI
+→ SPIKE-001
 → SPIKE-002
 → SPIKE-004
 → SPIKE-003
 ```
 
+`SPIKE-000` validates the development hierarchy, not product runtime behavior. If it is only partially supported, record exactly which guarantees are structural versus prompt-enforced before proceeding.
+
 SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if their branches and global-configuration mutations remain isolated.
 
-Each result is written to `docs/spikes/results/SPIKE-NNN.md`, with safe reusable fixtures only when they improve later testing.
+Each result is written under `docs/spikes/results/` with safe reusable fixtures only when they improve later testing.
 
 A spike validates mechanism; it does not silently redesign policy.
 
@@ -163,6 +220,14 @@ A spike validates mechanism; it does not silently redesign policy.
 ### Active: `docs-only`
 
 Pending metadata migration, link checks, schema validation, decision/state consistency and secret scan.
+
+Canonical command:
+
+```text
+scripts/verify-docs.ps1
+```
+
+`.github/workflows/ci.yml` is only a thin Windows adapter over the same validator.
 
 ### Future: `repo`
 
@@ -181,7 +246,7 @@ clean Windows
 → later session recovers state
 ```
 
-`DESIGN-010` maps the evidence contracts that must pass before this E2E can be trusted.
+`DESIGN-010` maps the product evidence contracts that must pass before this E2E can be trusted.
 
 ## 10. Failure, recovery and secrets
 
@@ -193,10 +258,11 @@ Normal recovery remains `inspect → plan → apply → doctor`. PowerShell does
 
 ## 11. Current next sequence
 
-1. review and merge the operational-contract branch;
-2. delegate SPIKE-001 to Codex and collect its Windows-native evidence;
-3. apply only evidence-backed contract corrections and update `config/components.jsonc`;
-4. execute SPIKE-002 and SPIKE-004, then SPIKE-003;
-5. resolve `DEC-009`, `DEC-010` and `DEC-012`;
-6. complete metadata migration and synchronize specification v0.3 before formal Phase 0 closure/active matrix approval;
-7. implement the CLI against the accepted post-spike contracts and run `E2E-001`.
+1. execute `SPIKE-000` on the actual Windows Codex environment and record PASS / INCONCLUSIVE / FAIL;
+2. if orchestration is usable, use the validated master/specialist workflow to complete the controlled metadata migration;
+3. make `scripts/verify-docs.ps1` and repository CI green without redesigning `DESIGN-004`;
+4. execute `SPIKE-001` and apply only evidence-backed contract corrections;
+5. execute SPIKE-002 and SPIKE-004, then SPIKE-003;
+6. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence;
+7. synchronize specification v0.3 and complete formal Phase 0 closure/active matrix approval;
+8. implement the CLI against the accepted post-spike contracts and run `E2E-001`.
