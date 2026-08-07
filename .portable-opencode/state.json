@@ -1,5 +1,6 @@
 {
   "$schema": "./state.schema.json",
+  "schema_version": "0.1.0",
   "project": {
     "name": "portable-opencode",
     "repository": "dpalazon-dev/portable-opencode",
@@ -18,12 +19,19 @@
     "bootstrap_shell": "powershell",
     "primary_terminal": "windows-terminal",
     "posix_shell_scripts_required": false,
-    "exact_windows_version": "pending-supported-version-manifest",
-    "exact_powershell_version": "pending-supported-version-manifest"
+    "exact_windows_version": "pending-spike-001",
+    "exact_powershell_version": "pending-spike-001",
+    "private_state_schema": "schemas/environment-state.schema.json"
   },
   "managed_configuration": {
     "decision": "DEC-021",
     "design": "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
+    "resource_catalog_design": "docs/design/CANONICAL_RESOURCE_CATALOG.md",
+    "environment_catalog": "config/resources/environment.jsonc",
+    "project_catalog": "config/resources/project.jsonc",
+    "resource_schema": "schemas/managed-resource.schema.json",
+    "inventory_schema": "schemas/managed-resource-inventory.schema.json",
+    "catalog_schema": "schemas/resource-catalog.schema.json",
     "default_modes": ["rendered", "copied"],
     "evidence_gated_mode": "linked",
     "external_state_mode": "queried",
@@ -31,8 +39,12 @@
     "mutation_policy": "proven-ownership-only",
     "unknown_resource_policy": "preserve-and-report",
     "retirement_policy": "explicit-plan-no-broad-cleanup",
-    "supported_version_manifest": "pending-contract-definition",
-    "bootstrap_policy": "minimal-powershell-establish-and-invoke-cli"
+    "supported_version_manifest": "config/components.jsonc",
+    "supported_version_schema": "schemas/supported-components.schema.json",
+    "supported_versions_status": "pending-spike-evidence",
+    "private_override_path": "%LOCALAPPDATA%\\portable-opencode\\override.jsonc",
+    "private_override_default": "absent",
+    "bootstrap_policy": "minimal-powershell-establish-cli-only"
   },
   "opencode": {
     "project_config_decision": "DEC-017",
@@ -63,7 +75,8 @@
     "missing_policy": "create-after-approval",
     "drift_policy": "create-new-active-version-after-approval",
     "delete_policy": "never-automatic",
-    "preset_reference_validation": "pending-spike-002"
+    "preset_reference_validation": "pending-spike-002",
+    "concrete_manifest_status": "pending-spike-002-model-policy-evidence"
   },
   "agent_model_policy": {
     "decision": "DEC-018",
@@ -87,6 +100,7 @@
     "environment": "not_applicable",
     "scaffold": "dogfooded_manually",
     "interactive_context": "personal_first_alignment_complete",
+    "project_verification_schema": "schemas/verification-manifest.schema.json",
     "ready": false
   },
   "context": {
@@ -121,41 +135,34 @@
     "conventions": "aligned",
     "operations": "aligned",
     "configuration_tui": "deferred",
-    "roadmap": "aligned_pending_owner_review",
-    "configuration_matrix": "owner-defaults-resolved-pending-contracts-and-evidence",
-    "managed_configuration_materialization": "aligned_pending-resource-manifests"
+    "roadmap": "operational-contracts-complete-pending-owner-review",
+    "configuration_matrix": "contracts-defined-pending-evidence-and-owner-approval",
+    "managed_configuration_materialization": "aligned",
+    "canonical_resource_catalog": "aligned",
+    "cli_operation_contracts": "aligned",
+    "evidence_mapping": "aligned",
+    "spike_briefs": "defined"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
     "control_interface": "headless-cli-required",
     "tui": "deferred-until-cli-effective",
     "profile_strategy": "single-canonical-configuration",
-    "environment_lifecycle": "separate",
-    "project_lifecycle": "separate",
+    "environment_lifecycle": "separate-private-state",
+    "project_lifecycle": "separate-versioned-state",
     "implementation_shape": "small-core-with-native-tool-surfaces",
     "resource_mutation_boundary": "proven-ownership-only"
   },
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
-      "status": "owner-defaults-resolved-pending-contracts-and-evidence",
+      "status": "contracts-defined-pending-evidence-and-owner-approval",
       "document": "docs/design/CONFIGURATION_MATRIX.md",
       "capability_count": 81,
       "previous_capability_count": 177,
-      "resolved_personal_defaults": [
-        "primary-environment-windows-native",
-        "opencode-project-config-root-jsonc-with-dot-opencode-assets",
-        "native-agents-with-main-reason-fast-roles",
-        "graphify-minimal-versioned-output-allowlist",
-        "minimal-repository-owned-context-metadata",
-        "phoenix-native-on-demand-sqlite-30-day-intent",
-        "declarative-openrouter-preset-reconciliation",
-        "explicit-managed-resource-materialization"
-      ],
       "remaining_personal_defaults": 0,
       "evidence_gated_decisions": ["DEC-009", "DEC-010", "DEC-012"],
-      "next_action": "instantiate-resource-manifests-and-cli-contracts",
-      "completion_gate": "metadata_migrated_contracts_defined_spikes_mapped_owner_verified"
+      "completion_gate": "metadata_migrated_spec_synced_spikes_executed_evidence_resolved_owner_verified"
     },
     "agent_model_roles": {
       "id": "DESIGN-002",
@@ -186,9 +193,30 @@
     },
     "managed_configuration_materialization": {
       "id": "DESIGN-007",
-      "status": "active_pending-resource-manifests-and-windows-validation",
+      "status": "active_pending-windows-validation",
       "document": "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
       "decision": "DEC-021"
+    },
+    "canonical_resource_catalog": {
+      "id": "DESIGN-008",
+      "status": "active_pending-spike-path-validation",
+      "document": "docs/design/CANONICAL_RESOURCE_CATALOG.md"
+    },
+    "cli_operation_contracts": {
+      "id": "DESIGN-009",
+      "status": "active-preimplementation",
+      "document": "docs/design/CLI_OPERATION_CONTRACTS.md",
+      "result_schema": "schemas/operation-result.schema.json"
+    },
+    "evidence_and_spike_mapping": {
+      "id": "DESIGN-010",
+      "status": "active",
+      "document": "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md"
+    },
+    "powershell_script_inventory": {
+      "id": "DESIGN-011",
+      "status": "active-pending-packaging-evidence",
+      "document": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md"
     }
   },
   "features": {
@@ -200,6 +228,35 @@
       "technology_candidate": "ratatui",
       "implementation": "not_started",
       "reconsider_after": "effective-stable-cli"
+    }
+  },
+  "spikes": {
+    "opencode_lifecycle": {
+      "id": "SPIKE-001",
+      "status": "defined",
+      "document": "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md",
+      "execution_order": 1
+    },
+    "openrouter_policy": {
+      "id": "SPIKE-002",
+      "status": "defined",
+      "document": "docs/spikes/SPIKE-002_OPENROUTER_POLICY.md",
+      "execution_order": 2,
+      "depends_on": ["SPIKE-001"]
+    },
+    "graphify_rtk": {
+      "id": "SPIKE-004",
+      "status": "defined",
+      "document": "docs/spikes/SPIKE-004_GRAPHIFY_RTK.md",
+      "execution_order": 3,
+      "depends_on": ["SPIKE-001"]
+    },
+    "observability": {
+      "id": "SPIKE-003",
+      "status": "defined",
+      "document": "docs/spikes/SPIKE-003_OBSERVABILITY.md",
+      "execution_order": 4,
+      "depends_on": ["SPIKE-001", "SPIKE-002"]
     }
   },
   "graphify": {
@@ -238,7 +295,11 @@
   },
   "operations": {
     "model": "lightweight-personal-workflow",
-    "codex_policy": "bounded-tasks-only",
+    "codex_policy": "bounded-spikes-then-implementation",
+    "cli_contract": "docs/design/CLI_OPERATION_CONTRACTS.md",
+    "evidence_map": "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
+    "script_inventory": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
+    "result_schema": "schemas/operation-result.schema.json",
     "active_verification_profile": "docs-only",
     "bootstrap_shell": "powershell",
     "defect_policy": "reproduce-user-facing-path-before-fix",
@@ -256,15 +317,15 @@
     "superseded": 1
   },
   "next": {
-    "milestone": "configuration-contract-definition",
-    "step": "instantiate-managed-resource-manifests-and-cli-contracts",
+    "milestone": "technical-validation-readiness",
+    "step": "review-merge-operational-contracts-then-execute-spike-001",
     "documents": [
       "docs/context/ROADMAP.md",
-      "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
-      "docs/design/OBSERVABILITY_LIFECYCLE.md",
-      "docs/design/OPENROUTER_PRESET_RECONCILIATION.md"
+      "docs/design/CANONICAL_RESOURCE_CATALOG.md",
+      "docs/design/CLI_OPERATION_CONTRACTS.md",
+      "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
+      "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
     ]
   },
-  "updated_at": "2026-08-06T18:44:00+02:00"
+  "updated_at": "2026-08-07T09:53:00+02:00"
 }
