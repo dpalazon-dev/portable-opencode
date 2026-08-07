@@ -136,6 +136,16 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 - wrote executable Codex briefs for SPIKE-001 through SPIKE-004 with scope, safety, procedure, evidence, acceptance criteria, decision impact and discard boundaries;
 - selected `SPIKE-001 → SPIKE-002 → SPIKE-004 → SPIKE-003` as the recommended technical validation order.
 
+## 2026-08-07 — Operational contracts merged and repository CI added
+
+- merged the operational-contract work into `main`;
+- implemented `scripts/verify-docs.ps1` as the single repository-validation entry point;
+- pinned repository-only validation dependencies in `scripts/requirements-docs.txt`;
+- added `.github/workflows/ci.yml` on `windows-latest` for pull requests and pushes to `main`;
+- kept GitHub Actions as a thin adapter that invokes the same local validator rather than duplicating validation logic;
+- kept Python validation dependencies strictly as development tooling, without resolving the product implementation-language decision;
+- confirmed inherited metadata still exists, so the first expected CI failure should expose migration debt rather than be treated as product failure.
+
 **Recommended next action**
 
-Review and merge the operational-contract PR, then delegate `SPIKE-001` to Codex as the first bounded Windows-native experiment. Metadata migration and specification v0.3 synchronization remain definition-phase housekeeping before formal Phase 0 closure, but no longer require Codex to invent spike behaviour.
+Use Codex to complete the controlled metadata migration and make the repository-validation CI green without changing document bodies except broken-link corrections. Once CI is green and state/specification housekeeping is synchronized, execute `SPIKE-001` as the first bounded Windows-native experiment.
