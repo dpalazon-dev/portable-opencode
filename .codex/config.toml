@@ -31,3 +31,7 @@ config_file = "./agents/cli-developer.toml"
 [agents.powershell-ui-architect]
 description = "PowerShell and future UI/TUI specialist; currently limited to PowerShell boundaries and advisory UI work because the TUI is deferred."
 config_file = "./agents/powershell-ui-architect.toml"
+
+[agents.powershell-7-expert]
+description = "PowerShell 7 specialist for Windows-native bootstrap, repository validation, CI helpers, spike evidence, and safe process/filesystem automation."
+config_file = "./agents/powershell-7-expert.toml"
