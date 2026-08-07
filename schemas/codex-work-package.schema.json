@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-opencode.local/schemas/codex-work-package.schema.json",
+  "title": "Portable OpenCode Codex Work Package",
+  "description": "Repository-development delegation contract from development-orchestrator to one bounded specialist.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "title",
+    "goal",
+    "assigned_agent",
+    "authoritative_sources",
+    "scope",
+    "invariants",
+    "required_verification",
+    "stop_conditions",
+    "deliverables",
+    "orchestration",
+    "receipt_schema"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "0.1.0"},
+    "task_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9._-]{2,79}$"},
+    "title": {"type": "string", "minLength": 3},
+    "goal": {"type": "string", "minLength": 10},
+    "assigned_agent": {
+      "type": "string",
+      "enum": [
+        "context-manager",
+        "prompt-engineer",
+        "cli-developer",
+        "powershell-7-expert",
+        "powershell-ui-architect",
+        "test-engineer",
+        "code-reviewer"
+      ]
+    },
+    "advisors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["context-manager", "prompt-engineer", "test-engineer", "code-reviewer"]
+      },
+      "uniqueItems": true
+    },
+    "authoritative_sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "path": {"type": "string"},
+          "required": {"type": "boolean"}
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "exclude"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "exclude": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "required_verification": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "purpose", "blocking"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+          "purpose": {"type": "string", "minLength": 1},
+          "command": {"type": "string"},
+          "blocking": {"type": "boolean"},
+          "expected": {"type": "string"}
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "deliverables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "orchestration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_agent", "max_delegation_depth", "fresh_review_required"],
+      "properties": {
+        "parent_agent": {"type": "string", "const": "development-orchestrator"},
+        "max_delegation_depth": {"type": "integer", "const": 1},
+        "fresh_review_required": {"type": "boolean"},
+        "parallelizable": {"type": "boolean"},
+        "implementation_owner": {"type": "string"}
+      }
+    },
+    "receipt_schema": {"type": "string", "const": "schemas/codex-task-receipt.schema.json"},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}
