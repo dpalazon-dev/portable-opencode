@@ -9,6 +9,8 @@ sources:
     title: OpenRouter presets
   - resource: https://openrouter.ai/docs/api/api-reference/presets/list-presets
     title: OpenRouter preset API
+  - resource: https://openrouter.ai/docs/api/api-reference/presets/list-preset-versions
+    title: OpenRouter preset version API
 ---
 
 # OpenRouter preset reconciliation
@@ -249,7 +251,24 @@ Validate:
 - API limits, errors and authentication;
 - stable identifiers worth storing privately.
 
-## 14. Reconsideration triggers
+## 14. SPIKE-002 evidence reconciliation
+
+`docs/spikes/results/SPIKE-002.md` is `INCONCLUSIVE`: the unauthenticated list and get requests returned `401`, no remote mutation was attempted, and no provider-backed OpenCode request was possible. Official documentation confirms the v1 list, get, version-list, version-get and create-from-skin surfaces, including designated-version response fields and new-version behavior for an existing slug. A disposable local prototype confirms the intended normalization cases, but it is not a remote API test or production reconciler.
+
+The following constraints are now explicit:
+
+- normalize the persisted configuration before applying a version so an equivalent request is a no-op; do not assume the API deduplicates equivalent posts;
+- compare the selected inference skin and persisted configuration, while excluding transient fields that the API ignores;
+- treat `@preset/<slug>` as an OpenRouter wire-level reference only until OpenCode accepts and executes a verified mapping;
+- keep provider routing, fallback, data-collection denial and ZDR as OpenRouter policy fields, while reporting account-level privacy state that cannot be inspected;
+- retain prior versions and record partial success; stop after failed post-operation verification rather than continuing silently;
+- do not create the concrete versioned manifest or add model/provider values from documentation alone.
+
+### Remaining authenticated gate
+
+Before the concrete manifest or an accepted OpenRouter component can be created, a separately authorized disposable run must prove: private credential injection without persistence; list/get/create/designated-version/version-history lifecycle for all three run-scoped role slugs; live no-op normalization, drift/versioning and one-slug partial-failure recovery; one exact OpenCode preset representation; synthetic `main`/`reason`/`fast` requests with tool and fallback compatibility; authenticated account/request privacy visibility; and non-streaming/streaming usage, routing, provider, cache, reasoning, cost and error fields where returned. The result must sanitize identifiers and remove all temporary remote resources. Until then, `SPIKE-002` stays `INCONCLUSIVE`, `@preset/<slug>` stays wire-level only and `SPIKE-003` stays blocked.
+
+## 15. Reconsideration triggers
 
 Change this policy only when:
 

@@ -186,7 +186,7 @@ portable-fast
 
 These slugs are remote identities, not concrete model names. Their desired policy will be stored in a versioned local manifest.
 
-`SPIKE-002` must determine how OpenCode should reference them. The design must not assume that a guessed `provider/model` string is valid merely because OpenRouter accepts `@preset/<slug>` in direct API requests.
+`SPIKE-002` did not establish an OpenCode representation because authenticated provider-backed execution was unavailable. OpenRouter documents `@preset/<slug>` for the wire request, while OpenCode documents model selection as `provider/model` or an expanded provider/model object. The design must not promote a guessed alias or `modelID` containing `@preset/<slug>`.
 
 ## 6. OpenCode configuration intent
 
@@ -204,7 +204,7 @@ scout.model   = fast role
 general.model = fast role
 ```
 
-Exact model identifiers are generated only after SPIKE-002 validates preset representation.
+Exact model identifiers and preset references remain ungenerated: [`SPIKE-002.md`](../spikes/results/SPIKE-002.md) classified the OpenCode representation `BLOCKED / UNVERIFIED`.
 
 Custom agents are stored as:
 
@@ -269,6 +269,8 @@ A new agent requires repeated work with a distinct permission or output contract
 - tool compatibility and fallbacks;
 - preset reconciliation and version identity;
 - `small_model` use through the fast role.
+
+SPIKE-002 preserved the role mapping but did not validate the runtime reference, tool path, fallback compatibility or `small_model` behavior. These remain implementation/evidence gates and must not be filled with concrete models by preference.
 
 ## 11. Reconsideration triggers
 

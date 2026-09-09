@@ -97,7 +97,7 @@ schemas/codex-task-receipt.schema.json
 - SPIKE-001 through SPIKE-004 can be assigned as bounded runtime experiments;
 - Codex development work has one explicit master, bounded specialist roles and machine-checkable delegation/receipt contracts.
 
-The operational-contract, spike-definition, repository-metadata migration, specification v0.3 synchronization and owner-approval portions of Phase 0 are complete. The first green remote CI result remains the repository gate before Phase 0 is formally closed.
+The operational-contract, spike-definition, repository-metadata migration, specification v0.3 synchronization, owner-approval and first-green-remote-CI portions of Phase 0 are complete. Formal closure still depends on the remaining evidence-gated technical decisions and implementation readiness.
 
 ## 3. Phase 1 — Technical validation
 
@@ -136,6 +136,8 @@ The completed metadata migration was bounded housekeeping and did not redesign c
 
 Canonical brief: [`docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md`](../spikes/SPIKE-001_OPENCODE_LIFECYCLE.md)
 
+Result: [`SPIKE-001_RESULT.md`](../spikes/results/SPIKE-001_RESULT.md) is `INCONCLUSIVE` and remains bounded to `opencode-ai@1.18.30`. `PASS`: native installation/version detection, exercised config discovery/merge/provenance layers, `.opencode/` asset discovery, permissions, local server startup, synthetic session records, plugin config-hook loading, copied/rendered materialization and disposable junction creation. `FAIL`: symbolic-link creation under the tested Windows privilege/developer-mode state. `INCONCLUSIVE`: rules loading, real command/subtask and skill invocation, LSP usefulness, watcher events, compaction/context-limit metadata, session recovery and adversarial model behavior. `NOT TESTED`: auth-store mechanics, provider-backed turns, formatter execution, managed settings and organization configuration. These observations are evidence for contract review only; they do not generalize beyond the tested version or change the canonical root `opencode.jsonc` policy.
+
 Validate on Windows:
 
 - install/version detection;
@@ -161,6 +163,8 @@ Validate:
 - create/new-version APIs and partial failure;
 - routing, fallbacks, tools, privacy and usage metadata.
 
+Result: [`SPIKE-002.md`](../spikes/results/SPIKE-002.md) is `INCONCLUSIVE`. Official API and local normalization evidence is recorded, but authenticated preset lifecycle, OpenCode representation, tool/routing smoke tests and live privacy/usage fields remain blocked. The concrete preset manifest stays pending.
+
 ### SPIKE-003 — Observability
 
 Canonical brief: [`docs/spikes/SPIKE-003_OBSERVABILITY.md`](../spikes/SPIKE-003_OBSERVABILITY.md)
@@ -181,6 +185,15 @@ Accept or reject `DEC-010` from evidence.
 ### SPIKE-004 — Graphify and RTK
 
 Canonical brief: [`docs/spikes/SPIKE-004_GRAPHIFY_RTK.md`](../spikes/SPIKE-004_GRAPHIFY_RTK.md)
+
+Result: [`SPIKE-004.md`](../spikes/results/SPIKE-004.md) is `PARTIAL`. Graphify `0.9.56` and RTK `0.48.0` were installed and exercised in native Windows disposable fixtures. Core extraction, ignore semantics, clone/update, relative-path manifest portability, RTK rewriting, exclusions, private failure tee and degraded operation were evidenced; determinism, corruption recovery, hooks and provider-backed OpenCode hook invocation remain partial or deferred as stated in the result. The Graphify report requires `PYTHONHASHSEED=0` for deterministic tie ordering; corrupt graphs require a full rebuild; hooks remain deferred because they are asynchronous and write private logs. The final Graphify allowlist is `graph.json`, `GRAPH_REPORT.md` and conditional validated `manifest.json`; no Graphify MCP or alternate RTK filter is introduced.
+
+### Current technical-validation gate
+
+- `SPIKE-001`: `INCONCLUSIVE`, version-scoped to `opencode-ai@1.18.30`; no OpenCode component promotion follows from configuration-only evidence.
+- `SPIKE-002`: `INCONCLUSIVE`; only official documentation and local synthetic normalization evidence are available. The exact authenticated gate is defined in [`SPIKE-002.md`](../spikes/results/SPIKE-002.md).
+- `SPIKE-004`: `PARTIAL`; only Graphify `0.9.56` and RTK `0.48.0` are promoted in `config/components.jsonc`.
+- `SPIKE-003`: defined, blocked and not started until the authenticated SPIKE-002 gate is complete; Phoenix remains pending.
 
 Validate:
 

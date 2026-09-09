@@ -47,17 +47,21 @@ E2E-001    clean-Windows canonical journey after implementation
 | `OC-03` | SPIKE-001 root config discovery | `IMPL-PRJ-01` generated project load fixture |
 | `OC-04` | SPIKE-001 precedence/provenance | `IMPL-OC-02` inspect provenance fixture |
 | `OC-05` | SPIKE-001 rules discovery/precedence | `IMPL-PRJ-02` rules contradiction fixture |
-| `OC-06` | SPIKE-001 auth-store mechanics + SPIKE-002 authenticated request | `IMPL-SEC-01` no-secret persistence fixture |
+| `OC-06` | SPIKE-001 auth-store mechanics (`NOT TESTED`) + SPIKE-002 authenticated request | `IMPL-SEC-01` no-secret persistence fixture |
 | `OC-07` | SPIKE-002 exact role/preset representation | `IMPL-OC-03` generated mapping fixture |
 | `OC-08` | SPIKE-001 agent discovery/modes/permissions | `IMPL-AGENT-01` scaffold agent fixture |
 | `OC-09` | SPIKE-001 command/subtask invocation | `IMPL-AGENT-02` `/review`/`/verify` fixture |
 | `OC-10` | SPIKE-001 skill discovery/permission | `IMPL-AGENT-03` on-demand skill fixture |
 | `OC-11` | SPIKE-001 plugin mechanics; SPIKE-003/004 for accepted integrations | `IMPL-OC-04` plugin failure/isolation fixture |
 | `OC-12` | SPIKE-001 permissions/last-match behaviour | `IMPL-SEC-02` adversarial permission fixture |
-| `OC-13` | SPIKE-001 LSP/formatter mechanics | `IMPL-PRJ-03` stack-derived config fixture |
-| `OC-14` | SPIKE-001 compaction/watcher behaviour | `IMPL-OC-05` long-session/watcher fixture |
+| `OC-13` | SPIKE-001 LSP/formatter mechanics (`INCONCLUSIVE`; formatter `NOT TESTED`) | `IMPL-PRJ-03` stack-derived config fixture |
+| `OC-14` | SPIKE-001 compaction/watcher behaviour (`INCONCLUSIVE`) | `IMPL-OC-05` long-session/watcher fixture |
 
 `OC-15` is documentation-backed and does not carry `S` in the current matrix.
+
+### SPIKE-001 reconciliation boundary
+
+The result remains `INCONCLUSIVE` and is version-scoped to `opencode-ai@1.18.30`. `PASS` observations cover installation/version detection, exercised configuration/assets/permissions, local server/session records, plugin config-hook loading and copied/rendered materialization. The symbolic-link attempt is `FAIL`. Rules loading, real command/subtask and skill invocation, LSP usefulness, watcher events, compaction/context-limit metadata, recovery continuity and adversarial model behavior remain `INCONCLUSIVE`. Auth-store mechanics, provider-backed turns, formatter execution, organization configuration and managed Windows settings remain `NOT TESTED`. No category is promoted to an accepted product guarantee by this reconciliation.
 
 ## 4. OpenRouter contracts
 
@@ -72,6 +76,10 @@ E2E-001    clean-Windows canonical journey after implementation
 | `OR-07` | SPIKE-002 usage/cost/resolution fields | `IMPL-OBS-01` usage ingestion fixture |
 
 `OR-08` is owner policy and does not require runtime evidence before initial activation.
+
+### SPIKE-002 reconciliation boundary
+
+[`SPIKE-002.md`](../spikes/results/SPIKE-002.md) is `INCONCLUSIVE`. `OR-01`, `OR-02`, `OR-03`, `OR-06` and `OR-07` have partial documentation/local-fixture evidence; `OR-04` and `OR-05` remain unverified; `OR-08` remains an accepted owner policy. The official `@preset/<slug>` syntax is proven only for OpenRouter wire requests. The exact OpenCode representation, authenticated preset lifecycle, provider/fallback resolution, tool compatibility and live usage fields remain blocked by unavailable private credentials.
 
 ## 5. Observability contracts
 
@@ -107,6 +115,10 @@ E2E-001    clean-Windows canonical journey after implementation
 | `RTK-03` | SPIKE-004 exclusions/config | `IMPL-RTK-03` exclusion fixture |
 | `RTK-04` | SPIKE-004 private failure tee | `IMPL-RTK-04` failure-output privacy fixture |
 | `RTK-05` | SPIKE-004 gain/degradation behaviour | `IMPL-RTK-05` doctor/degraded fixture |
+
+### SPIKE-004 reconciliation boundary
+
+[`SPIKE-004.md`](../spikes/results/SPIKE-004.md) is `PARTIAL`. Native fixture evidence is sufficient to promote only Graphify `0.9.56` and RTK `0.48.0` with their recorded mechanisms. `GR-05`/`GR-06` remain partial because deterministic report generation requires `PYTHONHASHSEED=0` and corrupt graphs require a full rebuild; `GR-07`/`GR-08` remain partial or deferred because hooks are asynchronous/private-log side effects and state/doctor implementation is not present. Provider-backed OpenCode hook invocation was not tested.
 
 ## 8. Cross-cutting `S` contracts
 

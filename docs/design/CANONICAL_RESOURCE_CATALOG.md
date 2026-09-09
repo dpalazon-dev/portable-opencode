@@ -117,7 +117,24 @@ Target intent:
 └── AGENTS.md
 ```
 
-`SPIKE-001` must prove the effective Windows path and global rule discovery for the supported OpenCode version. If upstream behaviour differs, this design is corrected from evidence before implementation.
+`SPIKE-001` proved the effective Windows path and global rule discovery for the tested OpenCode version. The evidence remains version-scoped and does not replace the implementation validation required before support is promoted.
+
+The spike observed `%USERPROFILE%\\.config\\opencode` as the global configuration path in an isolated Windows fixture. It also observed, only in `opencode-ai@1.18.30`, that root `opencode.json` and `opencode.jsonc` can merge and that `.opencode\\opencode.jsonc` can load after the root project configuration. The canonical target remains one root `opencode.jsonc`; duplicate roots and `.opencode\\opencode.json(c)` remain noncanonical policy findings and must not be generalized as universal upstream behavior.
+
+### SPIKE-001 precedence reconciliation
+
+| Layer or surface | Classification | Reconciled interpretation |
+|---|---|---|
+| Global config | `PASS` | Marker and permission defaults loaded from the observed global path. |
+| `OPENCODE_CONFIG` | `PASS` | Custom marker appeared between global and project markers. |
+| Root project config and Git-root traversal | `PASS` | Root marker loaded from a nested directory; the tested version merged root JSON and JSONC rather than rejecting both. |
+| `OPENCODE_CONFIG_DIR` | `PASS` for asset discovery | Custom agents/commands were discovered; complete precedence semantics were not independently generalized. |
+| `.opencode\\opencode.jsonc` | `PASS`, version-scoped | Marker loaded after root config in `1.18.30`; this remains noncanonical for portable-opencode. |
+| `OPENCODE_CONFIG_CONTENT` | `PASS` | Inline marker and conflicting rule won last in the exercised process. |
+| Remote organization config | `NOT TESTED` | No authenticated organization surface was exercised. |
+| `%ProgramData%\\opencode` managed config | `NOT TESTED` | No system directory was modified or proven as an active layer. |
+
+This table records observed evidence, not a universal OpenCode precedence contract. The implementation must report active provenance and keep the repository's canonical conflict policy explicit.
 
 No global copies of `review`, `verify` or project lifecycle commands are required. They remain project-versioned so a repository carries the behaviour needed to understand and verify itself.
 
@@ -191,7 +208,7 @@ After `portable-opencode init-project <path>` and successful `/init-project`, th
 
 Only native asset directories with actual files are created. Additional `.opencode/skills/`, `plugins/`, `tools/` or `themes/` directories appear only when a real project need or accepted integration requires them.
 
-`graphify-out/manifest.json` remains conditional on `SPIKE-004` proving portability and private-path absence.
+`graphify-out/manifest.json` is accepted conditionally for the validated Graphify `0.9.56` contract. SPIKE-004 proved relative source keys, absence of absolute/private paths and clone/incremental re-anchoring on Windows; freshness fields remain expected diff churn.
 
 ## 6. Environment resource catalog
 
@@ -207,8 +224,8 @@ config/resources/environment.jsonc
 | `env.opencode.rules` | `config/global/AGENTS.md` | effective global `AGENTS.md` | `copied` | portable-opencode | replace only with proven ownership/backup |
 | `env.opencode.auth` | none | OpenCode private auth store | `private` | OpenCode/user | inspect availability; never copy credentials |
 | `env.openrouter.presets` | `config/openrouter/presets.jsonc` | OpenRouter preset API | `queried` | OpenRouter | reconcile only through DEC-020 |
-| `env.rtk.integration` | upstream RTK command | native RTK/OpenCode integration | `queried` | RTK | invoke native lifecycle; verify resulting state |
-| `env.graphify.installation` | supported component manifest | native Graphify installation | `queried` | Graphify/package mechanism | install/verify supported version only |
+| `env.rtk.integration` | upstream RTK command | native RTK/OpenCode integration | `queried` | RTK | invoke `rtk init -g --opencode`; verify `%USERPROFILE%\\.config\\opencode\\plugins\\rtk.ts`; missing binary is degraded |
+| `env.graphify.installation` | supported component manifest | private Python 3.12 venv containing `graphifyy==0.9.56` | `queried` | Graphify/package mechanism | install/verify supported version only; no project-global Python mutation |
 | `env.observability.proxy` | portable implementation + component manifest | managed local executable/process | `private` | portable-opencode | managed process and private runtime state |
 | `env.observability.phoenix` | component manifest | isolated Python environment + private SQLite | `private` | Phoenix/portable-opencode lifecycle | native lifecycle only if SPIKE-003 accepts Phoenix |
 | `env.portable.state` | environment-state schema | `%LOCALAPPDATA%\portable-opencode\environment-state.json` | `private` | portable-opencode | machine-edited; schema validated |
@@ -240,7 +257,7 @@ config/resources/project.jsonc
 | `project.verification` | verification-manifest schema + stack-derived initialization | `.portable-opencode/verification.json` | `rendered` | project/portable-opencode | canonical commands and readiness checks only |
 | `project.graphifyignore` | base + stack + repository decisions | `.graphifyignore` | `rendered` then curated | project | explicit ambiguous-path decisions preserved |
 | `project.gitignore` | base + stack | `.gitignore` | `rendered` then curated | project | never erase unrelated user rules |
-| `project.graph.outputs` | Graphify | `graphify-out/` allowlist | `queried` | Graphify/project | update through Graphify; verify before commit |
+| `project.graph.outputs` | Graphify | `graphify-out/` allowlist | `queried` | Graphify/project | update through Graphify with `PYTHONHASHSEED=0`; verify before commit |
 
 The initial target is a new or freshly initialized repository. Adoption semantics for arbitrary existing project files remain outside the MVP.
 

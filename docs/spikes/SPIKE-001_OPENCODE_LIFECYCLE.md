@@ -210,6 +210,8 @@ The result must produce an observed precedence table, not merely restate documen
 6. record duplicate/conflicting asset behaviour where relevant;
 7. record whether asset changes require restart or are picked up dynamically.
 
+When the fixture is written by Windows PowerShell 5.1, record the exact Markdown encoding and verify the first bytes. A BOM-sensitive parsing difference is an implementation hazard to classify separately from OpenCode runtime support and must not be generalized beyond the tested version.
+
 ### Test group E — Agent and permission contract
 
 Using synthetic files and commands:
@@ -372,7 +374,7 @@ Do not silently change accepted product defaults inside the spike branch.
 Required:
 
 ```text
-docs/spikes/results/SPIKE-001.md
+docs/spikes/results/SPIKE-001_RESULT.md
 ```
 
 Optional reusable evidence:

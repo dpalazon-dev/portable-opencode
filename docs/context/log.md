@@ -204,3 +204,55 @@ Run `SPIKE-000` from Codex on Windows. If the hierarchy passes or its exact sema
 - GitHub Actions run `34339325620` passed on `windows-latest` with Python 3.13;
 - repository validation is now green locally and remotely;
 - `SPIKE-001` is unblocked as the next technical-validation step.
+
+## 2026-09-09 — SPIKE-001 executed with bounded evidence
+
+- rechecked the publication gate: `601d068` is an ancestor of `origin/main`; its historical CI failure was corrected by `1c90a51`, and the current `origin/main` commit `fde157d` passed CI in run `34339478515`;
+- installed `opencode-ai@1.18.30` under a disposable npm prefix and isolated OpenCode state with native Windows PowerShell;
+- demonstrated global/project/custom/inline config merge, Git-root discovery, `.opencode/` agents/commands/skills, permission last-match behavior, local server startup, synthetic parallel session records, plugin config-hook loading, and copied/rendered materialization;
+- observed that root JSON plus JSONC merge in the tested version and `.opencode/opencode.jsonc` is loaded as a higher project layer; these are evidence for contract review, not silent policy changes;
+- observed symbolic-link creation failing with `UnauthorizedAccessException` while a junction succeeded in the temporary fixture;
+- classified the result as `INCONCLUSIVE` because auth, provider-backed turns, real command/subtask execution, formatter execution, watcher events, compaction/context limits, managed settings and organization configuration were not proven;
+- removed disposable package, fixture, session, server and materialization artifacts; no commit or push was made;
+- next action is review and reconciliation of `docs/spikes/results/SPIKE-001_RESULT.md` before SPIKE-002.
+
+## 2026-09-09 — SPIKE-001 reconciled before SPIKE-002
+
+- kept `SPIKE-001` `INCONCLUSIVE` and preserved the original result evidence without provider-backed execution or credential use;
+- synchronized the version-scoped configuration findings: root JSON plus JSONC merge and `.opencode/opencode.jsonc` loading are observed only in `opencode-ai@1.18.30`, while the canonical root `opencode.jsonc` and duplicate/noncanonical-file policy remain unchanged;
+- recorded the Windows PowerShell 5.1 BOM hazard as an implementation test, kept symbolic-link creation as `FAIL`, and kept junction success from becoming a link substitution policy;
+- kept provider-backed execution, auth-store mechanics, formatter execution, organization configuration and managed Windows settings as `NOT TESTED`, with watcher/compaction/context-pressure limitations still `INCONCLUSIVE`;
+- corrected stale CI and specification-v0.3 state to remote-green, and marked SPIKE-002 unblocked after this reconciliation without starting it;
+- next action is to execute SPIKE-002 under its own brief and safety boundary.
+
+## 2026-09-09 — SPIKE-002 executed without private authentication
+
+- confirmed the reconciled SPIKE-001 result remains version-scoped `INCONCLUSIVE` with its provider/auth/runtime limitations intact;
+- checked the official OpenRouter v1 preset list, get, version and create-from-skin documentation and observed HTTP `401` for unauthenticated list/get requests;
+- used only the run-scoped temporary slug names in the test boundary, made no remote mutation, and did not read or print credentials;
+- proved missing/in-sync/reordered/unknown-field/drift/unauthorized comparison outcomes and a one-slug-at-a-time partial-failure model in a disposable local synthetic prototype;
+- kept `DEC-020`, the three semantic role mappings and the no-automatic-delete policy, while leaving the exact OpenCode representation `BLOCKED / UNVERIFIED` and the concrete manifest pending;
+- recorded documented privacy, routing, fallback, usage, cache, reasoning and cost fields without claiming live availability;
+- updated the state, roadmap, component notes and design evidence; no SPIKE-003 or SPIKE-004 work was started and no commit or push was made.
+
+**Next action:** obtain a separately authorized private credential context for the authenticated portions, then validate the OpenCode preset path before promoting any concrete manifest values.
+
+## 2026-09-09 — SPIKE-004 executed with partial Windows-native evidence
+
+- installed Graphify `0.9.56` from `graphifyy==0.9.56` in a disposable Python 3.12 venv and RTK `0.48.0` from the verified official Windows ZIP downloaded through `winget`;
+- exercised synthetic fixtures for Graphify extraction, `.gitignore`/`.graphifyignore`, quality comparisons, deterministic report generation with `PYTHONHASHSEED=0`, clone/incremental update, manifest portability, corruption recovery and disposable hook install/uninstall;
+- accepted the versioned Graphify allowlist `graph.json`, `GRAPH_REPORT.md` and conditional `manifest.json`; kept cache, HTML, cost, query logs, analysis/root files and optional exports private or ignored;
+- verified Graphify OpenCode installation as an upstream project integration and RTK `rtk init -g --opencode` as an upstream global TypeScript plugin delegating to `rtk rewrite`; no provider-backed OpenCode turn was run;
+- verified RTK exclusions, private failures-only tee, gain statistics and pass-through degradation; no alternate filter layer or Graphify MCP was added;
+- backed up and removed the accidental disposable-test write to the real RTK OpenCode plugin target, verified the global target absent, and left no integration active;
+- classified SPIKE-004 as `PARTIAL`, updated `DESIGN-003`, `DESIGN-008`, `config/components.jsonc`, state and roadmap, and did not start SPIKE-003 or use OpenRouter credentials.
+
+## 2026-09-09 — Final reconciliation of SPIKE-001, SPIKE-002 and SPIKE-004
+
+- preserved the final classifications: SPIKE-001 `INCONCLUSIVE`, SPIKE-002 `INCONCLUSIVE` and SPIKE-004 `PARTIAL`;
+- promoted only Graphify `0.9.56` and RTK `0.48.0` with their evidenced Windows-native mechanisms; OpenCode, OpenRouter and Phoenix remain pending;
+- reconciled result-document frontmatter with the repository lifecycle schema without changing the classifications stated in the reports;
+- recorded the exact authenticated SPIKE-002 gate: private credential boundary, live three-slug lifecycle, normalization/idempotence, partial failure, exact OpenCode representation, role/tool/fallback smoke tests, privacy visibility and usage metadata;
+- audited `docs/superpowers/plans/2026-09-09-spike-002-openrouter-policy.md` as a disposable execution plan: it is not a canonical source or spike deliverable, and its evidence is superseded by the sanitized result;
+- removed the disposable plan and confirmed no fixtures, processes, hooks, plugins, caches or temporary logs remain in the repository;
+- kept SPIKE-003 defined, blocked and not started until the authenticated SPIKE-002 gate is complete; no commit or push was performed.

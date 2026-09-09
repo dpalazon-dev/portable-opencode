@@ -251,6 +251,8 @@ Diagnostics must report:
 - active `OPENCODE_CONFIG`, `OPENCODE_CONFIG_DIR` or `OPENCODE_CONFIG_CONTENT` as explicit provenance layers;
 - managed Windows settings under `%ProgramData%\opencode` when they affect the result.
 
+`SPIKE-001` observed, only in `opencode-ai@1.18.30`, that root `opencode.json` and `opencode.jsonc` can merge and that `.opencode/opencode.jsonc` can load after the root configuration. This does not revise `DEC-017`: the portable layer still manages one canonical root `opencode.jsonc`, reports duplicate-root ambiguity and noncanonical `.opencode` configuration as policy findings, and must not generalize the tested parser behavior to other OpenCode versions. Remote organization and managed Windows configuration were not tested.
+
 ## 7. One canonical personal configuration
 
 The MVP uses:
@@ -331,6 +333,7 @@ The smallest credible implementation contains:
 - versioned native configuration and templates;
 - an early supported-component version manifest;
 - a minimal PowerShell bootstrap that only establishes and invokes the CLI;
+- explicit UTF-8-without-BOM writing and byte-level verification for generated OpenCode Markdown when Windows PowerShell 5.1 is involved; the exact BOM hazard remains an implementation test, not a product-wide runtime guarantee;
 - schemas, fixtures and tests;
 - one observability integration validated by a spike.
 

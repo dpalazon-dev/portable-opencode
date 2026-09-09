@@ -208,7 +208,7 @@ This decision confused OpenCode's asset directory with its documented project ru
 
 Root `opencode.jsonc` is canonical runtime configuration. `.opencode/` stores native agents, commands, skills, plugins, tools and themes. Root `AGENTS.md` remains the repository operating entry point.
 
-Root `opencode.json` is a migration candidate; dual root configs are blocking; `.opencode/opencode.json(c)` is misplaced; environment and managed sources are reported as provenance.
+Root `opencode.json` is a migration candidate; dual root configs are blocking in the portable configuration policy; `.opencode/opencode.json(c)` is misplaced; environment and managed sources are reported as provenance. `SPIKE-001` observed merge/loading of these noncanonical forms only in `opencode-ai@1.18.30`; that observation is version-scoped evidence and does not replace the policy or establish behavior for other versions.
 
 ---
 
@@ -277,7 +277,8 @@ Rules:
 - partial outcomes are recorded and verified individually;
 - inability to reconcile reproducibly leaves policy blocked or explicitly degraded rather than falling back silently to manual setup;
 - API keys remain private;
-- exact OpenCode preset representation remains SPIKE-002 evidence.
+- exact OpenCode preset representation remains blocked/unverified after SPIKE-002 because OpenRouter `@preset/<slug>` was not exercised through an authenticated OpenCode provider path;
+- official API semantics and a local synthetic comparison support the normalization/versioning policy, but do not authorize a concrete manifest or model/provider choice.
 
 ---
 
@@ -298,6 +299,8 @@ private   → local value or state outside Git
 ```
 
 `rendered` and `copied` are the normal modes. Links are not a convenience default because an upstream application may rewrite the canonical repository through the target.
+
+`SPIKE-001` observed `copied` and `rendered` success, symbolic-link creation failure with `UnauthorizedAccessException`, and junction success in a disposable fixture. A junction is not a silent substitute for a symbolic link, and the linked mode remains exceptional and evidence-gated.
 
 The CLI may replace, detach or remove only resources whose ownership it can prove from recorded state and current evidence. Unmanaged or ambiguous resources are preserved and reported. Removing a resource from desired state produces a retirement plan; it never authorizes blind deletion.
 

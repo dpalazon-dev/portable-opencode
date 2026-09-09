@@ -48,7 +48,7 @@ Binding facts:
 - the TUI is deferred;
 - all owner-level defaults are resolved;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
-- inherited metadata migration is complete and the canonical local validator passes; the CI adapter has not yet been run.
+- inherited metadata migration is complete, the canonical local validator passes, and the CI adapter passed in run `34339478515`.
 
 ## 3. Starting a session
 
@@ -209,7 +209,7 @@ SPIKE-000
 → SPIKE-003
 ```
 
-`SPIKE-000` validates the development hierarchy, not product runtime behavior. If it is only partially supported, record exactly which guarantees are structural versus prompt-enforced before proceeding.
+`SPIKE-000` validates the development hierarchy, not product runtime behavior. If it is only partially supported, record exactly which guarantees are structural versus prompt-enforced before proceeding. `SPIKE-001` is now recorded as bounded, version-scoped `INCONCLUSIVE` evidence; its untested provider/auth surfaces are not prerequisites for beginning the independently scoped `SPIKE-002` policy experiment.
 
 SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if their branches and global-configuration mutations remain isolated.
 
@@ -221,7 +221,7 @@ A spike validates mechanism; it does not silently redesign policy.
 
 ### Active: `docs-only`
 
-The canonical local validator passes metadata migration, link checks, schema validation, decision/state consistency and private-boundary checks. The GitHub Actions adapter remains pending its next run.
+The canonical local validator passes metadata migration, link checks, schema validation, decision/state consistency and private-boundary checks. The GitHub Actions adapter passed the same validation path in run `34339478515`.
 
 Canonical command:
 
@@ -261,9 +261,8 @@ Normal recovery remains `inspect → plan → apply → doctor`. PowerShell does
 ## 11. Current next sequence
 
 1. use the documented prompt/policy-mediated orchestration workflow, with the SPIKE-000 routing limitation explicit;
-2. obtain the first green repository CI result from the same validator adapter;
-3. synchronize specification v0.3 and complete formal Phase 0 closure/active matrix approval;
-4. execute `SPIKE-001` and apply only evidence-backed contract corrections;
-5. execute SPIKE-002 and SPIKE-004, then SPIKE-003;
-6. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence;
-7. implement the CLI against the accepted post-spike contracts and run `E2E-001`.
+2. preserve the reconciled `SPIKE-001` categories and version boundary in all downstream contracts;
+3. complete the exact authenticated SPIKE-002 gate before creating the concrete preset manifest or accepting OpenRouter;
+4. retain SPIKE-004 as `PARTIAL` and the Graphify/RTK promotions as version-scoped evidence; keep OpenCode, OpenRouter and Phoenix pending;
+5. keep SPIKE-003 blocked and not started until the SPIKE-002 gate is complete;
+6. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence, then implement the CLI against the accepted post-spike contracts and run `E2E-001`.

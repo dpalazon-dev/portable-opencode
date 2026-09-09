@@ -3,7 +3,7 @@ type: Design Matrix
 id: DESIGN-001
 title: Portable OpenCode Configuration Matrix
 description: Reduced personal-first Windows-native configuration contracts grounded in the canonical specification and current upstream documentation.
-status: draft
+status: active
 ---
 
 # Configuration matrix
@@ -126,6 +126,8 @@ remote config
 → managed settings
 ```
 
+`SPIKE-001` exercised only a subset of these layers. In `opencode-ai@1.18.30`, root JSON plus JSONC merged and `.opencode/opencode.jsonc` loaded after the root project configuration. The canonical conflict treatment remains a portable policy, not a claim about every OpenCode parser version; remote organization and managed Windows settings remain `NOT TESTED`.
+
 ---
 
 ## 4. Core configuration and lifecycle — 10
@@ -174,6 +176,8 @@ remote config
 | `OPENCODE_CONFIG_DIR` | additional-asset provenance |
 | `OPENCODE_CONFIG_CONTENT` | runtime override provenance |
 | `%ProgramData%\opencode` | managed highest-priority provenance |
+
+The first two noncanonical cases were observed to load or merge in the tested version, but remain policy findings for managed configuration. The result does not convert them into supported canonical layouts.
 
 ## 6. OpenRouter — 8
 
@@ -287,14 +291,14 @@ DEC-012  final packaging after language evidence
 
 ## 15. Work remaining before activation
 
-Pre-spike operational definition is complete. Remaining work is:
+Pre-spike operational definition and repository validation are complete. Remaining work is:
 
-- execute metadata migration and docs validation;
-- execute SPIKE-001 through SPIKE-004 and apply evidence-backed corrections;
-- populate exact supported versions/mechanisms in `config/components.jsonc` from spike results;
-- create the concrete OpenRouter preset manifest after SPIKE-002 model-policy evidence;
+- preserve the reconciled `SPIKE-001` result classifications and version boundary;
+- complete the authenticated SPIKE-002 gate and apply evidence-backed corrections;
+- retain `SPIKE-004` as `PARTIAL`; Graphify `0.9.56` and RTK `0.48.0` are the only promoted components, while OpenCode, OpenRouter and Phoenix remain pending;
+- keep `SPIKE-003` blocked and not started until the SPIKE-002 gate is complete;
+- create the concrete OpenRouter preset manifest only after SPIKE-002 supplies authenticated model-policy evidence;
 - resolve DEC-009/010/012;
-- synchronize specification v0.3;
-- obtain owner approval of the resulting active matrix.
+- keep the active matrix synchronized with the evidence and downstream implementation tests.
 
 No implementation agent may fill a `pending` evidence field by preference or convenience.

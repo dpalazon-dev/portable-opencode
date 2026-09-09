@@ -157,7 +157,8 @@ Rules:
 - installed state is not automatically the source of truth;
 - secrets are referenced through private mechanisms;
 - derived state is reconstructible or explicitly local-only;
-- use the format natively consumed by each component.
+- use the format natively consumed by each component;
+- when PowerShell 5.1 writes OpenCode Markdown assets, choose and verify an explicit UTF-8 encoding without relying on its defaults; the BOM-sensitive fixture result is version-scoped evidence, not a universal OpenCode guarantee.
 
 ## 9. OpenCode and OpenRouter
 
@@ -249,7 +250,7 @@ The canonical local validator passes because:
 - decisions, matrix, roadmap and state agree;
 - no unsupported implementation claim exists.
 
-The GitHub Actions adapter remains pending its next run.
+The GitHub Actions adapter is green in run `34339478515` on `windows-latest`; later changes must keep the same validator path green.
 
 When executable code exists, prioritize schema, planning, mutation, lifecycle, security and canonical Windows journey tests.
 

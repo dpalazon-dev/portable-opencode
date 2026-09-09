@@ -77,7 +77,7 @@ The report is generated evidence, not curated project architecture. Durable conc
 
 ### `graphify-out/manifest.json`
 
-**Versioned: yes when produced by the supported Graphify version.**
+**Versioned: yes when produced by the pinned, validated Graphify version.**
 
 Reason:
 
@@ -86,7 +86,7 @@ Reason:
 - avoids unnecessary full rebuilds on another machine;
 - supports incremental freshness.
 
-`SPIKE-004` must verify the exact schema and absence of absolute or private paths before enabling this rule.
+SPIKE-004 validated Graphify `0.9.56` on Windows: the manifest used relative source keys, contained no absolute user/profile paths or machine identifiers, survived a clone to a different Windows path and supported incremental update. Its `mtime` and `seen` fields are freshness metadata, not stable content hashes; expected update churn must not be mistaken for private-path leakage.
 
 ## 4. Ignored private or regenerable output
 
@@ -153,9 +153,11 @@ graphify-out/*
 !graphify-out/manifest.json
 ```
 
-If a supported Graphify version uses additional required parent directories or different output names, `SPIKE-004` updates this policy deliberately.
+For Graphify `0.9.56`, `.graphify_root`, `.graphify_analysis.json`, `cache/`, HTML, cost, query logs and optional exports remain ignored. If a supported Graphify version uses additional required parent directories or different output names, this policy must be updated deliberately.
 
 `.graphifyignore` must exclude `graphify-out/` from source extraction so generated graph artefacts never feed back into the graph.
+
+Graph report generation and hook-triggered rebuilds must set `PYTHONHASHSEED=0`. Without that upstream-supported deterministic seed, tied god-node ordering changed between otherwise identical report generations. This is an explicit update precondition, not a replacement Graphify implementation.
 
 ## 6. Update and commit policy
 
@@ -189,6 +191,8 @@ After cloning on another supported Windows machine:
 - stale graph marks project state `dirty`;
 - corrupt or unexplained severely shrunken graph marks project state `blocked` until repaired.
 
+The Windows spike observed that a corrupt `graph.json` makes `graphify update` exit non-zero and requires a full rebuild, while a missing manifest permits a rebuild with possible structural churn. The CLI must expose those as repairable diagnostics rather than silently accepting the resulting graph.
+
 ## 9. SPIKE-004 validation
 
 Validate on Windows:
@@ -202,6 +206,8 @@ Validate on Windows:
 - hook merge-driver side effects even though the personal MVP is single-user;
 - exclusion of `graphify-out/` from source scanning;
 - no secrets in versioned output.
+
+SPIKE-004 result: [`SPIKE-004.md`](../spikes/results/SPIKE-004.md) is `PARTIAL`. Native installation, explicit extraction, ignore semantics, core clone/update paths, manifest portability and private-output checks were evidenced in disposable Windows fixtures. Report determinism requires `PYTHONHASHSEED=0`; corruption recovery remains a rebuild path, and automatic hooks remain deferred because they are asynchronous and write private logs.
 
 ## 10. Reconsideration triggers
 

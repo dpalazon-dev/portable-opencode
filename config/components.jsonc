@@ -4,9 +4,9 @@
   "platform": {
     "os": "windows-native",
     "shell": "powershell",
-    "windows_version": null,
-    "powershell_version": null,
-    "evidence_state": "pending"
+    "windows_version": "10.0.26200 (build 26200)",
+    "powershell_version": "Windows PowerShell 5.1.26100.8457; PowerShell 7.6.5",
+    "evidence_state": "validated"
   },
   "components": [
     {
@@ -35,7 +35,7 @@
       "evidence_state": "pending",
       "evidence_source": "SPIKE-002",
       "upgrade_policy": "remote-contract",
-      "notes": "Tracked as an API contract rather than an installed binary; preset and OpenCode integration semantics require SPIKE-002."
+      "notes": "Tracked as an API contract rather than an installed binary. SPIKE-002 documented the v1 preset surfaces and local normalization boundary, but authenticated lifecycle, OpenCode preset invocation, tools, routing, privacy inspection and live usage fields remain unverified; keep evidence pending."
     },
     {
       "id": "phoenix",
@@ -55,29 +55,29 @@
       "id": "graphify",
       "kind": "cli",
       "required": true,
-      "supported_version": null,
-      "version_constraint": null,
-      "installation_source": null,
-      "installation_mechanism": null,
+      "supported_version": "0.9.56",
+      "version_constraint": "==0.9.56",
+      "installation_source": "https://pypi.org/project/graphifyy/0.9.56/",
+      "installation_mechanism": "Python 3.12 isolated venv plus python.exe -m pip install graphifyy==0.9.56; invoke graphify.exe from Scripts",
       "platform_constraints": ["windows-native"],
-      "evidence_state": "pending",
+      "evidence_state": "validated",
       "evidence_source": "SPIKE-004",
-      "upgrade_policy": "pending",
-      "notes": "Version, output contract and native integration require SPIKE-004."
+      "upgrade_policy": "pinned",
+      "notes": "Native install, explicit code extraction, ignore semantics, clone/update and relative-path manifest portability were evidenced in disposable fixtures. Deterministic reports require PYTHONHASHSEED=0 and corrupt-graph recovery requires a full rebuild; hooks remain deferred; no Graphify MCP is part of core."
     },
     {
       "id": "rtk",
       "kind": "integration",
       "required": true,
-      "supported_version": null,
-      "version_constraint": null,
-      "installation_source": null,
-      "installation_mechanism": null,
+      "supported_version": "0.48.0",
+      "version_constraint": "==0.48.0",
+      "installation_source": "https://github.com/rtk-ai/rtk/releases/tag/v0.48.0",
+      "installation_mechanism": "winget download --id rtk-ai.rtk --exact --version v0.48.0; extract rtk-x86_64-pc-windows-msvc.zip and place rtk.exe on PATH",
       "platform_constraints": ["windows-native", "opencode-integration"],
-      "evidence_state": "pending",
+      "evidence_state": "validated",
       "evidence_source": "SPIKE-004",
-      "upgrade_policy": "pending",
-      "notes": "Native binary and OpenCode rewrite integration require SPIKE-004."
+      "upgrade_policy": "pinned",
+      "notes": "Native binary identity, rewrite registry, exclusions, private failure tee and degraded OpenCode loading passed. Upstream integration is %USERPROFILE%\\.config\\opencode\\plugins\\rtk.ts; provider-backed tool invocation was not tested."
     }
   ]
 }

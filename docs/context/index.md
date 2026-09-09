@@ -66,10 +66,10 @@ Each runtime spike is an execution brief. Results belong in `docs/spikes/results
 - all owner-level configuration defaults are resolved;
 - operational resource, CLI, state, diagnostic and evidence contracts are defined;
 - repository-local Codex specialist roles plus a single `development-orchestrator` master are configured;
-- `DESIGN-012` defines Work Package/Receipt orchestration and `SPIKE-000` must validate actual Codex role routing before it is relied upon;
-- SPIKE-001 through SPIKE-004 remain ready as bounded runtime assignments after the Codex preflight and repository-validation gate;
+- `DESIGN-012` defines Work Package/Receipt orchestration; `SPIKE-000` is recorded as `INCONCLUSIVE`, so named-role routing remains prompt/policy-mediated rather than structurally guaranteed;
+- SPIKE-001 remains bounded, version-scoped `INCONCLUSIVE` evidence; SPIKE-002 remains `INCONCLUSIVE` without private authentication; SPIKE-004 is reconciled as `PARTIAL`; SPIKE-003 is defined but blocked and not started until the authenticated SPIKE-002 gate closes;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
-- specification v0.3 synchronization and owner approval still prevent formal Phase 0 closure;
+- specification v0.3 synchronization, owner approval and first green remote CI are complete; formal Phase 0 closure still depends on remaining evidence-gated technical decisions and implementation readiness;
 - no executable production implementation exists yet.
 
 ## Maintenance rule

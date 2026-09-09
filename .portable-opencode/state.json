@@ -19,8 +19,8 @@
     "bootstrap_shell": "powershell",
     "primary_terminal": "windows-terminal",
     "posix_shell_scripts_required": false,
-    "exact_windows_version": "pending-spike-001",
-    "exact_powershell_version": "pending-spike-001",
+    "exact_windows_version": "Windows 11 Pro 10.0.26200 (build 26200)",
+    "exact_powershell_version": "Windows PowerShell 5.1.26100.8457; PowerShell 7.6.5",
     "private_state_schema": "schemas/environment-state.schema.json"
   },
   "managed_configuration": {
@@ -41,7 +41,7 @@
     "retirement_policy": "explicit-plan-no-broad-cleanup",
     "supported_version_manifest": "config/components.jsonc",
     "supported_version_schema": "schemas/supported-components.schema.json",
-    "supported_versions_status": "pending-spike-evidence",
+    "supported_versions_status": "partial-spike-evidence;graphify-rtk-validated;opencode-openrouter-phoenix-pending",
     "private_override_path": "%LOCALAPPDATA%\\portable-opencode\\override.jsonc",
     "private_override_default": "absent",
     "bootstrap_policy": "minimal-powershell-establish-cli-only"
@@ -54,16 +54,32 @@
     "root_agents_path": "AGENTS.md",
     "project_tui_config_path": "tui.jsonc",
     "project_tui_config_required": false,
-    "root_json_policy": "migration-candidate",
-    "dual_root_config_policy": "blocking-ambiguity",
-    "misplaced_dot_opencode_config_policy": "report-unmanaged-misplaced-file",
+    "root_json_policy": "migration-candidate;merge-observed-in-tested-1.18.30-only",
+    "dual_root_config_policy": "canonical-policy-blocking;merge-observed-in-tested-1.18.30-only",
+    "misplaced_dot_opencode_config_policy": "canonical-policy-report-unmanaged;load-observed-in-tested-1.18.30-only",
     "runtime_override_provenance": [
       "OPENCODE_CONFIG",
       "OPENCODE_CONFIG_DIR",
       "OPENCODE_CONFIG_CONTENT",
-      "%ProgramData%\\opencode"
+      "%ProgramData%\\opencode",
+      ".opencode\\opencode.jsonc-observed-only"
     ],
-    "runtime_validation": "pending-spike-001"
+    "runtime_validation": "inconclusive-spike-001-version-scoped-no-provider-tests",
+    "tested_version": "opencode-ai@1.18.30",
+    "installation_mechanism": "npm-prefix-disposable-fixture",
+    "observed_global_config_path": "%USERPROFILE%\\.config\\opencode",
+    "observed_data_path": "%USERPROFILE%\\.local\\share\\opencode",
+    "observed_state_path": "%USERPROFILE%\\.local\\state\\opencode",
+    "bootstrap_prerequisites_observed": ["Windows PowerShell 5.1", "PowerShell 7", "Node.js", "npm", "Git"],
+    "context_pressure_metadata": "empty-session-counters-only;context-limit-utilization-and-compaction-unavailable",
+    "provider_backed_execution": "not-tested-no-credentials",
+    "auth_store": "not-tested-no-credentials",
+    "formatter_execution": "not-tested",
+    "watcher_events": "inconclusive-no-event-captured",
+    "compaction_events": "inconclusive-no-limit-or-event-captured",
+    "session_metadata": "pass-synthetic-records-only",
+    "utf8_bom_hazard": "version-scoped-fixture-hazard;explicit-utf8-without-bom-implementation-test-required",
+    "linked_materialization": "symbolic-link-fail-unauthorized;junction-pass-disposable-only;no-substitution"
   },
   "openrouter": {
     "decision": "DEC-020",
@@ -75,8 +91,8 @@
     "missing_policy": "create-after-approval",
     "drift_policy": "create-new-active-version-after-approval",
     "delete_policy": "never-automatic",
-    "preset_reference_validation": "pending-spike-002",
-    "concrete_manifest_status": "pending-spike-002-model-policy-evidence"
+    "preset_reference_validation": "inconclusive-spike-002;openrouter-wire-reference-documented;opencode-reference-blocked-without-auth",
+    "concrete_manifest_status": "pending-authenticated-spike-002-model-policy-evidence"
   },
   "agent_model_policy": {
     "decision": "DEC-018",
@@ -139,16 +155,17 @@
     "conventions": "aligned",
     "operations": "aligned",
     "configuration_tui": "deferred",
-    "roadmap": "codex-preflight-then-repository-gate-then-runtime-spikes",
+    "roadmap": "spike-001-002-004-reconciled;spike-003-blocked-on-authenticated-spike-002",
     "configuration_matrix": "contracts-defined-owner-approved-pending-evidence",
     "managed_configuration_materialization": "aligned",
     "canonical_resource_catalog": "aligned",
     "cli_operation_contracts": "aligned",
     "evidence_mapping": "aligned",
+    "openrouter_policy": "inconclusive;api-docs-and-local-normalization-only;authenticated-runtime-blocked",
     "codex_development_orchestration": "inconclusive-role-routing-not-structural",
-    "spike_briefs": "spike-000-through-spike-004-defined",
+    "spike_briefs": "spike-000-through-spike-004-defined;spike-001-002-004-results-reconciled;spike-003-blocked",
     "repository_validation_ci": "green-local-and-remote-ci",
-    "specification_v0_3": "draft-owner-approved-remote-ci-pending"
+    "specification_v0_3": "owner-approved-remote-ci-green"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
@@ -178,7 +195,7 @@
     },
     "graphify_output_policy": {
       "id": "DESIGN-003",
-      "status": "active_pending-spike-004-validation",
+      "status": "active-spike-004-partial;allowlist-and-manifest-reconciled",
       "document": "docs/design/GRAPHIFY_OUTPUT_POLICY.md"
     },
     "context_metadata_schema": {
@@ -194,19 +211,19 @@
     },
     "openrouter_preset_reconciliation": {
       "id": "DESIGN-006",
-      "status": "active_pending-spike-002-validation",
+      "status": "active-spike-002-inconclusive;authenticated-lifecycle-and-opencode-reference-pending",
       "document": "docs/design/OPENROUTER_PRESET_RECONCILIATION.md",
       "schema": "schemas/openrouter-presets.schema.json"
     },
     "managed_configuration_materialization": {
       "id": "DESIGN-007",
-      "status": "active_pending-windows-validation",
+      "status": "active-spike-001-evidence-reconciled;implementation-validation-pending",
       "document": "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
       "decision": "DEC-021"
     },
     "canonical_resource_catalog": {
       "id": "DESIGN-008",
-      "status": "active_pending-spike-path-validation",
+      "status": "active-spike-001-and-004-path-evidence-version-scoped;organization-managed-unverified",
       "document": "docs/design/CANONICAL_RESOURCE_CATALOG.md"
     },
     "cli_operation_contracts": {
@@ -253,22 +270,32 @@
     },
     "opencode_lifecycle": {
       "id": "SPIKE-001",
-      "status": "defined",
+      "status": "inconclusive",
       "document": "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md",
+      "result": "docs/spikes/results/SPIKE-001_RESULT.md",
+      "reconciliation": "complete;result-remains-inconclusive;version-scoped-no-provider-tests",
       "execution_order": 1,
       "depends_on": ["SPIKE-000", "repository-validation-green"]
     },
     "openrouter_policy": {
       "id": "SPIKE-002",
-      "status": "defined",
+      "status": "inconclusive",
       "document": "docs/spikes/SPIKE-002_OPENROUTER_POLICY.md",
+      "result": "docs/spikes/results/SPIKE-002.md",
       "execution_order": 2,
-      "depends_on": ["SPIKE-001"]
+      "depends_on": ["SPIKE-001"],
+      "readiness": "executed-without-private-authentication",
+      "reconciliation": "reconciled;no-remote-mutation;local-normalization-only;opencode-reference-blocked",
+      "limitations": ["authenticated-preset-lifecycle", "provider-backed-opencode-invocation", "tools-routing-fallback", "account-privacy-inspection", "live-usage-cost-fields"]
     },
     "graphify_rtk": {
       "id": "SPIKE-004",
-      "status": "defined",
+      "status": "inconclusive",
       "document": "docs/spikes/SPIKE-004_GRAPHIFY_RTK.md",
+      "result": "docs/spikes/results/SPIKE-004.md",
+      "classification": "partial",
+      "reconciliation": "reconciled;native-fixture-evidence;manifest-conditional;hooks-deferred;rtk-degraded",
+      "status_note": "lifecycle-status-inconclusive;result-classification-partial",
       "execution_order": 3,
       "depends_on": ["SPIKE-001"]
     },
@@ -277,14 +304,16 @@
       "status": "defined",
       "document": "docs/spikes/SPIKE-003_OBSERVABILITY.md",
       "execution_order": 4,
-      "depends_on": ["SPIKE-001", "SPIKE-002"]
+      "depends_on": ["SPIKE-001", "SPIKE-002"],
+      "readiness": "blocked-until-authenticated-spike-002-gate",
+      "reconciliation": "not-started"
     }
   },
   "graphify": {
     "decision": "DEC-019",
     "design": "docs/design/GRAPHIFY_OUTPUT_POLICY.md",
     "installed": false,
-    "status": "inactive_no_source_implementation",
+    "status": "validated_disposable_fixture_no_persistent_install",
     "dirty": false,
     "ignore_file": ".graphifyignore",
     "output_versioning_policy": "minimal-allowlist",
@@ -293,8 +322,10 @@
       "graphify-out/GRAPH_REPORT.md",
       "graphify-out/manifest.json"
     ],
-    "manifest_validation": "pending-spike-004",
-    "last_update": null
+    "manifest_validation": "accepted-graphify-0.9.56-relative-paths-no-private-absolute-paths",
+    "deterministic_update_precondition": "PYTHONHASHSEED=0",
+    "hooks": "deferred-mvp;disposable-install-uninstall-only",
+    "last_update": "2026-09-09T15:30:53+02:00"
   },
   "observability": {
     "decision": "DEC-010",
@@ -311,8 +342,8 @@
     "telemetry_enabled": false,
     "external_resources_enabled": false,
     "validated": false,
-    "context_pressure_metadata": "pending-spike-001-and-spike-003",
-    "compaction_correlation": "pending-spike-001-and-spike-003"
+    "context_pressure_metadata": "spike-001-empty-session-counters-only;context-limit-unavailable;pending-spike-003-correlation",
+    "compaction_correlation": "spike-001-no-event-or-count;pending-spike-003-correlation"
   },
   "operations": {
     "model": "lightweight-personal-workflow",
@@ -340,8 +371,8 @@
   },
   "verification": {
     "profile": "docs-only",
-    "last_run": "2026-09-09T12:17:37+02:00",
-    "result": "passed-remote-ci"
+    "last_run": "2026-09-09T18:21:40+02:00",
+    "result": "passed-local-docs-validator-with-spike-results;state-json-validated;git-diff-check;spike-001-inconclusive;spike-002-inconclusive;spike-004-partial;spike-003-blocked"
   },
   "decisions": {
     "accepted": 16,
@@ -351,15 +382,24 @@
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "execute-spike-001-opencode-lifecycle",
+    "step": "complete-authenticated-spike-002-gate;preserve-spike-004-partial-evidence;keep-spike-003-blocked-and-not-started",
     "documents": [
       "docs/SPECIFICATION.es.md",
       "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
       "docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md",
       "docs/design/CONTEXT_METADATA_SCHEMA.md",
       "docs/context/ROADMAP.md",
-      "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
+      "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md",
+      "docs/spikes/results/SPIKE-001_RESULT.md",
+      "docs/spikes/results/SPIKE-002.md",
+      "docs/spikes/results/SPIKE-004.md",
+      "docs/design/OPENROUTER_PRESET_RECONCILIATION.md",
+      "docs/design/CANONICAL_RESOURCE_CATALOG.md",
+      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
+      "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
+      "docs/design/GRAPHIFY_OUTPUT_POLICY.md",
+      "config/components.jsonc"
     ]
   },
-  "updated_at": "2026-09-09T12:17:37+02:00"
+  "updated_at": "2026-09-09T18:21:40+02:00"
 }

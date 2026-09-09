@@ -151,17 +151,19 @@ Completed:
 - PowerShell bootstrap/verification/recovery boundaries;
 - complete `S`-contract evidence mapping;
 - executable briefs for SPIKE-001 through SPIKE-004.
+- reconciled sanitized results for SPIKE-001, SPIKE-002 and SPIKE-004 with their remaining evidence gates.
 - inherited metadata migration and canonical repository-document validation.
 
 Pending before formal definition-phase closure:
 
-- synchronize the full specification as personal-first v0.3;
-- create the concrete OpenRouter preset manifest after SPIKE-002 supplies model-policy evidence;
-- owner review/approval of the resulting configuration matrix and operational contracts.
+- create the concrete OpenRouter preset manifest only after the authenticated SPIKE-002 model-policy gate is satisfied;
+- resolve the remaining evidence-gated technical decisions without converting partial or documentation-only evidence into acceptance.
 
 Pending technical evidence/implementation:
 
-- execute SPIKE-001 through SPIKE-004;
+- preserve `SPIKE-001` as version-scoped `INCONCLUSIVE` evidence and close the exact authenticated gaps from `SPIKE-002`;
+- retain `SPIKE-004` as `PARTIAL` with Graphify `0.9.56` and RTK `0.48.0` promoted, while OpenCode, OpenRouter and Phoenix remain pending;
+- keep `SPIKE-003` blocked and not started until the authenticated SPIKE-002 gate is complete;
 - resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence;
 - implement the CLI, templates, adapters and tests;
 - execute the clean-Windows canonical journey and release.

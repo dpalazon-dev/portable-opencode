@@ -73,6 +73,10 @@ versioned intent
 
 Use `rendered` when project- or machine-specific inputs are required. Use `copied` when the canonical file is already complete. Use `linked` only after an explicit contract and Windows-native validation.
 
+`SPIKE-001` reconciled the Windows evidence without changing the default: `copied` and `rendered` both passed in a disposable fixture; symbolic-link creation failed with `UnauthorizedAccessException` under the tested privilege/developer-mode state; and a junction succeeded. The junction result does not authorize silently substituting junctions for symbolic links. `linked` therefore remains exceptional, type-explicit and evidence-gated for the supported environment.
+
+The same fixture exposed a Windows PowerShell 5.1 encoding hazard: the tested BOM-free Markdown encoding preserved agent frontmatter and subagent mode, while a BOM-producing encoding changed the observed parsing result. Generated Markdown must use an explicit UTF-8-without-BOM writer and byte-level verification in a future implementation test. This is not generalized beyond the tested OpenCode version and fixture.
+
 No fixed symbolic path to the repository is required. The installation location is discovered from private installation state or the running executable.
 
 ## 5. Ownership and adoption
@@ -168,6 +172,8 @@ project, session and agent
 ```
 
 Unavailable values remain explicitly unavailable. The system must not fabricate a context percentage from incomplete metadata.
+
+`SPIKE-001` observed only empty synthetic-session token counters; it did not expose a context limit, utilization, compaction count or compaction event. These fields remain unavailable for the spike and require later provider/observability correlation; no pressure percentage was derived.
 
 ## 12. Validation
 
