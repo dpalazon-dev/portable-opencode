@@ -4,17 +4,17 @@ id: DESIGN-003
 title: Graphify Output Ownership Policy
 description: Versioning, privacy and regeneration policy for Graphify project artefacts.
 status: active
-created: 2026-08-05
-modified: 2026-08-05
 sources:
-  - ../context/PROJECT.md
-  - ../context/ARCHITECTURE.md
-  - ../context/DECISIONS.md
-  - ../research/CONFIGURATION_SURFACE_RESEARCH.md
-  - CONFIGURATION_MATRIX.md
-verified:
-  - by: repository-owner
-    status: pending
+  - resource: ../context/PROJECT.md
+    title: Portable OpenCode Project Definition
+  - resource: ../context/ARCHITECTURE.md
+    title: Portable OpenCode Architecture
+  - resource: ../context/DECISIONS.md
+    title: Portable OpenCode Decisions
+  - resource: ../research/CONFIGURATION_SURFACE_RESEARCH.md
+    title: Configuration Surface Research
+  - resource: CONFIGURATION_MATRIX.md
+    title: Portable OpenCode Configuration Matrix
 ---
 
 # Graphify output ownership policy

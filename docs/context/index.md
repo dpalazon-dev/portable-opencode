@@ -69,7 +69,7 @@ Each runtime spike is an execution brief. Results belong in `docs/spikes/results
 - `DESIGN-012` defines Work Package/Receipt orchestration and `SPIKE-000` must validate actual Codex role routing before it is relied upon;
 - SPIKE-001 through SPIKE-004 remain ready as bounded runtime assignments after the Codex preflight and repository-validation gate;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
-- metadata migration and specification v0.3 synchronization still prevent formal Phase 0 closure;
+- specification v0.3 synchronization and owner approval still prevent formal Phase 0 closure;
 - no executable production implementation exists yet.
 
 ## Maintenance rule

@@ -113,7 +113,7 @@
     "required_frontmatter": ["type", "title", "description", "status"],
     "reserved_frontmatter_free": ["index.md", "log.md"],
     "deprecated_fields": ["created", "modified", "verified"],
-    "migration_status": "in-progress",
+    "migration_status": "complete",
     "migrated_files": [
       "docs/context/PROJECT.md",
       "docs/context/ARCHITECTURE.md",
@@ -124,9 +124,13 @@
       "docs/context/index.md",
       "docs/context/log.md",
       "docs/design/CONFIGURATION_MATRIX.md",
-      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md"
+      "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
+      "docs/design/AGENT_AND_MODEL_ROLES.md",
+      "docs/design/GRAPHIFY_OUTPUT_POLICY.md",
+      "docs/features/CONFIGURATION_TUI.md",
+      "docs/research/CONFIGURATION_SURFACE_RESEARCH.md"
     ],
-    "owner_verification": "pending"
+    "owner_verification": "approved-v0.3-scope-2026-09-09"
   },
   "scope_alignment": {
     "project": "aligned",
@@ -136,14 +140,15 @@
     "operations": "aligned",
     "configuration_tui": "deferred",
     "roadmap": "codex-preflight-then-repository-gate-then-runtime-spikes",
-    "configuration_matrix": "contracts-defined-pending-evidence-and-owner-approval",
+    "configuration_matrix": "contracts-defined-owner-approved-pending-evidence",
     "managed_configuration_materialization": "aligned",
     "canonical_resource_catalog": "aligned",
     "cli_operation_contracts": "aligned",
     "evidence_mapping": "aligned",
-    "codex_development_orchestration": "defined-pending-spike-000-validation",
+    "codex_development_orchestration": "inconclusive-role-routing-not-structural",
     "spike_briefs": "spike-000-through-spike-004-defined",
-    "repository_validation_ci": "implemented-pending-first-green-run"
+    "repository_validation_ci": "implemented-local-validator-green-remote-ci-pending",
+    "specification_v0_3": "draft-owner-approved-remote-ci-pending"
   },
   "architecture": {
     "model": "single-canonical-personal-workflow",
@@ -158,7 +163,7 @@
   "design": {
     "configuration_matrix": {
       "id": "DESIGN-001",
-      "status": "contracts-defined-pending-evidence-and-owner-approval",
+      "status": "contracts-defined-owner-approved-pending-evidence",
       "document": "docs/design/CONFIGURATION_MATRIX.md",
       "capability_count": 81,
       "previous_capability_count": 177,
@@ -178,7 +183,7 @@
     },
     "context_metadata_schema": {
       "id": "DESIGN-004",
-      "status": "active_pending-repository-migration",
+      "status": "active-metadata-migrated-validator-green",
       "document": "docs/design/CONTEXT_METADATA_SCHEMA.md",
       "schema": "schemas/context-document.schema.json"
     },
@@ -222,7 +227,7 @@
     },
     "codex_development_orchestration": {
       "id": "DESIGN-012",
-      "status": "active-pending-spike-000-validation",
+      "status": "active-inconclusive-role-routing",
       "document": "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
       "work_package_schema": "schemas/codex-work-package.schema.json",
       "task_receipt_schema": "schemas/codex-task-receipt.schema.json"
@@ -242,7 +247,7 @@
   "spikes": {
     "codex_orchestration": {
       "id": "SPIKE-000",
-      "status": "defined",
+      "status": "inconclusive",
       "document": "docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md",
       "execution_order": 0
     },
@@ -318,7 +323,7 @@
     "codex_orchestration_design": "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
     "codex_work_package_schema": "schemas/codex-work-package.schema.json",
     "codex_task_receipt_schema": "schemas/codex-task-receipt.schema.json",
-    "codex_orchestration_validation": "pending-spike-000",
+    "codex_orchestration_validation": "inconclusive-prompt-mediated-routing",
     "cli_contract": "docs/design/CLI_OPERATION_CONTRACTS.md",
     "evidence_map": "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
     "script_inventory": "docs/design/POWERSHELL_SCRIPT_INVENTORY.md",
@@ -335,8 +340,8 @@
   },
   "verification": {
     "profile": "docs-only",
-    "last_run": null,
-    "result": "pending-metadata-migration-ci-enforced"
+    "last_run": "2026-09-09T11:27:23+02:00",
+    "result": "passed-local-validator"
   },
   "decisions": {
     "accepted": 16,
@@ -346,8 +351,9 @@
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "execute-spike-000-then-complete-metadata-migration-and-green-ci-before-spike-001",
+    "step": "prepare-commit-push-and-remote-ci-before-spike-001",
     "documents": [
+      "docs/SPECIFICATION.es.md",
       "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
       "docs/spikes/SPIKE-000_CODEX_ORCHESTRATION.md",
       "docs/design/CONTEXT_METADATA_SCHEMA.md",
@@ -355,5 +361,5 @@
       "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
     ]
   },
-  "updated_at": "2026-08-07T11:09:00+02:00"
+  "updated_at": "2026-09-09T11:54:12+02:00"
 }

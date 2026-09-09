@@ -63,7 +63,7 @@ Version `graph.json`, `GRAPH_REPORT.md` and a validated portable `manifest.json`
 
 ### Context metadata
 
-Non-reserved curated documents require `type`, `title`, `description` and `status`. `index.md` and `log.md` have no frontmatter. Inherited metadata migration remains pending.
+Non-reserved curated documents require `type`, `title`, `description` and `status`. `index.md` and `log.md` have no frontmatter. Inherited metadata migration is complete and the canonical local docs validator passes.
 
 ### Observability intent
 
@@ -151,10 +151,10 @@ Completed:
 - PowerShell bootstrap/verification/recovery boundaries;
 - complete `S`-contract evidence mapping;
 - executable briefs for SPIKE-001 through SPIKE-004.
+- inherited metadata migration and canonical repository-document validation.
 
 Pending before formal definition-phase closure:
 
-- complete inherited metadata migration and docs validation;
 - synchronize the full specification as personal-first v0.3;
 - create the concrete OpenRouter preset manifest after SPIKE-002 supplies model-policy evidence;
 - owner review/approval of the resulting configuration matrix and operational contracts.
@@ -188,4 +188,4 @@ These are not owner defaults to decide in prose. They require Windows-native evi
 
 ## 10. Definition-phase completion
 
-The definition phase is now operationally specified enough for Codex to execute the four bounded spikes without inventing product behaviour. Formal Phase 0 closure still requires metadata migration, specification v0.3 synchronization and owner approval of the resulting contracts.
+The definition phase is now operationally specified enough for Codex to execute the four bounded spikes without inventing product behaviour. Formal Phase 0 closure still requires specification v0.3 synchronization and owner approval of the resulting contracts.

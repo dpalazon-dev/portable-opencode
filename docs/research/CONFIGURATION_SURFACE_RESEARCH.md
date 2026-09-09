@@ -4,16 +4,15 @@ id: RESEARCH-001
 title: Configuration Surface Research
 description: Official configuration and integration surfaces that constrain the portable-opencode design.
 status: active
-created: 2026-08-05
-modified: 2026-08-05
 sources:
-  - ../SPECIFICATION.es.md
-  - ../context/PROJECT.md
-  - ../context/VISION.md
-  - ../context/ARCHITECTURE.md
-verified:
-  - by: repository-owner
-    status: pending
+  - resource: ../SPECIFICATION.es.md
+    title: Portable OpenCode Specification
+  - resource: ../context/PROJECT.md
+    title: Portable OpenCode Project Definition
+  - resource: ../context/VISION.md
+    title: Portable OpenCode Vision
+  - resource: ../context/ARCHITECTURE.md
+    title: Portable OpenCode Architecture
 ---
 
 # Configuration surface research

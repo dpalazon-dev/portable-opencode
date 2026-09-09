@@ -48,7 +48,7 @@ Binding facts:
 - the TUI is deferred;
 - all owner-level defaults are resolved;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
-- metadata migration is pending, so `docs-only` has not passed.
+- inherited metadata migration is complete and the canonical local validator passes; the CI adapter has not yet been run.
 
 ## 3. Starting a session
 
@@ -184,6 +184,8 @@ If Codex cannot demonstrably invoke the intended named role, do not silently sub
 
 Do not build a custom dispatcher/hook workaround unless a later explicit design accepts that work.
 
+SPIKE-000 evidence currently classifies named-role selection, structural role identity and runtime depth enforcement as not demonstrated in Codex CLI `0.153.4`. Work Packages, Receipts, bounded worker behavior, fresh behavioral review and safe negative routing are usable as explicit contracts, but role routing must remain recorded as prompt/policy-mediated until a later runtime capability proves otherwise.
+
 ## 8. Spike workflow
 
 Each spike records question, relevance, hypotheses, tested versions, reproducible procedure, evidence, limitations, decision impact, recommendation and discard boundary.
@@ -219,7 +221,7 @@ A spike validates mechanism; it does not silently redesign policy.
 
 ### Active: `docs-only`
 
-Pending metadata migration, link checks, schema validation, decision/state consistency and secret scan.
+The canonical local validator passes metadata migration, link checks, schema validation, decision/state consistency and private-boundary checks. The GitHub Actions adapter remains pending its next run.
 
 Canonical command:
 
@@ -258,11 +260,10 @@ Normal recovery remains `inspect → plan → apply → doctor`. PowerShell does
 
 ## 11. Current next sequence
 
-1. execute `SPIKE-000` on the actual Windows Codex environment and record PASS / INCONCLUSIVE / FAIL;
-2. if orchestration is usable, use the validated master/specialist workflow to complete the controlled metadata migration;
-3. make `scripts/verify-docs.ps1` and repository CI green without redesigning `DESIGN-004`;
+1. use the documented prompt/policy-mediated orchestration workflow, with the SPIKE-000 routing limitation explicit;
+2. obtain the first green repository CI result from the same validator adapter;
+3. synchronize specification v0.3 and complete formal Phase 0 closure/active matrix approval;
 4. execute `SPIKE-001` and apply only evidence-backed contract corrections;
 5. execute SPIKE-002 and SPIKE-004, then SPIKE-003;
 6. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence;
-7. synchronize specification v0.3 and complete formal Phase 0 closure/active matrix approval;
-8. implement the CLI against the accepted post-spike contracts and run `E2E-001`.
+7. implement the CLI against the accepted post-spike contracts and run `E2E-001`.

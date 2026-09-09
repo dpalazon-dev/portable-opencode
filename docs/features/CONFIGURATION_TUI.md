@@ -4,18 +4,18 @@ id: FEAT-001
 title: Interactive Configuration TUI
 description: Parked Ratatui interface concept to reconsider after the CLI is effective and stable.
 status: deferred
-created: 2026-08-04
-modified: 2026-08-05
 decision: DEC-013
 sources:
-  - ../context/PROJECT.md
-  - ../context/VISION.md
-  - ../context/ARCHITECTURE.md
-  - ../context/DECISIONS.md
-  - ../context/ROADMAP.md
-verified:
-  - by: repository-owner
-    status: pending
+  - resource: ../context/PROJECT.md
+    title: Portable OpenCode Project Definition
+  - resource: ../context/VISION.md
+    title: Portable OpenCode Vision
+  - resource: ../context/ARCHITECTURE.md
+    title: Portable OpenCode Architecture
+  - resource: ../context/DECISIONS.md
+    title: Portable OpenCode Decisions
+  - resource: ../context/ROADMAP.md
+    title: Portable OpenCode Roadmap
 ---
 
 # Interactive Configuration TUI

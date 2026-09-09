@@ -3,15 +3,13 @@ type: Vision
 title: Portable OpenCode Vision
 description: Personal-first product vision, desired user experience and evidence required before broader productization.
 status: active
-created: 2026-08-04
-modified: 2026-08-05
 sources:
-  - PROJECT.md
-  - DECISIONS.md
-  - ../SPECIFICATION.es.md
-verified:
-  - by: repository-owner
-    status: pending
+  - resource: PROJECT.md
+    title: Portable OpenCode Project Definition
+  - resource: DECISIONS.md
+    title: Portable OpenCode Decisions
+  - resource: ../SPECIFICATION.es.md
+    title: Portable OpenCode Specification
 ---
 
 # Vision

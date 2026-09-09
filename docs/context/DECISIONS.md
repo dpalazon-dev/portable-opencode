@@ -151,7 +151,7 @@ Non-reserved curated documents require only `type`, `title`, `description` and `
 
 `created`, `modified` and generic `verified` are removed. `index.md` and `log.md` are frontmatter-free. Parsed metadata is validated against `schemas/context-document.schema.json`.
 
-Existing documents require a controlled migration before `docs-only` can pass.
+Existing documents required a controlled migration before `docs-only` could pass; that migration is complete and the canonical local validator now passes.
 
 ---
 

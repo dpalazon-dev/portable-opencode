@@ -160,3 +160,39 @@ This log records outcomes, resulting state and the next action. Detailed rationa
 **Recommended next action**
 
 Run `SPIKE-000` from Codex on Windows. If the hierarchy passes or its exact semantic-vs-structural limitations are documented, use the validated `development-orchestrator` workflow to complete the controlled metadata migration and obtain the first green repository CI before starting `SPIKE-001`.
+
+## 2026-09-09 — SPIKE-000 executed with partial support
+
+- ran the bounded Windows-native Codex orchestration probe on `spike/000-codex-orchestration`;
+- validated Work Package and Task Receipt instances against their repository schemas;
+- observed bounded worker behavior, independent test/review behavior and safe negative routing failure;
+- did not observe an explicit named-role selector, structural role identity or runtime depth-1 enforcement;
+- classified the result as `INCONCLUSIVE / partially supported` and recorded sanitized evidence in `docs/spikes/results/SPIKE-000_RESULT.md`;
+- removed the disposable fixture after evidence capture;
+- next action is controlled metadata migration plus the canonical docs validator, with routing limitations kept explicit.
+
+## 2026-09-09 — Metadata migration and local validator green
+
+- migrated the five inherited frontmatter documents by removing deprecated `created`, `modified` and `verified` fields and converting material sources to structured entries;
+- updated the two instance schemas to admit their existing `$schema` annotations;
+- ran `scripts/verify-docs.ps1`, which passed with 65 tracked files, 16 parsed JSON/JSONC documents, 12 schemas and 26 curated frontmatter documents;
+- confirmed `git diff --check` and direct `state.json` parsing pass, with no known temporary fixture paths remaining;
+- kept the SPIKE-000 prompt/policy-mediated routing limitation explicit and did not start SPIKE-001;
+- next action is specification v0.3 synchronization and owner review, followed by the still-unstarted runtime spikes.
+
+## 2026-09-09 — CI-equivalent validation and specification v0.3 draft
+
+- inspected `.github/workflows/ci.yml` and ran its local Windows/PowerShell validator path with the pinned documentation dependencies under Python 3.12; Python 3.13 from CI is not installed locally;
+- `scripts/verify-docs.ps1` passed with 65 tracked files, 16 parsed JSON/JSONC documents, 12 schemas and 26 curated frontmatter documents;
+- `ci.yml` parsed as YAML, `state.json` parsed and validated against `.portable-opencode/state.schema.json`, and `git diff --check` passed;
+- synchronized `docs/SPECIFICATION.es.md` to a v0.3 draft aligned with the current personal-first contracts, while retaining explicit owner questions and evidence-gated decisions;
+- kept `SPIKE-000_RESULT.md` unchanged and did not start `SPIKE-001`;
+- next action is owner review of the v0.3 draft and its four concrete questions before runtime-spike execution.
+
+## 2026-09-09 — Owner approval of specification v0.3 scope
+
+- approved the personal-first and Windows-native MVP scope without profiles, teams, organizations or an alternative observability backend;
+- approved the canonical CLI surface from `DESIGN-009` and the resource tree from `DESIGN-008`;
+- approved retaining `DEC-009`, `DEC-010` and `DEC-012` as evidence-gated decisions;
+- confirmed that no additional unsupported v0.2 promises, including gratuity, profiles or team compatibility, are retained;
+- next action is to prepare the reviewed changes for commit/push and obtain the first green remote CI result before `SPIKE-001`.

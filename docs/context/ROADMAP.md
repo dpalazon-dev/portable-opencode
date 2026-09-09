@@ -43,8 +43,8 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 
 ### Contract work remaining
 
-- [ ] migrate inherited context frontmatter and validate `schemas/context-document.schema.json`;
-- [ ] publish and synchronize the full personal-first specification v0.3;
+- [x] migrate inherited context frontmatter and validate `schemas/context-document.schema.json`;
+- [x] publish and synchronize the full personal-first specification v0.3 and obtain owner approval;
 - [x] define canonical global and project file trees;
 - [x] define generated, copied, linked, queried and private ownership;
 - [x] instantiate those rules as concrete environment/project resource catalogs;
@@ -60,7 +60,7 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [x] write executable briefs for SPIKE-001 through SPIKE-004;
 - [x] define repository-local Codex master/specialist orchestration, Work Packages and Receipts;
 - [x] write executable `SPIKE-000` to validate the Codex development hierarchy before relying on it;
-- [ ] approve `DESIGN-001` after these contracts are reviewable.
+- [x] approve `DESIGN-001` after these contracts are reviewable.
 
 ### New contract artefacts
 
@@ -97,7 +97,7 @@ schemas/codex-task-receipt.schema.json
 - SPIKE-001 through SPIKE-004 can be assigned as bounded runtime experiments;
 - Codex development work has one explicit master, bounded specialist roles and machine-checkable delegation/receipt contracts.
 
-The operational-contract and spike-definition portions of Phase 0 are complete. Metadata migration, specification v0.3 synchronization and owner approval of the resulting matrix remain before Phase 0 is formally closed.
+The operational-contract, spike-definition, repository-metadata migration, specification v0.3 synchronization and owner-approval portions of Phase 0 are complete. The first green remote CI result remains the repository gate before Phase 0 is formally closed.
 
 ## 3. Phase 1 — Technical validation
 
@@ -118,17 +118,19 @@ Before assigning runtime spikes to Codex, validate the development factory itsel
 
 This is a development-process gate, not a product runtime contract. If partially supported, record exactly which guarantees are structural versus prompt/policy enforced. If it fails, do not autonomously build a custom dispatcher.
 
+Result: [SPIKE-000 result](../spikes/results/SPIKE-000_RESULT.md) is `INCONCLUSIVE / partially supported`. Work Packages, Receipts, bounded worker behavior, fresh behavioral review and safe negative routing are usable, while named-role selection, structural role identity and runtime depth enforcement remain unproven in Codex CLI `0.153.4`.
+
 ### Repository-validation gate
 
 After `SPIKE-000` establishes how Codex orchestration actually behaves:
 
 ```text
-migrate inherited metadata
-→ run scripts/verify-docs.ps1
-→ obtain the first green repository CI
+migrate inherited metadata (complete)
+→ run scripts/verify-docs.ps1 (passed locally)
+→ obtain the first green repository CI (pending remote execution)
 ```
 
-The metadata migration remains bounded housekeeping and must not redesign context policy.
+The completed metadata migration was bounded housekeeping and did not redesign context policy.
 
 ### SPIKE-001 — OpenCode lifecycle
 
@@ -206,7 +208,7 @@ SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if branch and global
 ### Exit criteria
 
 - Codex development orchestration is either validated or its exact routing limitations are recorded before runtime delegation;
-- repository validation reaches green after the controlled metadata migration;
+- the canonical local repository validator reaches green after the controlled metadata migration; the CI adapter is ready and remains pending remote execution;
 - all runtime spikes reproduce from PowerShell without WSL;
 - uncertain matrix contracts become accepted, revised or deferred;
 - exact tested versions/mechanisms replace `pending` entries in `config/components.jsonc` only from evidence;

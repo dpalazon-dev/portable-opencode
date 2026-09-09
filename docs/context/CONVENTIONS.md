@@ -103,7 +103,7 @@ Do not use:
 
 `index.md` and `log.md` have no frontmatter. Parsed non-reserved frontmatter is validated against `schemas/context-document.schema.json`.
 
-The current repository still contains inherited metadata. New or substantially edited documents follow the new schema immediately; the controlled migration must remove the remaining deprecated fields before `docs-only` can pass.
+The inherited metadata migration is complete. New or substantially edited documents continue to follow the new schema, and the canonical local validator is the source of truth for the `docs-only` profile.
 
 ## 6. Documentation content
 
@@ -240,14 +240,16 @@ Prompt instructions alone are insufficient enforcement.
 
 Current profile: `docs-only`.
 
-It remains pending until:
+The canonical local validator passes because:
 
 - inherited metadata is migrated;
-- reserved files lose frontmatter;
+- reserved files have no frontmatter;
 - all frontmatter validates;
 - internal links resolve;
 - decisions, matrix, roadmap and state agree;
 - no unsupported implementation claim exists.
+
+The GitHub Actions adapter remains pending its next run.
 
 When executable code exists, prioritize schema, planning, mutation, lifecycle, security and canonical Windows journey tests.
 

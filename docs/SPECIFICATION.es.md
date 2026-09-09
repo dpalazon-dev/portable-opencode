@@ -1,7 +1,7 @@
 # Portable OpenCode + OpenRouter
 
 **Documento:** Especificación conceptual y funcional  
-**Estado:** Draft v0.2  
+**Estado:** Draft v0.3 — alcance aprobado por el propietario; evidencia técnica pendiente
 **Nombre provisional:** `portable-opencode`
 
 ## 1. Definición
@@ -10,7 +10,7 @@
 
 No es únicamente una distribución de OpenCode. OpenCode actúa como runtime y superficie de interacción; OpenRouter funciona como plano de control de modelos, proveedores, privacidad, costes y routing. RTK, Graphify, la observabilidad local y una capa mínima de automatización completan el sistema.
 
-El objetivo es permitir que una persona o un equipo pueda:
+El objetivo del MVP es permitir que el propietario del repositorio pueda:
 
 1. preparar un ordenador para trabajar con OpenCode de forma segura y consistente;
 2. inicializar un proyecto nuevo con infraestructura agentic reproducible;
@@ -35,7 +35,7 @@ El sistema combina:
 - procedimientos explícitos de exploración, planificación, revisión y verificación;
 - aislamiento estricto de credenciales y estado privado.
 
-Será **opinionated by default, configurable by design**: ofrecerá una ruta recomendada, pero sus decisiones podrán sustituirse mediante perfiles, fragmentos de configuración o preferencias locales.
+Será **opinionated by default, configurable by design**: ofrecerá una única configuración personal canónica, con sustituciones explícitas cuando exista una necesidad demostrada. Los perfiles, equipos y organizaciones quedan fuera del MVP.
 
 ## 3. Principios de diseño
 
@@ -53,7 +53,7 @@ La instalación del entorno, la configuración de OpenCode y OpenRouter, la prep
 
 ### 3.4. Seguridad codificada
 
-Las restricciones críticas deben reflejarse en permisos, hooks, herramientas y límites explícitos, no depender únicamente del prompt.
+Las restricciones críticas deben reflejarse en permisos, herramientas y límites explícitos, no depender únicamente del prompt. Los hooks solo se incorporarán cuando una necesidad repetida y evidencia técnica justifiquen su ciclo de vida.
 
 ### 3.5. Estado observable
 
@@ -83,17 +83,15 @@ Responsabilidades:
 
 ### 4.2. OpenRouter: plano de control de modelos
 
-OpenCode conocerá roles semánticos estables, por ejemplo:
+OpenCode conservará sus agentes nativos y portable-opencode mapeará sus responsabilidades a tres roles semánticos estables:
 
 ```text
 main
-build
-explore
-review
-verify
+reason
+fast
 ```
 
-La política de OpenRouter decidirá qué modelo, proveedor, fallback y perfil de privacidad corresponde a cada rol.
+La política de OpenRouter decidirá qué modelo, proveedor, fallback, privacidad y generación corresponde a cada rol. El mapeo inicial es `build → main`, `plan/review/verify → reason` y `general/explore/scout/small_model → fast`. Los slugs gestionados son `portable-main`, `portable-reason` y `portable-fast`; la sintaxis exacta con la que OpenCode los consume queda pendiente de SPIKE-002.
 
 La integración contemplará:
 
@@ -126,7 +124,7 @@ backend y UI local
 
 El proxy expondrá un endpoint compatible con OpenCode, reenviará las peticiones a OpenRouter y registrará la telemetría. Debe conservar streaming, tool calling, structured outputs, headers, errores y campos específicos de OpenRouter.
 
-**Backend de referencia para el MVP:** Arize Phoenix local, sujeto a un spike técnico. Langfuse podrá ofrecerse como perfil alternativo para equipos.
+**Backend propuesto para el MVP:** Arize Phoenix local, sujeto a SPIKE-003 y a la aceptación de DEC-010. No se define un backend alternativo ni un perfil de equipos dentro del MVP.
 
 Telemetría de inferencia:
 
@@ -155,16 +153,16 @@ Privacidad predeterminada:
 - prompts y respuestas completos desactivados por defecto;
 - metadata, usage y errores activados;
 - redacción de secretos antes de persistir;
-- retención configurable.
+- retención predeterminada de 30 días, modificable mediante una operación explícita.
 
-Comandos previstos:
+Comandos previstos por el contrato CLI:
 
 ```text
-portable-opencode observe start
-portable-opencode observe stop
-portable-opencode observe status
-portable-opencode observe open
-portable-opencode observe doctor
+portable-opencode observability start
+portable-opencode observability stop
+portable-opencode observability status
+portable-opencode observability open
+portable-opencode observability purge
 ```
 
 ### 4.4. RTK
@@ -199,7 +197,7 @@ Instala y configura:
 - RTK;
 - Graphify;
 - configuración global;
-- agentes, comandos, plugins, skills y tools globales;
+- reglas globales y los recursos nativos que estén demostrados como necesarios;
 - permisos seguros;
 - diagnóstico final.
 
@@ -210,12 +208,12 @@ Esta capa no conoce el stack ni la arquitectura de un proyecto concreto.
 `portable-opencode init-project <ruta>`:
 
 1. valida que la ruta esté vacía o recién creada;
-2. inicializa Git;
+2. inicializa Git cuando no exista y sea seguro hacerlo;
 3. crea la estructura documental;
 4. copia la configuración local de OpenCode;
 5. genera `.graphifyignore` provisional;
 6. crea `graphify-out/` y el estado local;
-7. instala hooks y tools locales;
+7. materializa solo los assets nativos canónicos y las herramientas justificadas por contrato;
 8. deja el proyecto preparado para `/init-project`.
 
 ### Capa 3: configuración interactiva dentro de OpenCode
@@ -232,7 +230,7 @@ Esta capa no conoce el stack ni la arquitectura de un proyecto concreto.
 8. ejecuta `/init` nativo de OpenCode;
 9. revisa `AGENTS.md`;
 10. verifica la aplicación;
-11. marca el proyecto como `ready`.
+11. marca el proyecto como `ready` solo si `project doctor` satisface los predicados de readiness.
 
 ### Capa 4: secretos y estado privado
 
@@ -258,10 +256,13 @@ my-project/
 ├── .graphifyignore
 ├── .opencode/
 │   ├── agents/
-│   ├── commands/
-│   ├── plugins/
-│   ├── skills/
-│   └── tools/
+│   │   ├── review.md
+│   │   └── verify.md
+│   └── commands/
+│       ├── init-project.md
+│       ├── review.md
+│       ├── verify.md
+│       └── graph-update.md
 ├── docs/context/
 │   ├── index.md
 │   ├── log.md
@@ -272,9 +273,15 @@ my-project/
 │   ├── DECISIONS.md
 │   └── ROADMAP.md
 ├── graphify-out/
+│   ├── graph.json
+│   ├── GRAPH_REPORT.md
+│   └── manifest.json
 └── .portable-opencode/
-    └── state.json
+    ├── state.json
+    └── verification.json
 ```
+
+Solo se crean directorios de assets nativos que contengan archivos reales. `manifest.json` es condicional hasta que SPIKE-004 demuestre su portabilidad y ausencia de rutas privadas.
 
 ## 7. Modelo de agentes
 
@@ -296,21 +303,15 @@ Subagente de comprensión estructural. Prioridad de consulta:
 4. búsqueda textual;
 5. lectura directa.
 
-### `architect`
-
-Evalúa alternativas, trade-offs y decisiones arquitectónicas. No implementa por defecto.
-
 ### `review`
 
 Revisa diff, contratos, diagnósticos, tests e impacto estructural. No modifica.
 
 ### `verify`
 
-Ejecuta lint, typecheck, tests, build y smoke tests. No edita salvo permiso explícito.
+Ejecuta el manifiesto de verificación canónico. No edita ni repara silenciosamente.
 
-### `docs`
-
-Mantiene documentación del proyecto sin modificar código fuente.
+Los agentes nativos `general`, `explore` y `scout` se conservan para delegación y exploración; no se crean copias personalizadas sin una necesidad repetida.
 
 ## 8. Commands, skills, plugins y tools
 
@@ -325,45 +326,16 @@ Plugin      → automatización ligada a eventos
 Custom tool → operación estructurada ejecutable
 ```
 
-Comandos iniciales:
+Comandos de proyecto iniciales:
 
 ```text
 /init-project
-/project-status
-/context-review
-/explore
-/plan
-/implement
-/debug
 /review
 /verify
-/graph-status
 /graph-update
-/graph-audit
-/graph-review
-/decision
-/cost
-/handoff
 ```
 
-Plugins mínimos:
-
-- `portable-security`;
-- `portable-graphify`;
-- `portable-compaction`;
-- `portable-session`;
-- `portable-observability`.
-
-Custom tools previstas:
-
-- `project_status`;
-- `project_context`;
-- `graph_status`;
-- `graph_update`;
-- `graph_audit`;
-- `graph_decision`;
-- `verification_profile`;
-- `observability_status`.
+El CLI de control permanece separado de OpenCode y expone `status`, `inspect`, `plan`, `apply`, `doctor`, `install`, `init-project`, `project status`, `project doctor` y el ciclo `observability start|stop|status|open|purge`. No se asume un catálogo de plugins ni de tools personalizados antes de que exista una brecha nativa demostrada.
 
 ## 9. Permisos y seguridad
 
@@ -380,7 +352,7 @@ Operaciones peligrosas → deny
 
 Se denegará por defecto la lectura de `.env`, claves privadas y certificados. `git push`, `git reset --hard`, `git clean`, `rm -rf` y operaciones destructivas equivalentes estarán denegadas o requerirán aprobación explícita según el perfil.
 
-Los permisos variarán por agente. `architect` y `review` tendrán capacidades más restrictivas que `build` o `verify`.
+Los permisos variarán por agente. `review` y `verify` tendrán capacidades más restrictivas que `build`; ambos son no mutantes. `git push`, la destrucción y la mutación fuera del proyecto permanecen denegadas o requieren aprobación explícita según el contrato aplicable.
 
 ## 10. Graphify como subsistema de primera clase
 
@@ -393,6 +365,13 @@ base universal
 + decisiones del usuario
 = .graphifyignore final
 ```
+
+La política de salida del MVP es explícita:
+
+- se versionan `graphify-out/graph.json` y `graphify-out/GRAPH_REPORT.md`;
+- `graphify-out/manifest.json` se versiona solo tras validación de SPIKE-004;
+- HTML, cachés, costes, logs de consultas y exports opcionales permanecen fuera de Git;
+- `graphify-out/` se excluye de la extracción del propio grafo.
 
 Acciones automáticas seguras:
 
@@ -423,7 +402,7 @@ docs/generated/
 
 Las decisiones se persistirán para no repetir preguntas.
 
-Eventos conceptuales:
+Eventos conceptuales que pueden marcar el estado como `dirty`:
 
 ```text
 file.edited             → graph_dirty = true
@@ -436,7 +415,7 @@ gran crecimiento        → auditoría
 archivos sin clasificar → decisión pendiente
 ```
 
-El MVP priorizará comandos explícitos antes de activar automatización avanzada en idle.
+El MVP prioriza comandos explícitos (`/graph-update` y el CLI cuando corresponda) antes de activar automatización avanzada en idle o hooks.
 
 ## 11. OpenRouter Policy
 
@@ -449,31 +428,28 @@ La política versionada documentará:
 - límites de gasto;
 - logs;
 - continuidad de sesión;
-- plugins permitidos;
-- perfiles estándar y ZDR estricto.
+- privacidad y recolección de datos.
 
 Configuración conceptual inicial:
 
 ```text
-main    → Auto Router
-build   → router orientado a coding
-explore → modelo rápido / throughput
-review  → modelo fuerte de coding o reasoning
-verify  → modelo barato y fiable
+main  → implementación y coding interactivo
+reason → planificación, revisión y verificación
+fast  → exploración y tareas ligeras
 ```
 
 Principios:
 
 - una API key por usuario;
-- límites de gasto configurables;
+- límites de gasto configurables cuando la superficie remota los soporte;
 - prompt logging desactivado;
-- `data_collection: deny` como política base;
-- ZDR como perfil opcional;
+- `data_collection: deny` como política base cuando sea expresable y verificable;
 - fallbacks habilitados;
 - provider pinning solo cuando exista una razón demostrada;
 - response caching desactivado para tareas dependientes del estado del repositorio;
 - prompt caching aprovechado cuando sea posible;
-- metadata y usage activados para observabilidad.
+- metadata y usage activados para observabilidad;
+- la manifest local de presets será `config/openrouter/presets.jsonc`, sin credenciales.
 
 ## 12. Portabilidad y propiedad del estado
 
@@ -510,58 +486,36 @@ Principios:
 - logs privados;
 - estado de sesión no compartible.
 
-## 13. Estructura propuesta del repositorio portable
+## 13. Estructura canónica del repositorio portable
 
 ```text
 portable-opencode/
-├── bin/
-├── global/
+├── config/
+│   ├── components.jsonc
+│   ├── global/
+│   │   ├── opencode.jsonc
+│   │   └── AGENTS.md
+│   ├── openrouter/
+│   │   └── presets.jsonc
+│   └── resources/
+│       ├── environment.jsonc
+│       └── project.jsonc
+├── templates/project/
 │   ├── opencode.jsonc
-│   ├── tui.json
 │   ├── AGENTS.md
-│   ├── agents/
-│   ├── commands/
-│   ├── plugins/
-│   ├── skills/
-│   └── tools/
-├── project/
-├── openrouter/
-│   ├── POLICY.md
-│   ├── presets.yaml
-│   ├── providers.yaml
-│   └── guardrails.yaml
-├── observability/
-│   ├── POLICY.md
-│   ├── proxy/
-│   ├── phoenix/
-│   ├── schemas/
-│   └── doctor
-├── knowledge/
-│   ├── OKF.md
-│   ├── schemas/
-│   └── templates/
-├── graphifyignore/
-├── profiles/
+│   ├── .opencode/
+│   │   ├── agents/review.md, verify.md
+│   │   └── commands/init-project.md, review.md, verify.md, graph-update.md
+│   ├── docs/context/
+│   └── .portable-opencode/
+│       ├── state.json
+│       └── verification.json
 ├── scripts/
 ├── schemas/
-├── tests/
 └── docs/
 ```
 
-Perfiles previstos:
-
-```text
-standard
-strict-security
-team
-solo
-typescript
-python
-data-science
-observability-minimal
-observability-langfuse
-okf-strict
-```
+Este árbol expresa intención canónica; no obliga a crear directorios o assets que aún no tengan una necesidad repetida o evidencia de integración. No existe un catálogo de perfiles en el MVP. La TUI permanece diferida hasta que el CLI sea efectivo.
 
 ## 14. Criterios para considerar un proyecto `ready`
 
@@ -574,35 +528,39 @@ okf-strict
 - formatter decidido;
 - `.gitignore` y `.graphifyignore` revisados;
 - primer grafo generado y auditado;
+- `graph.json` y `GRAPH_REPORT.md` válidos; `manifest.json` solo si SPIKE-004 lo habilita;
 - `AGENTS.md` alineado con el proyecto real;
 - verificaciones definidas y ejecutadas;
-- observabilidad disponible o desactivada explícitamente;
+- observabilidad disponible o marcada explícitamente como degradada/desactivada;
 - llamada de prueba a OpenRouter correlacionada con la sesión local;
 - metadata OKF mínima en los documentos de contexto;
 - ninguna decisión crítica pendiente;
-- primer commit preparado.
+- `project doctor` sin bloqueos.
 
 ## 15. MVP
 
 Incluido inicialmente:
 
-- estrategia explícita de soporte por plataforma;
-- instalación idempotente y backup;
-- configuración global de OpenCode;
-- integración básica con OpenRouter;
-- proxy local de observabilidad;
-- Phoenix local para metadata, usage, coste y errores;
-- plugin `portable-observability`;
-- RTK y Graphify;
-- `doctor` global;
-- `init-project` para repositorios nuevos;
+- una configuración personal Windows-native y PowerShell;
+- un CLI headless con inspección, plan, apply, diagnóstico y estado;
+- instalación idempotente y backups de recursos gestionados;
+- configuración global de OpenCode y scaffold de proyecto raíz;
+- integración básica con OpenRouter a través de tres roles semánticos;
+- RTK y Graphify con límites de salida explícitos;
 - documentos compatibles con el subconjunto mínimo de OKF;
-- agentes base;
-- comandos esenciales;
-- permisos seguros;
+- agentes nativos más `review` y `verify` no mutantes;
+- permisos seguros y estado verificable;
 - generador inicial de `.graphifyignore`;
 - actualización explícita del grafo;
-- handoff y compactación con estado esencial.
+- `init-project` para repositorios nuevos o recién inicializados;
+- continuidad mediante contexto, decisiones, estado y verificación.
+
+Condicionado a evidencia y decisiones aún abiertas:
+
+- proxy local y backend Phoenix para observabilidad (`DEC-010`, SPIKE-003);
+- versiones y mecanismos de instalación de componentes (SPIKE-001/002/004);
+- lenguaje y distribución del CLI (`DEC-009`, `DEC-012`);
+- integración exacta de presets OpenRouter desde OpenCode (SPIKE-002).
 
 Diferido:
 
@@ -612,7 +570,8 @@ Diferido:
 - SDK de OpenCode;
 - policies experimentales obligatorias;
 - adopción de repositorios existentes;
-- marketplace de perfiles.
+- perfiles, equipos, organizaciones y marketplace;
+- TUI de configuración hasta que el CLI sea efectivo.
 
 ## 16. Riesgos de diseño
 
@@ -628,44 +587,46 @@ Diferido:
 
 ## 17. Decisiones adoptadas
 
-- OpenCode será el runtime principal.
-- OpenRouter será el plano de control de modelos, proveedores, routing, privacidad y costes.
-- El proyecto se define como configuración conjunta de OpenCode + OpenRouter.
-- La observabilidad local formará parte del núcleo.
-- Phoenix será el backend de referencia del MVP, sujeto a validación.
-- La documentación adoptará un subconjunto compatible con OKF.
-- RTK y Graphify formarán parte del núcleo.
-- Graphify se instalará desde el inicio.
-- `.graphifyignore` será generado y refinado.
-- El sistema se optimizará primero para proyectos nuevos.
-- `/init-project` conservará el `/init` nativo.
-- Los MCPs serán opcionales.
-- La seguridad se expresará en configuración y permisos.
-- Las ambigüedades se preguntarán y persistirán.
-- El sistema será público, gratuito y configurable.
+- OpenCode será el runtime principal y OpenRouter el plano de control de modelos, proveedores, routing, privacidad y costes (`DEC-014`, límites de responsabilidad en `ARCHITECTURE.md`).
+- El MVP será personal-first, Windows-native, PowerShell y Windows Terminal; la reutilización pública no amplía el alcance MVP (`DEC-014`, `DEC-015`).
+- La configuración de proyecto usa `opencode.jsonc` en la raíz y assets nativos bajo `.opencode/`; la configuración global y la procedencia se gestionan por separado (`DEC-017`).
+- Se conservan los agentes nativos y solo se añaden `review` y `verify` como subagentes no mutantes; los roles semánticos son `main`, `reason` y `fast` (`DEC-018`).
+- Se versiona la allowlist mínima de Graphify: `graph.json`, `GRAPH_REPORT.md` y, condicionalmente, `manifest.json` (`DEC-019`).
+- La reconciliación remota gestiona únicamente `portable-main`, `portable-reason` y `portable-fast`, con plan, aprobación, versionado y sin borrado automático (`DEC-020`).
+- La materialización distingue `rendered`, `copied`, `linked`, `queried` y `private`, y solo muta recursos con ownership probado (`DEC-021`).
+- La documentación usa el subconjunto mínimo de metadatos compatible con OKF (`DEC-011`); RTK y Graphify forman parte del diseño canónico, sujetos a sus spikes de integración.
+- Las operaciones ambiguas o destructivas requieren intervención y los secretos/estado privado permanecen fuera de Git.
 
 ## 18. Decisiones abiertas
 
-- nombre definitivo;
-- lenguaje del CLI;
-- estrategia multiplataforma;
-- formato exacto del estado;
-- outputs de Graphify que se versionarán;
-- actualización y migración entre versiones;
-- presets iniciales de OpenRouter;
-- lenguaje y diseño del proxy de observabilidad;
-- retención y granularidad de trazas;
-- confirmación de Phoenix tras el spike;
-- grado de conformidad OKF;
-- política exacta de costes y privacidad;
-- agentes globales frente a locales;
-- hooks incluidos en el MVP;
-- validación según versión de OpenCode;
-- límites de personalización compatibles con la ruta recomendada.
+Las siguientes decisiones técnicas siguen evidence-gated y no deben resolverse por preferencia del agente:
+
+- `DEC-009`: lenguaje principal y forma de empaquetado del CLI;
+- `DEC-010`: aceptación de Phoenix como backend de observabilidad;
+- `DEC-012`: mecanismo final de distribución;
+- versión, rutas efectivas y precedencia de OpenCode (`SPIKE-001`);
+- representación de presets y política de modelos/proveedores (`SPIKE-002`);
+- versiones y comportamiento Windows de Graphify y RTK (`SPIKE-004`).
+
+Preguntas concretas para el propietario, resueltas el 2026-09-09:
+
+1. ¿Aprueba que el alcance normativo del MVP sea personal-first y Windows-native, sin perfiles, equipos, organizaciones ni backend alternativo de observabilidad? **Aprobada.**
+2. ¿Aprueba como superficie canónica el CLI de `DESIGN-009`, incluyendo el namespace `observability` y `purge`, y el árbol de recursos de `DESIGN-008`? **Aprobada.**
+3. ¿Aprueba que esta especificación pase a ser v0.3 draft para revisión, manteniendo `DEC-009`, `DEC-010` y `DEC-012` abiertas hasta disponer de evidencia? **Aprobada.**
+4. ¿Debe conservarse alguna promesa de producto de la v0.2 que no esté reflejada en el contexto actual, en particular la gratuidad, perfiles o compatibilidad con equipos? **No; no se conserva ninguna promesa adicional de la v0.2.**
 
 ## 19. Siguiente artefacto
 
-Antes de escribir scripts debe crearse una **matriz de configuración** con estas columnas:
+La matriz de configuración ya existe como `DESIGN-001` y sus contratos operativos se han desglosado en `DESIGN-007` a `DESIGN-012`. El propietario ha aprobado el alcance de esta v0.3 y las cuatro preguntas anteriores. La siguiente acción es obtener el primer resultado real del CI remoto antes de iniciar los spikes de runtime.
+
+Tras la aprobación, la secuencia es:
+
+1. incorporar únicamente las decisiones aprobadas en la especificación y el contexto;
+2. ejecutar los spikes runtime pendientes en el orden documentado;
+3. resolver las decisiones evidence-gated con resultados reproducibles;
+4. implementar el CLI y los templates sin inventar rutas, versiones o mecanismos.
+
+La matriz canónica conserva estas columnas:
 
 ```text
 Feature
@@ -681,7 +642,7 @@ Criterio de validación
 Estado de soporte
 ```
 
-Esta matriz será la frontera entre la visión y la implementación.
+Esta matriz y los diseños enlazados son la frontera entre la visión y la implementación.
 
 ## 20. Referencias técnicas
 
