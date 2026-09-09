@@ -214,7 +214,7 @@ for path in tracked_existing:
         expected_prefix = "FEAT-"
     elif relative.startswith("docs/research/"):
         expected_prefix = "RESEARCH-"
-    elif relative.startswith("docs/spikes/"):
+    elif relative.startswith("docs/spikes/") and not relative.startswith("docs/spikes/results/"):
         expected_prefix = "SPIKE-"
 
     if expected_prefix:
