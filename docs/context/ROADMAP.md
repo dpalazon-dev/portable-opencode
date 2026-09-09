@@ -127,7 +127,7 @@ After `SPIKE-000` establishes how Codex orchestration actually behaves:
 ```text
 migrate inherited metadata (complete)
 → run scripts/verify-docs.ps1 (passed locally)
-→ obtain the first green repository CI (pending remote execution)
+→ obtain the first green repository CI (passed on GitHub run 34339325620)
 ```
 
 The completed metadata migration was bounded housekeeping and did not redesign context policy.
@@ -208,7 +208,7 @@ SPIKE-002 and SPIKE-004 may run in parallel after SPIKE-001 if branch and global
 ### Exit criteria
 
 - Codex development orchestration is either validated or its exact routing limitations are recorded before runtime delegation;
-- the canonical local repository validator reaches green after the controlled metadata migration; the CI adapter is ready and remains pending remote execution;
+- the canonical local repository validator and the CI adapter both pass after the controlled metadata migration;
 - all runtime spikes reproduce from PowerShell without WSL;
 - uncertain matrix contracts become accepted, revised or deferred;
 - exact tested versions/mechanisms replace `pending` entries in `config/components.jsonc` only from evidence;

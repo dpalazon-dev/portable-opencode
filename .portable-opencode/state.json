@@ -147,7 +147,7 @@
     "evidence_mapping": "aligned",
     "codex_development_orchestration": "inconclusive-role-routing-not-structural",
     "spike_briefs": "spike-000-through-spike-004-defined",
-    "repository_validation_ci": "implemented-local-validator-green-remote-ci-pending",
+    "repository_validation_ci": "green-local-and-remote-ci",
     "specification_v0_3": "draft-owner-approved-remote-ci-pending"
   },
   "architecture": {
@@ -340,8 +340,8 @@
   },
   "verification": {
     "profile": "docs-only",
-    "last_run": "2026-09-09T11:27:23+02:00",
-    "result": "passed-local-validator"
+    "last_run": "2026-09-09T12:17:37+02:00",
+    "result": "passed-remote-ci"
   },
   "decisions": {
     "accepted": 16,
@@ -351,7 +351,7 @@
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "prepare-commit-push-and-remote-ci-before-spike-001",
+    "step": "execute-spike-001-opencode-lifecycle",
     "documents": [
       "docs/SPECIFICATION.es.md",
       "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
@@ -361,5 +361,5 @@
       "docs/spikes/SPIKE-001_OPENCODE_LIFECYCLE.md"
     ]
   },
-  "updated_at": "2026-09-09T11:54:12+02:00"
+  "updated_at": "2026-09-09T12:17:37+02:00"
 }

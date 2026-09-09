@@ -196,3 +196,11 @@ Run `SPIKE-000` from Codex on Windows. If the hierarchy passes or its exact sema
 - approved retaining `DEC-009`, `DEC-010` and `DEC-012` as evidence-gated decisions;
 - confirmed that no additional unsupported v0.2 promises, including gratuity, profiles or team compatibility, are retained;
 - next action is to prepare the reviewed changes for commit/push and obtain the first green remote CI result before `SPIKE-001`.
+
+## 2026-09-09 — First green remote CI
+
+- pushed the approved v0.3 documentation and state changes to `main` over SSH;
+- fixed the validator so result documents under `docs/spikes/results/` are not mistaken for spike briefs requiring duplicate IDs;
+- GitHub Actions run `34339325620` passed on `windows-latest` with Python 3.13;
+- repository validation is now green locally and remotely;
+- `SPIKE-001` is unblocked as the next technical-validation step.
