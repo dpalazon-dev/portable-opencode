@@ -28,6 +28,7 @@ The broad specification remains in [../SPECIFICATION.es.md](../SPECIFICATION.es.
 - [DESIGN-010 — Evidence and Spike Mapping](../design/EVIDENCE_AND_SPIKE_MAPPING.md) maps every runtime-evidence contract to a spike or implementation test.
 - [DESIGN-011 — PowerShell Script Inventory](../design/POWERSHELL_SCRIPT_INVENTORY.md) limits scripts to bootstrap, repository validation and evidence-gated break-glass recovery.
 - [DESIGN-012 — Codex Development Orchestration](../design/CODEX_DEVELOPMENT_ORCHESTRATION.md) defines the repository-local master/specialist hierarchy, Work Packages, Receipts and independent acceptance gates.
+- [DESIGN-013 — Guided Installation and Onboarding](../design/GUIDED_INSTALLATION_AND_ONBOARDING.md) defines the external acquisition gate, transactional CLI activation, resumable CLI onboarding, browser handoff and native secret custody.
 - [FEAT-001 — Interactive Configuration TUI](../features/CONFIGURATION_TUI.md) is deferred until the CLI is effective.
 
 ## Bounded technical spikes
@@ -65,10 +66,11 @@ Each runtime spike is an execution brief. Results belong in `docs/spikes/results
 
 - all owner-level configuration defaults are resolved;
 - operational resource, CLI, state, diagnostic and evidence contracts are defined;
+- guided installation and onboarding contracts are accepted at the product level; exact packaging, OpenCode authentication and evidence-gated components remain unresolved;
 - repository-local Codex specialist roles plus a single `development-orchestrator` master are configured;
 - `DESIGN-012` defines Work Package/Receipt orchestration; `SPIKE-000` is recorded as `INCONCLUSIVE`, so named-role routing remains prompt/policy-mediated rather than structurally guaranteed;
 - SPIKE-001 remains bounded, version-scoped `INCONCLUSIVE` evidence; SPIKE-002 remains `INCONCLUSIVE` without private authentication; SPIKE-004 is reconciled as `PARTIAL`; SPIKE-003 is defined but blocked and not started until the authenticated SPIKE-002 gate closes;
-- `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
+- `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated; `DEC-022` accepts public GitHub Releases as the initial channel without closing the exact packaging contract;
 - specification v0.3 synchronization, owner approval and first green remote CI are complete; formal Phase 0 closure still depends on remaining evidence-gated technical decisions and implementation readiness;
 - no executable production implementation exists yet.
 

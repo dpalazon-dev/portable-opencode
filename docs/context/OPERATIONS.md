@@ -40,6 +40,7 @@ Binding facts:
 - explicit managed-resource materialization and proven-ownership mutation;
 - canonical environment/project resource catalogs and state/result schemas;
 - exact headless CLI operation contracts;
+- guided, resumable, browser-assisted installation with a private non-sensitive environment checkpoint; an external acquisition gate authenticates bootstrap bytes before execution, preflight is strictly read-only, authenticated remote work requires a second inspection/plan/approval, secret values never enter child processes by default, and `--json` never opens a browser or native-auth UI;
 - proposed native Phoenix lifecycle with private SQLite and 30-day retention;
 - repository-local Codex specialists plus one `development-orchestrator` master;
 - Work Package and Task Receipt schemas for bounded Codex delegation;
@@ -47,6 +48,7 @@ Binding facts:
 - four product runtime spike briefs with evidence and discard boundaries;
 - the TUI is deferred;
 - all owner-level defaults are resolved;
+- public GitHub Releases are the accepted initial distribution channel; exact package mechanics remain evidence-gated under `DEC-012`;
 - `DEC-009`, `DEC-010` and `DEC-012` remain evidence-gated;
 - inherited metadata migration is complete, the canonical local validator passes, and the CI adapter passed in run `34339478515`.
 
@@ -238,7 +240,9 @@ Formatting, linting, type checking, unit/integration tests, schema validation an
 ### Future: `canonical-journey`
 
 ```text
-clean Windows
+public GitHub Release
+→ one PowerShell bootstrap command
+→ clean Windows
 → inspect and plan
 → install
 → healthy environment
@@ -250,6 +254,8 @@ clean Windows
 
 `DESIGN-010` maps the product evidence contracts that must pass before this E2E can be trusted.
 
+`DESIGN-013` owns the preflight, question, browser handoff, checkpoint, resume, redaction, optional Git/GitHub/SSH and health-classification contracts for this journey.
+
 ## 10. Failure, recovery and secrets
 
 Stop broad mutation, preserve original errors, detect partial changes, restore known backups, mark state honestly, provide narrow remediation and avoid blind retries.
@@ -260,9 +266,10 @@ Normal recovery remains `inspect → plan → apply → doctor`. PowerShell does
 
 ## 11. Current next sequence
 
-1. use the documented prompt/policy-mediated orchestration workflow, with the SPIKE-000 routing limitation explicit;
-2. preserve the reconciled `SPIKE-001` categories and version boundary in all downstream contracts;
-3. complete the exact authenticated SPIKE-002 gate before creating the concrete preset manifest or accepting OpenRouter;
-4. retain SPIKE-004 as `PARTIAL` and the Graphify/RTK promotions as version-scoped evidence; keep OpenCode, OpenRouter and Phoenix pending;
-5. keep SPIKE-003 blocked and not started until the SPIKE-002 gate is complete;
-6. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence, then implement the CLI against the accepted post-spike contracts and run `E2E-001`.
+1. create the implementation plan for owner-approved `DESIGN-013`;
+2. use the documented prompt/policy-mediated orchestration workflow, with the SPIKE-000 routing limitation explicit;
+3. preserve the reconciled `SPIKE-001` categories and version boundary in all downstream contracts;
+4. complete the exact authenticated SPIKE-002 gate before creating the concrete preset manifest or accepting OpenRouter;
+5. retain SPIKE-004 as `PARTIAL` and the Graphify/RTK promotions as version-scoped evidence; keep OpenCode, OpenRouter and Phoenix pending;
+6. keep SPIKE-003 blocked and not started until the SPIKE-002 gate is complete;
+7. resolve `DEC-009`, `DEC-010` and `DEC-012` from evidence, then implement the CLI against the accepted post-spike contracts and run `E2E-001`.

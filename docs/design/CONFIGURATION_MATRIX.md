@@ -110,6 +110,7 @@ DESIGN-008  canonical paths + resource catalogs
 DESIGN-009  CLI semantics + diagnostics + exit classes
 DESIGN-010  S-contract → spike/implementation-test mapping
 DESIGN-011  PowerShell script boundary
+DESIGN-013  Guided installation, onboarding and native secret custody
 ```
 
 Machine-readable desired state is represented by `config/components.jsonc` and `config/resources/{environment,project}.jsonc`. Pending component versions are evidence gaps, not values for implementation agents to choose.
@@ -140,7 +141,7 @@ remote config
 | CORE-04 | Produce deterministic inspectable plans before every mutation | typed plan | equivalent input produces equivalent plan · A |
 | CORE-05 | Apply approved operations only to proven-owned resources and back up managed files before replacement | managed-resource inventory + DESIGN-007 | partial outcome recorded; unknown ownership blocks mutation · A |
 | CORE-06 | Second run is no-op or explained drift; absence from desired state never authorizes deletion of unmanaged resources | current vs desired state | unexplained divergence or ownership ambiguity blocks apply · A |
-| CORE-07 | Environment states: absent, inspected, planned, installed, healthy, degraded, update-required, blocked | private environment state | predicates verified by doctor · A |
+| CORE-07 | Environment states: `not-started`, `inspected`, `plan-ready`, `approved`, `installing`, `authentication-required`, `configuring`, `verifying`, `healthy`, `degraded`, `blocked` | private environment state | predicates verified by doctor and resumable checkpoint · A |
 | CORE-08 | Project states: uninitialized, scaffolded, configuring, ready, dirty, degraded, blocked | `.portable-opencode/state.json` | ready requires gates · A |
 | CORE-09 | Diagnostics expose stable code, severity, evidence, impact and remediation | diagnostic registry | JSON and human-output fixtures · A |
 | CORE-10 | Version all managed config/state and supported component identities; migrate only known versions | schemas + supported-version manifest + explicit migrations | backup first; unknown version blocks · A |
@@ -256,11 +257,11 @@ The first two noncanonical cases were observed to load or merge in the tested ve
 |---|---|---|---|
 | CLI-01 | Select language/packaging from Windows-native evidence | DEC-009/012 + prototypes | clean-machine comparison · P/S |
 | CLI-02 | Core commands: status, inspect, plan, apply, doctor | DESIGN-009 + schemas | unit/integration fixtures · A |
-| CLI-03 | `install` converges global OpenCode, OpenRouter presets, RTK, Graphify and observability | adapters + plans | clean/existing machine fixtures · A/S |
+| CLI-03 | `install` performs read-only preflight, guided browser-assisted onboarding, a second authenticated inspection/plan/approval and dependency-ordered convergence of global OpenCode, OpenRouter presets, RTK, Graphify and accepted observability | adapters + two-phase plans + private checkpoint | clean/existing machine, auth-handoff, second-approval, interruption/resume and health fixtures · A/S |
 | CLI-04 | `init-project` generates canonical config/assets/context/graph policy/state | DESIGN-008 + templates + Windows filesystem | spaces/rerun fixtures · A |
 | CLI-05 | Add component lifecycle commands only where native commands are insufficient | narrow adapters | interruption/failure · A/S |
 | CLI-06 | Updates compare supported and installed versions, plan, back up and migrate | `config/components.jsonc` + functions | upgrade/rollback · A/S |
-| CLI-07 | Small `.ps1` wrappers only within DESIGN-011 boundaries; bootstrap establishes the CLI without duplicating lifecycle logic | PowerShell | SPIKE-001 + clean bootstrap fixture · A/S |
+| CLI-07 | Public GitHub Releases provide the initial channel; small `.ps1` wrappers only within DESIGN-011 boundaries; bootstrap establishes and verifies the CLI using an independently anchored release signature without duplicating lifecycle logic | PowerShell + release manifest + trust anchor | SPIKE-001 + DEC-012 + clean bootstrap and origin-authentication fixtures · A/S |
 | CLI-08 | JSON output and stable failure classes | `schemas/operation-result.schema.json` + DESIGN-009 | schema/exit-code tests · A |
 | CLI-09 | Uninstall/detach later after ownership is proven | resource inventory | preserve-user-data tests · L |
 

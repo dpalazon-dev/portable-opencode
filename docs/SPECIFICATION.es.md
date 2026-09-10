@@ -203,6 +203,10 @@ Instala y configura:
 
 Esta capa no conoce el stack ni la arquitectura de un proyecto concreto.
 
+La instalación inicial se distribuye mediante **GitHub Releases públicas** y comienza con un único comando de PowerShell. Un launcher o gate de adquisición ya confiable autentica los bytes exactos de `bootstrap.ps1` antes de pedir a PowerShell que los ejecute; después el bootstrap activa la CLI transaccionalmente. El mecanismo concreto sigue bloqueado por `DEC-012`. `bootstrap.ps1` solo establece y verifica una versión del CLI; `portable-opencode install` realiza el preflight estrictamente no mutante, genera el plan, pide aprobación, instala en orden de dependencias y ejecuta el diagnóstico final. El onboarding puede abrir páginas oficiales, esperar al usuario y reanudar la operación desde checkpoints privados no sensibles en `%LOCALAPPDATA%\portable-opencode\environment-state.json`. Si la autenticación cambia el estado remoto, el CLI vuelve a inspeccionar, genera un segundo plan y solicita una segunda aprobación; el modo `--json` nunca abre navegador ni interfaz nativa.
+
+El flujo de autenticación es browser-assisted y delega la captura y custodia de credenciales al mecanismo privado nativo de OpenCode. `portable-opencode` no recibe ni almacena API keys. GitHub, Git y SSH son opcionales para descargar e instalar el entorno; la TUI y el instalador gráfico permanecen diferidos. El contrato completo está en [`DESIGN-013`](design/GUIDED_INSTALLATION_AND_ONBOARDING.md).
+
 ### Capa 2: scaffold portable del proyecto
 
 `portable-opencode init-project <ruta>`:
@@ -542,6 +546,7 @@ Este árbol expresa intención canónica; no obliga a crear directorios o assets
 Incluido inicialmente:
 
 - una configuración personal Windows-native y PowerShell;
+- onboarding CLI guiado, reanudable y browser-assisted desde una Release pública;
 - un CLI headless con inspección, plan, apply, diagnóstico y estado;
 - instalación idempotente y backups de recursos gestionados;
 - configuración global de OpenCode y scaffold de proyecto raíz;
@@ -594,6 +599,7 @@ Diferido:
 - Se versiona la allowlist mínima de Graphify: `graph.json`, `GRAPH_REPORT.md` y, condicionalmente, `manifest.json` (`DEC-019`).
 - La reconciliación remota gestiona únicamente `portable-main`, `portable-reason` y `portable-fast`, con plan, aprobación, versionado y sin borrado automático (`DEC-020`).
 - La materialización distingue `rendered`, `copied`, `linked`, `queried` y `private`, y solo muta recursos con ownership probado (`DEC-021`).
+- El primer onboarding usa una Release pública, un bootstrap PowerShell mínimo y checkpoints privados; la autenticación permanece bajo custodia nativa de OpenCode (`DEC-022`, [`DESIGN-013`](design/GUIDED_INSTALLATION_AND_ONBOARDING.md)).
 - La documentación usa el subconjunto mínimo de metadatos compatible con OKF (`DEC-011`); RTK y Graphify forman parte del diseño canónico, sujetos a sus spikes de integración.
 - Las operaciones ambiguas o destructivas requieren intervención y los secretos/estado privado permanecen fuera de Git.
 
@@ -617,7 +623,7 @@ Preguntas concretas para el propietario, resueltas el 2026-09-09:
 
 ## 19. Siguiente artefacto
 
-La matriz de configuración ya existe como `DESIGN-001` y sus contratos operativos se han desglosado en `DESIGN-007` a `DESIGN-012`. El propietario ha aprobado el alcance de esta v0.3 y las cuatro preguntas anteriores. La siguiente acción es obtener el primer resultado real del CI remoto antes de iniciar los spikes de runtime.
+La matriz de configuración ya existe como `DESIGN-001` y sus contratos operativos se han desglosado en `DESIGN-007` a `DESIGN-013`. El propietario ha aprobado el alcance de esta v0.3, las cuatro preguntas anteriores y `DESIGN-013`. La siguiente acción es crear el plan de implementación sin resolver por preferencia los gates técnicos pendientes; los spikes de runtime siguen sujetos a sus gates.
 
 Tras la aprobación, la secuencia es:
 

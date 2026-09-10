@@ -32,6 +32,7 @@ status: active
 | DEC-019 | accepted | Version a minimal allowlist of Graphify output |
 | DEC-020 | accepted | Reconcile managed OpenRouter presets declaratively |
 | DEC-021 | accepted | Materialize configuration explicitly and mutate only proven-owned resources |
+| DEC-022 | accepted | Use guided, resumable, browser-assisted CLI onboarding with native secret custody |
 
 ---
 
@@ -305,6 +306,42 @@ private   → local value or state outside Git
 The CLI may replace, detach or remove only resources whose ownership it can prove from recorded state and current evidence. Unmanaged or ambiguous resources are preserved and reported. Removing a resource from desired state produces a retirement plan; it never authorizes blind deletion.
 
 The same design fixes an early supported-component version manifest and a deliberately small PowerShell bootstrap that establishes the CLI but does not duplicate application logic.
+
+## DEC-022 — Use guided, resumable, browser-assisted CLI onboarding with native secret custody
+
+**Status:** accepted
+**Date:** 2026-09-10
+**Design:** [DESIGN-013](../design/GUIDED_INSTALLATION_AND_ONBOARDING.md)
+
+Owner approval of `DESIGN-013` is recorded. This approval authorizes implementation planning, not implementation of unresolved evidence-gated mechanisms.
+
+The initial distribution channel is public GitHub Releases. An external acquisition gate authenticates the bootstrap bytes, after which the authenticated PowerShell bootstrap establishes and verifies the CLI only; `portable-opencode install` owns preflight, planning, approval, installation, browser-assisted onboarding, checkpointing, configuration, verification and recovery.
+
+The installation lifecycle is:
+
+```text
+not-started
+→ inspected
+→ plan-ready
+→ approved
+→ installing
+→ authentication-required
+→ inspected
+→ plan-ready
+→ approved
+→ installing
+→ configuring
+→ verifying
+→ healthy | degraded | blocked
+```
+
+The CLI inspects before asking, asks only for semantic decisions, ownership conflicts or mutations, and resumes from private non-sensitive checkpoints at `%LOCALAPPDATA%\portable-opencode\environment-state.json`. Preflight itself is strictly read-only, has no temporary-write exception and does not persist results; the first checkpoint is written only after approval and immediately before the first side effect. After native authentication, the CLI performs a second inspection, creates a new authenticated plan and requires a second approval before remote state changes. Interrupted or cancelled work preserves evidence and never retries an operation whose completion is unknown without re-inspection.
+
+Onboarding explains the required action, opens only the necessary official pages, waits for the user in interactive mode, launches the native OpenCode authentication mechanism, verifies a sanitized native status, and offers retry, explicitly accepted degradation or exit. `portable-opencode` never accesses secret values; child processes receive an explicit environment allowlist, native-auth input/output is not captured, and missing sanitized status fails closed. Non-interactive `--json` mode opens no browser or native graphical interface, emits the action as schema-valid structured data and returns a resumable blocker instead of waiting indefinitely.
+
+`portable-opencode` never receives or stores API keys. Credential capture and custody remain in OpenCode's native private mechanism. GitHub, Git and SSH are optional and do not gate release download or base installation. The TUI and graphical installer remain deferred.
+
+An already trusted acquisition launcher or gate must authenticate the exact bootstrap bytes against an independent trust root before PowerShell executes them, and the authenticated bootstrap must then verify the release signature against an independently provisioned trust anchor. A checksum fetched from the same Release detects corruption but does not authenticate the release origin. Bootstrap activation must be transactional and preserve the last verified CLI. The bootstrap may own only its private CLI staging, immutable identities, active selector, identity metadata, recognized temporaries and CLI restoration; `portable-opencode install` owns the environment lifecycle, managed resources, plans, checkpoints, backups, ownership, drift and recovery. This decision accepts the distribution channel and onboarding boundary, but does not resolve the trust-root, trust-anchor, package or activation mechanism under `DEC-012`, `DEC-009`, the exact OpenCode runtime/auth surface, the authenticated `SPIKE-002` gate, `SPIKE-003` or Phoenix.
 
 ## Evidence-gated decisions remaining
 

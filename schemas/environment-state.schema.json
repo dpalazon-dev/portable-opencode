@@ -2,32 +2,59 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://portable-opencode.local/schemas/environment-state.schema.json",
   "title": "Portable OpenCode Private Environment State",
-  "description": "Machine-private lifecycle and health state stored outside Git under LOCALAPPDATA.",
+  "description": "Machine-private lifecycle, resumable checkpoint and health state stored outside Git under LOCALAPPDATA.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "lifecycle", "components", "managed_resources", "observability", "verification"],
+  "required": [
+    "schema_version",
+    "lifecycle",
+    "last_outcome",
+    "installation",
+    "plan",
+    "checkpoint",
+    "progress",
+    "decisions",
+    "authentication",
+    "components",
+    "managed_resources",
+    "observability",
+    "health",
+    "verification",
+    "recovery"
+  ],
   "properties": {
-    "schema_version": {"type": "string", "const": "0.1.0"},
+    "schema_version": {"type": "string", "const": "0.2.0"},
     "lifecycle": {
       "type": "string",
-      "enum": ["absent", "inspected", "planned", "installed", "healthy", "degraded", "update-required", "blocked"]
+      "enum": [
+        "not-started",
+        "inspected",
+        "plan-ready",
+        "approved",
+        "installing",
+        "authentication-required",
+        "configuring",
+        "verifying",
+        "healthy",
+        "degraded",
+        "blocked"
+      ]
     },
-    "desired_state_hash": {"type": ["string", "null"]},
-    "last_plan_hash": {"type": ["string", "null"]},
+    "last_outcome": {"$ref": "#/$defs/operationOutcome"},
+    "installation": {"$ref": "#/$defs/installation"},
+    "plan": {"$ref": "#/$defs/plan"},
+    "checkpoint": {"$ref": "#/$defs/checkpoint"},
+    "progress": {"$ref": "#/$defs/progress"},
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    },
+    "authentication": {"$ref": "#/$defs/authentication"},
     "components": {
       "type": "object",
       "additionalProperties": {"$ref": "#/$defs/componentState"}
     },
-    "managed_resources": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["inventory_path"],
-      "properties": {
-        "inventory_path": {"type": "string", "minLength": 1},
-        "inventory_hash": {"type": ["string", "null"]},
-        "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
-      }
-    },
+    "managed_resources": {"$ref": "#/$defs/managedResources"},
     "observability": {
       "type": "object",
       "additionalProperties": true,
@@ -41,13 +68,13 @@
         "last_ingestion_at": {"type": ["string", "null"], "format": "date-time"}
       }
     },
-    "verification": {
+    "health": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["last_result"],
+      "required": ["classification", "last_verified_state", "diagnostic_codes"],
       "properties": {
-        "last_run_at": {"type": ["string", "null"], "format": "date-time"},
-        "last_result": {"type": "string", "enum": ["never", "healthy", "degraded", "blocked", "failed"]},
+        "classification": {"type": "string", "enum": ["PASS", "WARNING", "DEGRADED", "BLOCKED"]},
+        "last_verified_state": {"type": "string", "enum": ["healthy", "degraded", "blocked", "never"]},
         "diagnostic_codes": {
           "type": "array",
           "items": {"type": "string", "pattern": "^POC-[A-Z]+-[0-9]{3}$"},
@@ -55,9 +82,132 @@
         }
       }
     },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["last_result"],
+      "properties": {
+        "last_run_at": {"type": ["string", "null"], "format": "date-time"},
+        "last_result": {"type": "string", "enum": ["never", "healthy", "degraded", "blocked", "failed"]},
+        "doctor_revision": {"type": ["string", "null"]},
+        "diagnostic_codes": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^POC-[A-Z]+-[0-9]{3}$"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "recovery": {"$ref": "#/$defs/recovery"},
     "updated_at": {"type": "string", "format": "date-time"}
   },
   "$defs": {
+    "operationOutcome": {
+      "type": "string",
+      "enum": ["no-op", "planned", "applied", "healthy", "update-required", "degraded", "blocked", "partial", "failed", "cancelled"]
+    },
+    "installation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["installation_id", "cli_identity", "release_identity", "platform_identity"],
+      "properties": {
+        "installation_id": {"type": "string", "minLength": 1},
+        "cli_identity": {"type": "string", "minLength": 1},
+        "release_identity": {"type": "string", "minLength": 1},
+        "platform_identity": {"type": "string", "minLength": 1}
+      }
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan_schema_version", "plan_id", "plan_hash", "plan_phase", "supersedes_plan_id", "authentication_epoch", "observed_state_hash", "desired_state_hash", "checkpoint_sequence"],
+      "properties": {
+        "plan_schema_version": {"type": "string", "minLength": 1},
+        "plan_id": {"type": "string", "minLength": 1},
+        "plan_hash": {"type": ["string", "null"]},
+        "plan_phase": {"type": "string", "enum": ["pre-authentication", "authenticated"]},
+        "supersedes_plan_id": {"type": ["string", "null"]},
+        "authentication_epoch": {"type": "integer", "minimum": 0},
+        "observed_state_hash": {"type": ["string", "null"]},
+        "desired_state_hash": {"type": ["string", "null"]},
+        "checkpoint_sequence": {"type": "integer", "minimum": 0},
+        "created_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "updated_at", "last_transition_reason", "last_safe_resume_boundary"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "last_transition_reason": {"type": "string", "minLength": 1},
+        "last_safe_resume_boundary": {"type": "string", "minLength": 1},
+        "operation_in_progress": {"type": ["string", "null"]}
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_order", "completed_operation_ids", "current_operation_id", "status_by_operation"],
+      "properties": {
+        "operation_order": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "completed_operation_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "current_operation_id": {"type": ["string", "null"]},
+        "status_by_operation": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["planned", "skipped", "applied", "verified", "failed", "rolled-back", "partial", "unknown"]
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_key", "normalized_value", "plan_hash"],
+      "properties": {
+        "decision_key": {"type": "string", "minLength": 1},
+        "normalized_value": {"type": "string", "minLength": 1},
+        "plan_hash": {"type": ["string", "null"]}
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "provider_id", "next_action", "last_verified_at"],
+      "properties": {
+        "status": {"type": "string", "enum": ["not-required", "unknown", "required", "pending", "verified", "failed"]},
+        "provider_id": {"type": ["string", "null"]},
+        "next_action": {"type": ["string", "null"]},
+        "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "managedResources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inventory_path"],
+      "properties": {
+        "inventory_path": {"type": "string", "minLength": 1},
+        "inventory_hash": {"type": ["string", "null"]},
+        "last_verified_at": {"type": ["string", "null"], "format": "date-time"},
+        "ownership_evidence": {"type": "array", "items": {"type": "string"}},
+        "backup_references": {"type": "array", "items": {"type": "string"}},
+        "detached_resource_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interrupted", "unknown_completion", "retry_count", "rollback_available", "resume_instruction"],
+      "properties": {
+        "interrupted": {"type": "boolean"},
+        "unknown_completion": {"type": "boolean"},
+        "retry_count": {"type": "integer", "minimum": 0},
+        "rollback_available": {"type": "boolean"},
+        "resume_instruction": {"type": ["string", "null"]}
+      }
+    },
     "componentState": {
       "type": "object",
       "additionalProperties": false,

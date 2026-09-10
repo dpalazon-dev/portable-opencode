@@ -60,6 +60,7 @@ All owner-level product defaults are resolved. Language, packaging and Phoenix a
 - [x] write executable briefs for SPIKE-001 through SPIKE-004;
 - [x] define repository-local Codex master/specialist orchestration, Work Packages and Receipts;
 - [x] write executable `SPIKE-000` to validate the Codex development hierarchy before relying on it;
+- [x] define guided, resumable, browser-assisted installation and native secret custody;
 - [x] approve `DESIGN-001` after these contracts are reviewable.
 
 ### New contract artefacts
@@ -71,6 +72,7 @@ DESIGN-009  CLI Operation Contracts
 DESIGN-010  Evidence and Spike Mapping
 DESIGN-011  PowerShell Script Inventory
 DESIGN-012  Codex Development Orchestration
+DESIGN-013  Guided Installation and Onboarding
 
 config/components.jsonc
 config/resources/environment.jsonc
@@ -254,6 +256,7 @@ Required properties:
 - no TUI or WSL dependency.
 
 `DESIGN-009` is the command contract; implementation must not silently expand the initial CLI surface.
+`DESIGN-013` is the first-machine installation contract: public GitHub Releases, an external acquisition gate followed by a transactional minimal PowerShell bootstrap, strictly non-mutating preflight, private checkpoints, native OpenCode authentication, a mandatory authenticated re-inspection/second approval and final doctor. It does not resolve evidence-gated package or runtime choices.
 
 ## 5. Phase 3 — Personal machine installation
 
@@ -265,6 +268,8 @@ portable-opencode observability start|stop|status|open|purge
 ```
 
 Converge the global OpenCode environment, authentication, three managed OpenRouter presets, RTK, Graphify, proxy, proposed Phoenix backend, backups and health state.
+
+The installation order, browser-assisted handoff, retry/resume semantics, optional GitHub/Git/SSH module and `healthy`/`degraded`/`blocked` meanings are governed by [`DESIGN-013`](../design/GUIDED_INSTALLATION_AND_ONBOARDING.md). Public GitHub Releases are the initial distribution channel; exact package mechanics remain under `DEC-012`.
 
 A clean supported Windows environment must reach `healthy` or explain a precise blocked/degraded state.
 

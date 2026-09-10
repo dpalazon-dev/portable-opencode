@@ -18,7 +18,8 @@ The repository owner is the sole required MVP user. Public reuse is possible but
 ## 2. Canonical personal path
 
 ```text
-Windows native + PowerShell
+public GitHub Release + one PowerShell bootstrap command
+→ verified portable-opencode CLI
 → portable-opencode install
 → healthy OpenCode/OpenRouter environment
 → portable-opencode init-project <path>
@@ -105,6 +106,7 @@ A personal agentic environment otherwise accumulates scattered instructions, imp
 
 - inspect, plan, apply, verify and diagnose desired state;
 - install and configure OpenCode/OpenRouter coherently;
+- guide first-machine installation through resumable, browser-assisted CLI onboarding;
 - install and verify RTK and Graphify;
 - run local metadata-first observability;
 - scaffold canonical project config, assets, context and state;
@@ -149,6 +151,7 @@ Completed:
 - project/private environment/resource/result/verification schemas;
 - exact CLI command, outcome, diagnostic and exit-class contracts;
 - PowerShell bootstrap/verification/recovery boundaries;
+- public GitHub Release channel, external acquisition gate plus transactional minimal bootstrap, and native OpenCode secret-custody boundary;
 - complete `S`-contract evidence mapping;
 - executable briefs for SPIKE-001 through SPIKE-004.
 - reconciled sanitized results for SPIKE-001, SPIKE-002 and SPIKE-004 with their remaining evidence gates.
@@ -157,6 +160,7 @@ Completed:
 Pending before formal definition-phase closure:
 
 - create the concrete OpenRouter preset manifest only after the authenticated SPIKE-002 model-policy gate is satisfied;
+- create the implementation plan for the owner-approved `DESIGN-013` contract;
 - resolve the remaining evidence-gated technical decisions without converting partial or documentation-only evidence into acceptance.
 
 Pending technical evidence/implementation:
@@ -174,6 +178,8 @@ Pending technical evidence/implementation:
 - `DEC-010`: Phoenix acceptance;
 - `DEC-012`: final packaging/distribution.
 
+`DEC-022` accepts public GitHub Releases as the initial distribution channel and the guided onboarding boundary, but does not resolve the exact packaging mechanism or any evidence-gated upstream runtime choice.
+
 These are not owner defaults to decide in prose. They require Windows-native evidence.
 
 ## 9. Constraints
@@ -190,4 +196,4 @@ These are not owner defaults to decide in prose. They require Windows-native evi
 
 ## 10. Definition-phase completion
 
-The definition phase is now operationally specified enough for Codex to execute the four bounded spikes without inventing product behaviour. Formal Phase 0 closure still requires specification v0.3 synchronization and owner approval of the resulting contracts.
+The definition phase is now operationally specified enough for Codex to execute the four bounded spikes without inventing product behaviour. `DESIGN-013` owner approval is recorded; formal Phase 0 closure still requires the remaining evidence-gated technical decisions and implementation readiness.

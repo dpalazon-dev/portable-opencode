@@ -132,18 +132,23 @@ Installed versions are observed state, not canonical intent. The manifest enable
 
 ## 8. Bootstrap boundary
 
-The canonical clean-machine path is:
+The canonical clean-machine production path is:
 
 ```text
-git clone
-→ PowerShell bootstrap
+public GitHub Release
+→ trusted acquisition gate
+→ authenticated PowerShell bootstrap
 → portable-opencode inspect
 → portable-opencode plan
 → portable-opencode apply
 → portable-opencode doctor
 ```
 
-The bootstrap script is deliberately small. It may verify prerequisites and establish or invoke the pinned CLI. It must not duplicate desired-state resolution, planning, mutation, backup, verification or state recording.
+A repository checkout remains useful for development and source inspection, but Git and SSH are not installation prerequisites.
+
+An already trusted acquisition launcher or gate must authenticate the exact bootstrap bytes against an independent trust root before PowerShell executes them. After that gate, the authenticated bootstrap verifies the selected asset's digest and release signature against an independently provisioned trust anchor. A checksum downloaded from the same Release proves only transfer integrity, not release-origin authenticity; the exact bootstrap trust, release trust-anchor, key-rotation, staging and atomic-activation mechanism remains evidence-gated by `DEC-012`.
+
+The bootstrap script is deliberately small. It may govern only its private staging roots, immutable CLI identities, active-version selector, minimal identity metadata, recognized temporaries and restoration of the last verified CLI while transactionally establishing or invoking the pinned CLI. It must not duplicate desired-state resolution, planning, environment mutation, environment backup, environment ownership, environment drift, environment recovery, environment verification or environment state recording. The installed CLI is not a resource in the environment managed-resource graph.
 
 ## 9. Generated artefacts
 

@@ -11,6 +11,8 @@ sources:
     title: Canonical Resource Catalog and File Trees
   - resource: CONFIGURATION_MATRIX.md
     title: Portable OpenCode Configuration Matrix
+  - resource: GUIDED_INSTALLATION_AND_ONBOARDING.md
+    title: Guided Installation and Onboarding
 ---
 
 # CLI operation contracts
@@ -25,7 +27,7 @@ The CLI is the only mandatory configuration control interface. It exposes curren
 
 All commands follow these rules:
 
-- `--json` changes presentation only, never behaviour;
+- `--json` changes presentation and prompt handling, but never the plan, ownership, dependency, redaction or verification rules;
 - commands that inspect or diagnose never mutate;
 - mutation is based on a concrete plan and current evidence;
 - `--yes` approves only the exact current plan, identified by its plan hash;
@@ -35,6 +37,7 @@ All commands follow these rules:
 - commands run against native Windows paths and PowerShell-compatible processes;
 - equivalent desired and observed state produces a no-op;
 - interruption records a partial outcome when mutation already occurred;
+- `install` persists the private resumable environment checkpoint defined by `DESIGN-013`;
 - all results conform to `schemas/operation-result.schema.json`.
 
 ## 3. Command surface
@@ -115,6 +118,8 @@ It inspects:
 - observability process/storage/health evidence;
 - private local override existence and schema validity;
 - managed resource ownership, targets and content identities.
+
+For `install`, this is the complete strictly non-mutating preflight defined by `DESIGN-013`: Windows and architecture, PowerShell, DNS/TLS/proxy, official package sources, storage and ACLs, `PATH`, component versions, processes and locks, configuration provenance, ownership and credential presence without reading credentials. It uses only read-only mechanisms; a check requiring writes, process side effects or remote mutation is a planned operation after approval and the first checkpoint.
 
 Output contains facts and diagnostics only. It does not propose mutations beyond remediation hints.
 
@@ -227,14 +232,32 @@ Equivalent semantic flow:
 
 ```text
 inspect
-→ plan
-→ show plan
-→ approve
-→ apply
+→ collect only required semantic decisions
+→ create and show pre-auth plan
+→ approve exact pre-auth plan hash
+→ apply pre-auth operations in dependency order
+→ checkpoint and enter authentication-required when native auth is needed
+→ run a second authenticated inspection
+→ create and show authenticated plan
+→ approve exact authenticated plan hash
+→ apply authenticated operations
 → doctor
 ```
 
 `install` does not bypass the normal plan/apply contract and does not have a separate mutation engine.
+
+`DESIGN-013` owns the detailed lifecycle:
+
+```text
+not-started → inspected → plan-ready → approved → installing
+→ authentication-required → inspected → plan-ready → approved → installing
+→ configuring → verifying
+→ healthy | degraded | blocked
+```
+
+The authentication transition is conditional when native authentication is already verified or not required. When it is required, the pre-auth approval cannot authorize authenticated remote changes: interactive mode explains the action, opens official pages, waits for the user, launches native OpenCode authentication, verifies sanitized native status, runs a second inspection, creates a new plan and asks for approval again. `--json` mode never opens a browser or native graphical interface; it serializes the action, persists only an already-approved checkpoint and returns exit class `30` until the user completes the action outside the process.
+
+Installation never receives or stores API keys. GitHub, Git and SSH are optional and do not gate release download or base installation.
 
 Second execution on an in-sync environment is a no-op plus verification.
 
@@ -320,7 +343,7 @@ Every command reports exactly one final outcome:
 | `blocked` | required precondition, ownership or safety condition prevents progress |
 | `partial` | some approved mutations succeeded before execution stopped |
 | `failed` | an external operation failed without a valid degraded continuation |
-| `cancelled` | user declined or interrupted before any irreversible mutation |
+| `cancelled` | user declined or interrupted; if a mutation already occurred, the result preserves changed operations and does not claim rollback or no-op |
 
 `partial` is never presented as success.
 
@@ -355,6 +378,8 @@ remediation
 resource_id when applicable
 ```
 
+Every result envelope contains `diagnostics` as an array. The array may be empty when no finding exists, including for a healthy result. A present finding must contain every field required by `schemas/operation-result.schema.json`; the CLI does not manufacture a success diagnostic merely to populate the array.
+
 Severities:
 
 ```text
@@ -373,6 +398,22 @@ Initial stable diagnostic registry:
 | `POC-CORE-003` | managed resource drift detected |
 | `POC-CORE-004` | supplied plan is stale |
 | `POC-CORE-005` | required backup could not be created or verified |
+| `POC-INSTALL-001` | release or architecture has no supported asset |
+| `POC-INSTALL-002` | bootstrap or PowerShell capability is unsupported or unverifiable |
+| `POC-INSTALL-003` | DNS, TLS, HTTPS or proxy access is unavailable for a required source |
+| `POC-INSTALL-004` | an official package source is unavailable or returned unverifiable metadata |
+| `POC-INSTALL-005` | required storage, ACL or private-target access is unavailable |
+| `POC-INSTALL-006` | `PATH` or an existing executable creates an unresolved CLI/runtime collision |
+| `POC-INSTALL-007` | a relevant process or locked file prevents a safe owned operation |
+| `POC-INSTALL-008` | existing configuration or ownership requires a semantic decision |
+| `POC-INSTALL-009` | native authentication is required or its sanitized verification failed |
+| `POC-INSTALL-010` | the checkpoint or supplied plan is obsolete or cannot be resumed safely |
+| `POC-INSTALL-011` | an official browser handoff could not be opened or completed |
+| `POC-INSTALL-012` | a private-state or log redaction boundary was not verifiable |
+| `POC-INSTALL-013` | an installation operation has an unknown completion state |
+| `POC-INSTALL-014` | the release has no independently verifiable origin trust anchor |
+| `POC-INSTALL-015` | the release signature is invalid, revoked or does not match the selected asset |
+| `POC-INSTALL-016` | the bootstrap bytes or their complete pre-execution trust chain cannot be independently authenticated |
 | `POC-WIN-001` | Windows environment unsupported or unverifiable |
 | `POC-WIN-002` | PowerShell prerequisite unsupported or unverifiable |
 | `POC-OC-001` | OpenCode missing or not executable |
@@ -420,33 +461,41 @@ The formal envelope is `schemas/operation-result.schema.json`.
 
 ## 17. Bootstrap contract
 
-Canonical repository entrypoint:
+Canonical production entrypoint:
 
 ```text
-scripts/bootstrap.ps1
+public GitHub Release → trusted acquisition gate → authenticated bootstrap.ps1
 ```
 
-Its only responsibility is to make the pinned portable CLI runnable from a freshly cloned repository.
+The release-delivered `bootstrap.ps1` is the user-facing entrypoint. The repository copy at `scripts/bootstrap.ps1` is its versioned source boundary during development. A repository checkout is optional and is not required to download or install the environment. An already trusted acquisition launcher or gate must authenticate the exact bootstrap bytes against an independent trust root before PowerShell parses or executes them. A single command must not download and immediately pipe an unverified script to PowerShell or an equivalent evaluator.
 
 It may:
 
 - confirm the host is Windows;
+- begin only after the external acquisition gate has authenticated the exact bootstrap bytes;
 - detect available PowerShell/runtime/package primitives;
-- read `config/components.jsonc`;
-- establish the accepted CLI package/binary in a private managed location;
+- resolve a concrete public GitHub Release and read its public manifest;
+- verify the selected CLI asset's release identity, digest and signature against an independently provisioned trust anchor;
+- stage and verify the accepted CLI package/binary in a private bootstrap-owned location, then activate it atomically by immutable identity;
 - verify the CLI starts and reports its version;
 - print the next command.
+
+Bootstrap establishment is transactional: an equivalent verified identity is a `no-op`; unknown existing ownership blocks overwrite; the previous verified CLI remains available until the new one is verified; interruption leaves either the previous active identity or the complete new identity; cleanup is limited to bootstrap-owned temporaries; and CLI recovery never edits OpenCode configuration or environment state. The exact staging, activation, trust and package primitives remain evidence-gated.
+
+This private CLI installation boundary is separate from the environment resource graph. The bootstrap may own only its private staging roots, immutable CLI identities, active-version selector, minimal identity metadata, recognized temporaries and restoration of the last verified CLI. `portable-opencode install` alone owns environment lifecycle, plans, approvals, configuration, checkpoints, managed-resource ownership, environment backups, drift and recovery.
 
 It must not:
 
 - materialize OpenCode configuration;
+- open onboarding pages or launch authentication;
 - modify OpenRouter presets;
 - install Graphify, RTK or Phoenix directly outside the CLI operation model;
 - create project files;
-- mutate managed resources;
-- implement backups, drift resolution or state reconciliation.
+- mutate environment managed resources;
+- implement environment backups, environment ownership, environment drift, environment state reconciliation or environment recovery;
+- create plans, approvals or the environment checkpoint.
 
-The exact lowest-level PowerShell/runtime bootstrap mechanism remains evidence-gated by `SPIKE-001`, `DEC-009` and `DEC-012`. Codex may measure alternatives but may not select a new product policy inside the spike.
+The initial distribution channel is public GitHub Releases. A checksum fetched from the same Release is corruption detection, not origin authentication. The exact bootstrap trust root, release trust-anchor, signature, key-rotation, activation and package mechanism remain evidence-gated by `SPIKE-001`, `DEC-009` and `DEC-012`; absence of an independently verifiable origin must block a production bootstrap. Codex may measure alternatives but may not select a new product policy inside the spike.
 
 ## 18. Implementation gate
 

@@ -2,6 +2,13 @@
 
 This log records outcomes, resulting state and the next action. Detailed rationale lives in canonical context, decision, research and design documents.
 
+## 2026-09-10 — Guided installation and onboarding contract defined
+
+- created `DESIGN-013` for public GitHub Release distribution, the minimal PowerShell bootstrap, guided CLI installation, complete non-mutating preflight, browser-assisted native authentication, private checkpoints, resume/retry/recovery, optional Git/GitHub/SSH and final health classification;
+- accepted `DEC-022` without resolving `DEC-009`, `DEC-012`, OpenCode runtime/auth evidence, the authenticated `SPIKE-002` gate, `SPIKE-003` or Phoenix;
+- synchronized the specification, architecture, project, operations, roadmap, CLI, PowerShell inventory, resource catalog, configuration matrix and machine-readable state;
+- at that point, the next action was owner review of `DESIGN-013`; that approval is now recorded below before implementation planning.
+
 ## 2026-08-04 — Repository foundation
 
 - created the public repository and initial specification;
@@ -256,3 +263,36 @@ Run `SPIKE-000` from Codex on Windows. If the hierarchy passes or its exact sema
 - audited `docs/superpowers/plans/2026-09-09-spike-002-openrouter-policy.md` as a disposable execution plan: it is not a canonical source or spike deliverable, and its evidence is superseded by the sanitized result;
 - removed the disposable plan and confirmed no fixtures, processes, hooks, plugins, caches or temporary logs remain in the repository;
 - kept SPIKE-003 defined, blocked and not started until the authenticated SPIKE-002 gate is complete; no commit or push was performed.
+
+## 2026-09-10 — DESIGN-013 review corrections
+
+- reconciled the private environment-state contract to schema `0.2.0`, including the guided-install lifecycle, plan phases, authentication epoch, checkpoint sequence, progress and recovery fields;
+- made preflight explicitly read-only: it returns in-memory evidence and does not persist state or create a checkpoint; the first checkpoint is written transactionally only after approval and immediately before an approved side effect;
+- added the mandatory post-authentication inspection, authenticated plan and second explicit approval, with pre-authentication plans unable to authorize remote mutations;
+- replaced the `--json` illustration with an envelope valid against `schemas/operation-result.schema.json` and prohibited browser/native-auth UI in non-interactive mode;
+- documented that a checksum published by the same GitHub Release detects transfer corruption but is not an origin trust root; production bootstrap requires an independently provisioned trust anchor, with the mechanism still evidence-gated by `DEC-012`;
+- kept implementation, `SPIKE-003`, credentials, commit and push out of scope while owner review was still pending at the time of that entry; approval is now recorded below.
+
+## 2026-09-10 — DESIGN-013 security and outcome corrections
+
+- required independent authentication of the exact bootstrap bytes before PowerShell execution and prohibited download-and-pipe execution of unverified scripts;
+- removed the temporary-write preflight exception and defined all write/process-side-effect checks as approved, checkpointed plan operations;
+- closed the secret boundary by requiring child-process environment allowlists, sanitized native-auth status only, no captured auth I/O and fail-closed verification when sanitized status is unavailable;
+- defined transactional bootstrap staging, immutable activation, previous-CLI preservation, interruption recovery and ownership-safe cleanup without selecting the package mechanism;
+- added mandatory `last_outcome` to private environment state and distinguished it from lifecycle and health classification;
+- clarified that `diagnostics` is always an array and may be empty for healthy results; no synthetic success finding is emitted;
+- kept `DEC-009`, `DEC-012`, OpenCode, the authenticated `SPIKE-002` gate, `SPIKE-003`/Phoenix and all implementation work pending.
+
+## 2026-09-10 — Owner approval of DESIGN-013
+
+- recorded the owner's approval of `DESIGN-013` and retained `DEC-022` as accepted;
+- changed the current next action from design review to implementation planning;
+- preserved `DEC-009`, `DEC-012`, `SPIKE-001` `INCONCLUSIVE`, `SPIKE-002` `INCONCLUSIVE` with its authenticated gate pending, `SPIKE-003` blocked/not started, `SPIKE-004` `PARTIAL`, Phoenix/`DEC-010` pending and the absence of a concrete OpenRouter preset manifest;
+- did not authorize implementation of any mechanism whose evidence gate remains unresolved.
+
+## 2026-09-10 — DESIGN-013 acquisition-gate and bootstrap-ownership correction
+
+- separated the already trusted acquisition launcher/gate, which authenticates the exact bootstrap bytes before execution, from the authenticated `bootstrap.ps1`, which verifies the Release manifest and establishes the CLI;
+- limited bootstrap ownership and recovery to its private staging roots, immutable CLI identities, active selector, identity metadata, recognized temporaries and last-verified-CLI restoration;
+- kept environment lifecycle, managed resources, plans, approvals, checkpoints, backups, ownership, drift and recovery exclusively under `portable-opencode install`;
+- recorded that the installed CLI is not part of the environment managed-resource graph and kept the launcher, signature, trust-root and package mechanisms evidence-gated.

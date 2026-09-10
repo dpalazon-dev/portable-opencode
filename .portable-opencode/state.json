@@ -21,7 +21,8 @@
     "posix_shell_scripts_required": false,
     "exact_windows_version": "Windows 11 Pro 10.0.26200 (build 26200)",
     "exact_powershell_version": "Windows PowerShell 5.1.26100.8457; PowerShell 7.6.5",
-    "private_state_schema": "schemas/environment-state.schema.json"
+    "private_state_schema": "schemas/environment-state.schema.json",
+    "private_state_schema_version": "0.2.0"
   },
   "managed_configuration": {
     "decision": "DEC-021",
@@ -160,6 +161,7 @@
     "managed_configuration_materialization": "aligned",
     "canonical_resource_catalog": "aligned",
     "cli_operation_contracts": "aligned",
+    "guided_installation_and_onboarding": "aligned;owner-approved-ready-for-implementation-planning;state-schema-v0.2.0;last-outcome;preflight-strictly-read-only;second-authenticated-plan;public-release-channel;external-bootstrap-acquisition-gate;transactional-cli-activation;native-secret-custody;secret-value-exclusion;independent-release-trust-required",
     "evidence_mapping": "aligned",
     "openrouter_policy": "inconclusive;api-docs-and-local-normalization-only;authenticated-runtime-blocked",
     "codex_development_orchestration": "inconclusive-role-routing-not-structural",
@@ -172,7 +174,7 @@
     "control_interface": "headless-cli-required",
     "tui": "deferred-until-cli-effective",
     "profile_strategy": "single-canonical-configuration",
-    "environment_lifecycle": "separate-private-state",
+    "environment_lifecycle": "not-started→inspected→plan-ready→approved→installing→authentication-required→inspected→plan-ready→approved→installing→configuring→verifying→healthy|degraded|blocked",
     "project_lifecycle": "separate-versioned-state",
     "implementation_shape": "small-core-with-native-tool-surfaces",
     "resource_mutation_boundary": "proven-ownership-only"
@@ -248,6 +250,18 @@
       "document": "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
       "work_package_schema": "schemas/codex-work-package.schema.json",
       "task_receipt_schema": "schemas/codex-task-receipt.schema.json"
+    },
+    "guided_installation_and_onboarding": {
+      "id": "DESIGN-013",
+      "status": "owner-approved-ready-for-implementation-planning",
+      "document": "docs/design/GUIDED_INSTALLATION_AND_ONBOARDING.md",
+      "decision": "DEC-022",
+      "distribution_channel": "public-github-releases",
+      "bootstrap_boundary": "minimal-verified-cli-only",
+      "release_trust": "bootstrap-and-release-independent-anchor-required;same-release-checksum-insufficient",
+      "checkpoint": "%LOCALAPPDATA%\\portable-opencode\\environment-state.json",
+      "secret_custody": "native-opencode-private-mechanism",
+      "tui": "deferred"
     }
   },
   "features": {
@@ -371,18 +385,18 @@
   },
   "verification": {
     "profile": "docs-only",
-    "last_run": "2026-09-09T18:21:40+02:00",
-    "result": "passed-local-docs-validator-with-spike-results;state-json-validated;git-diff-check;spike-001-inconclusive;spike-002-inconclusive;spike-004-partial;spike-003-blocked"
+    "last_run": "2026-09-10T00:00:00+02:00",
+    "result": "passed-local-docs-validator-including-untracked-design;state-schema-0.2.0-last-outcome-and-in-memory-examples-validated;operation-example-validated;state-json-validated;git-diff-check;spike-001-inconclusive;spike-002-inconclusive;spike-004-partial;spike-003-blocked"
   },
   "decisions": {
-    "accepted": 16,
+    "accepted": 17,
     "proposed": 2,
     "deferred": 2,
     "superseded": 1
   },
   "next": {
     "milestone": "technical-validation-readiness",
-    "step": "complete-authenticated-spike-002-gate;preserve-spike-004-partial-evidence;keep-spike-003-blocked-and-not-started",
+    "step": "create-implementation-plan-design-013;resolve-dec-009-and-dec-012-before-dependent-implementation;complete-authenticated-spike-002-gate;preserve-spike-004-partial-evidence;keep-spike-003-blocked-and-not-started",
     "documents": [
       "docs/SPECIFICATION.es.md",
       "docs/design/CODEX_DEVELOPMENT_ORCHESTRATION.md",
@@ -397,9 +411,10 @@
       "docs/design/CANONICAL_RESOURCE_CATALOG.md",
       "docs/design/MANAGED_CONFIGURATION_MATERIALIZATION.md",
       "docs/design/EVIDENCE_AND_SPIKE_MAPPING.md",
+      "docs/design/GUIDED_INSTALLATION_AND_ONBOARDING.md",
       "docs/design/GRAPHIFY_OUTPUT_POLICY.md",
       "config/components.jsonc"
     ]
   },
-  "updated_at": "2026-09-09T18:21:40+02:00"
+  "updated_at": "2026-09-10T00:00:00+02:00"
 }

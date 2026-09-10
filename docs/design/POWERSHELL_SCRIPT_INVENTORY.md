@@ -11,6 +11,8 @@ sources:
     title: Canonical Resource Catalog and File Trees
   - resource: ../context/ROADMAP.md
     title: Portable OpenCode Roadmap
+  - resource: GUIDED_INSTALLATION_AND_ONBOARDING.md
+    title: Guided Installation and Onboarding
 ---
 
 # PowerShell script inventory
@@ -25,7 +27,7 @@ The canonical product remains the CLI. Scripts exist only where the CLI cannot y
 
 | Path | Status | Responsibility | Product behaviour? |
 |---|---|---|---|
-| `scripts/bootstrap.ps1` | required | make the pinned CLI runnable after clone | bootstrap only |
+| `scripts/bootstrap.ps1` | required | make the pinned CLI runnable from the public release entrypoint or a development checkout | bootstrap only |
 | `scripts/verify-docs.ps1` | implemented repository helper | validate this repository's Markdown metadata, links and JSON/JSONC schemas before the production CLI exists | no |
 | `scripts/recover-cli.ps1` | deferred | break-glass repair of a missing/corrupt CLI installation only if final packaging proves it necessary | only if DEC-012 evidence requires it |
 
@@ -35,7 +37,13 @@ No other PowerShell wrapper is part of the initial contract.
 
 Binding behaviour is defined in `DESIGN-009`.
 
-It may establish the CLI and verify that it starts. It must not install/configure OpenCode, reconcile OpenRouter, manage Graphify/RTK/Phoenix, scaffold projects or write portable lifecycle state beyond bootstrap-specific private evidence required by the accepted packaging mechanism.
+The initial distribution channel is public GitHub Releases. An already trusted acquisition launcher or gate must authenticate the exact bootstrap bytes against an independently provisioned trust root before PowerShell parses or executes them; direct download-and-pipe execution of an unverified script is forbidden. After that gate, the authenticated script may resolve a concrete release, verify the public asset's identity, digest and signature against an independently provisioned trust anchor, stage it privately, activate it atomically by immutable identity and verify `portable-opencode --version`. A checksum fetched from the same Release is not sufficient origin authentication.
+
+Bootstrap activation is transactional: an equivalent verified identity is a `no-op`; unowned existing paths cannot be overwritten; the previous verified CLI remains available until the new one passes verification; interruption leaves no partially active CLI; cleanup is restricted to bootstrap-owned temporaries; and CLI recovery cannot alter OpenCode configuration or `%LOCALAPPDATA%\portable-opencode\environment-state.json`. Within this private CLI boundary, the bootstrap may govern its staging roots, immutable version identities, active selector, identity metadata, recognized temporaries and restoration of the last verified CLI. It may not govern environment resources, environment backups, environment ownership, environment drift or environment recovery. The installed CLI is not part of the environment managed-resource graph. The exact trust, staging, activation and package primitives remain evidence-gated by `DEC-009` and `DEC-012`.
+
+It must not install/configure OpenCode, reconcile OpenRouter, manage Graphify/RTK/Phoenix, open onboarding pages, launch authentication, scaffold projects or write `%LOCALAPPDATA%\portable-opencode\environment-state.json`. It must not implement preflight, plans, approvals, environment backups, environment ownership, environment drift, environment lifecycle checkpoints, environment recovery or any other `DESIGN-013` behaviour outside its private CLI transaction.
+
+The exact package, signature, trust-anchor, key-rotation and runtime primitives remain evidence-gated by `DEC-009`, `DEC-012` and `SPIKE-001`; this inventory fixes the boundary, not the mechanism.
 
 ## 4. `verify-docs.ps1`
 

@@ -70,6 +70,7 @@ The core owns only lifecycle behaviour that cannot belong to an upstream tool:
 - environment inspection;
 - desired-state resolution;
 - deterministic change planning;
+- guided, resumable installation and browser-assisted handoffs;
 - safe application and managed backups;
 - project scaffolding;
 - diagnostics and repair suggestions;
@@ -270,11 +271,16 @@ There is no profile catalogue. New variability requires a real second configurat
 ### Environment
 
 ```text
-absent → inspected → planned → installed → healthy
-                                      ↘ degraded
-                                      ↘ update-required
-                                      ↘ blocked
+not-started → inspected → plan-ready → approved → installing
+                                               ↘ authentication-required
+authentication-required → inspected → plan-ready → approved → installing
+                                      ↘ configuring → verifying
+                                                         ↘ healthy
+                                                         ↘ degraded
+                                                         ↘ blocked
 ```
+
+The private environment checkpoint is `%LOCALAPPDATA%\portable-opencode\environment-state.json`. `DESIGN-013` defines the transition predicates, strictly read-only preflight, first-write checkpoint boundary, authenticated second inspection/approval, interruption and resume rules, browser-assisted onboarding, secret-value exclusion and the distinction between lifecycle, health classification and last outcome. An external acquisition gate authenticates bootstrap bytes before execution; the authenticated bootstrap establishes only its private CLI transactionally, while `portable-opencode install` owns the environment lifecycle.
 
 ### Project
 
@@ -333,6 +339,7 @@ The smallest credible implementation contains:
 - versioned native configuration and templates;
 - an early supported-component version manifest;
 - a minimal PowerShell bootstrap that only establishes and invokes the CLI;
+- public GitHub Releases as the initial distribution channel, with exact package mechanics still governed by `DEC-012`;
 - explicit UTF-8-without-BOM writing and byte-level verification for generated OpenCode Markdown when Windows PowerShell 5.1 is involved; the exact BOM hazard remains an implementation test, not a product-wide runtime guarantee;
 - schemas, fixtures and tests;
 - one observability integration validated by a spike.

@@ -12,6 +12,8 @@ sources:
     title: Portable OpenCode Architecture
   - resource: CONFIGURATION_MATRIX.md
     title: Portable OpenCode Configuration Matrix
+  - resource: GUIDED_INSTALLATION_AND_ONBOARDING.md
+    title: Guided Installation and Onboarding
 ---
 
 # Canonical resource catalog and file trees
@@ -156,7 +158,7 @@ Canonical private root:
 
 Responsibilities:
 
-- `environment-state.json`: current personal-environment lifecycle and last verified component state, validated by `schemas/environment-state.schema.json`;
+- `environment-state.json`: current personal-environment lifecycle, last operation outcome, resumable installation checkpoint and last verified component state, validated by `schemas/environment-state.schema.json` version `0.2.0` and governed by `DESIGN-013`;
 - `managed-resources.json`: ownership evidence and observed identities, validated by `schemas/managed-resource-inventory.schema.json`;
 - `override.jsonc`: optional private desired-state inputs accepted only when an explicit key contract exists; no arbitrary passthrough configuration;
 - `backups\`: pre-mutation backups keyed by resource and operation;
@@ -338,4 +340,5 @@ Before production implementation begins:
 - OpenRouter remote resources are validated by `SPIKE-002`;
 - observability private paths and processes are validated by `SPIKE-003`;
 - Graphify/RTK output and integration paths are validated by `SPIKE-004`;
+- bootstrap-byte authentication before execution, public release digest/signature verification and independently provisioned trust anchors are validated by `DEC-012` evidence;
 - the supported component manifest contains no guessed supported version.
